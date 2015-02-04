@@ -1,0 +1,25 @@
+How to include ToolBox.jar into Eclipse
+---------------------------------------
+1. Rickt click on a project and select "Properties".
+2. Select "Java Build Path".
+3. Click on "Add External JARs...".
+4. Navigate to and include "ToolBox.jar".
+
+How to create JAR files
+-----------------------
+1. Go to the "File" menu and select "Export".
+2. Expand the "Java" folder.
+3. Select "Runnable JAR file".
+4. Select the desired "Launch Configuration".
+5. Choose an "Export destination".
+6. Make sure you have selected "Extract required libraries into generated JAR".
+7. Click "Finish".
+
+How to compile from the commandline
+-----------------------------------
+javac MyProject.java -cp ToolBox.jar
+
+How to run from the commandline
+-------------------------------
+Unix   : java -cp ToolBox.jar:. MyProject
+Windows: java -cp ToolBox.jar; MyProject
