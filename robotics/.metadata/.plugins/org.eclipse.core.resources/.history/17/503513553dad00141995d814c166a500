@@ -95,13 +95,7 @@ public class ToolBoxDemo
 
 		//another iteration (not part of original)
 		nearest = tree.getNearestNeighbour(new IntPoint(200,300));
-		tree.addNode(nearest, new IntPoint(200,300));
-		System.out.println(nearest.toString());
-		
-		//one last test of methods
-		nearest=tree.getNearestNeighbour(new IntPoint(300,300));
-		tree.addNode(nearest, new IntPoint(300,300));
-		
+		tree.addNode(nearest, new IntPoint(150,200));
 		
 		// This prints the path from the start position to the position of the given node.
 		// In this example we only have a reference to the "nearest" node we got above.
