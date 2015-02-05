@@ -151,7 +151,7 @@ public class RRT {
 			// Update GUI
 			gui.update();
 			System.out.println(dist(goalX-moveTo.x, goalY-moveTo.y));
-			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=goalSize) atGoal = true;
+			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=stepSize) atGoal = true;
 			System.out.println(atGoal);
 		}
 		

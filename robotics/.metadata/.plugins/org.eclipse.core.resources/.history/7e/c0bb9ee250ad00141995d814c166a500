@@ -20,8 +20,6 @@ public class RRT {
 	private final int goalFieldIdY;
 	private final int goalSizeId;
 	
-	private int startX,startY,goalX,goalY,goalSize;
-	
 	private final int statusLabelId;
 	
 	private boolean atGoal;
@@ -88,16 +86,13 @@ public class RRT {
 	public void start(){
 		atGoal=false;
 		
-		startX=Integer.parseInt(gui.getTextFieldContent(startFieldIdX));
-		startY=Integer.parseInt(gui.getTextFieldContent(startFieldIdY));
-		goalX=Integer.parseInt(gui.getTextFieldContent(goalFieldIdX));
-		goalY=Integer.parseInt(gui.getTextFieldContent(goalFieldIdY));
-		goalSize=Integer.parseInt(gui.getTextFieldContent(goalSizeId));
+		int startX=Integer.parseInt(gui.getTextFieldContent(startFieldIdX));
+		int startY=Integer.parseInt(gui.getTextFieldContent(startFieldIdY));
+		int goalX=Integer.parseInt(gui.getTextFieldContent(goalFieldIdX));
+		int goalY=Integer.parseInt(gui.getTextFieldContent(goalFieldIdY));
+		int goalSize=Integer.parseInt(gui.getTextFieldContent(goalSizeId));
 		
-		if(dist(goalX-startX, goalY-startY)<=stepSize){
-			atGoal = true;
-			gui.setLabelText(statusLabelId, "You are already at the goal.");
-		}
+		System.out.println(startX+" "+startY+" "+goalX+" "+goalY);
 
 		gui.clearGraphicsPanel();
 		
@@ -120,9 +115,6 @@ public class RRT {
 		// there is nothing to draw yet but there will be later on.
 		gui.draw(tree);
 		
-		// User instructions
-		if(!atGoal) gui.setLabelText(statusLabelId,"Please press move to move the robot");
-		
 		// Refresh the GUI
 		gui.update();
 	}
@@ -130,50 +122,21 @@ public class RRT {
 	public void move(){
 		if(atGoal) return;
 		else{
-			// Random  point
+			// Random 
 			int randomX = randGen.nextInt(pixelX+1);
 			int randomY = randGen.nextInt(pixelY+1);
 			
 			// Returns the nearest node to the random point
 			RRNode nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
 			
-			// Get point to move to
-			IntPoint moveTo = step(randomX,randomY,nearest.x,nearest.y);
-			
-			tree.addNode(nearest, moveTo);
-			
 			// Draws a red dot at random point
 			RenderablePoint randPoint = new RenderablePoint(randomX,randomY);
-			randPoint.setProperties(Color.RED, 7.5f);
+			randPoint.setProperties(Color.RED, 5.0f);
 			gui.draw(randPoint);
 			
-			
-			// Update GUI
 			gui.update();
-			System.out.println(dist(goalX-moveTo.x, goalY-moveTo.y));
-			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=goalSize) atGoal = true;
-			System.out.println(atGoal);
 		}
 		
-	}
-	
-	public double dist(int distX, int distY){
-		return Math.sqrt(distX*distX+distY*distY);
-	}
-	
-	public IntPoint step(int randX, int randY, int nearX, int nearY){
-		// Point to move to given step
-		int distX = randX-nearX;
-		int distY = randY-nearY;
-		double distance = dist(distX,distY);
-		
-		// Step / distance
-		double stepRatio = stepSize/distance;
-		
-		// Point to move to in x and y direction
-		int moveX = nearX + (int)Math.floor(distX*stepRatio);
-		int moveY = nearY + (int)Math.floor(distY*stepRatio);
-		return new IntPoint(moveX,moveY);
 	}
 	
 	// MAIN

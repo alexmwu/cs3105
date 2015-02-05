@@ -130,6 +130,7 @@ public class RRT {
 	public void move(){
 		if(atGoal) return;
 		else{
+			System.out.println(atGoal);
 			// Random  point
 			int randomX = randGen.nextInt(pixelX+1);
 			int randomY = randGen.nextInt(pixelY+1);
@@ -150,9 +151,8 @@ public class RRT {
 			
 			// Update GUI
 			gui.update();
-			System.out.println(dist(goalX-moveTo.x, goalY-moveTo.y));
-			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=goalSize) atGoal = true;
-			System.out.println(atGoal);
+			
+			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=stepSize) atGoal = true;
 		}
 		
 	}

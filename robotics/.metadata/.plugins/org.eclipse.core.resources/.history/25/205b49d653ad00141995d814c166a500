@@ -94,10 +94,7 @@ public class RRT {
 		goalY=Integer.parseInt(gui.getTextFieldContent(goalFieldIdY));
 		goalSize=Integer.parseInt(gui.getTextFieldContent(goalSizeId));
 		
-		if(dist(goalX-startX, goalY-startY)<=stepSize){
-			atGoal = true;
-			gui.setLabelText(statusLabelId, "You are already at the goal.");
-		}
+		System.out.println(startX+" "+startY+" "+goalX+" "+goalY);
 
 		gui.clearGraphicsPanel();
 		
@@ -120,9 +117,6 @@ public class RRT {
 		// there is nothing to draw yet but there will be later on.
 		gui.draw(tree);
 		
-		// User instructions
-		if(!atGoal) gui.setLabelText(statusLabelId,"Please press move to move the robot");
-		
 		// Refresh the GUI
 		gui.update();
 	}
@@ -130,6 +124,7 @@ public class RRT {
 	public void move(){
 		if(atGoal) return;
 		else{
+			System.out.println(atGoal);
 			// Random  point
 			int randomX = randGen.nextInt(pixelX+1);
 			int randomY = randGen.nextInt(pixelY+1);
@@ -150,9 +145,8 @@ public class RRT {
 			
 			// Update GUI
 			gui.update();
-			System.out.println(dist(goalX-moveTo.x, goalY-moveTo.y));
-			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=goalSize) atGoal = true;
-			System.out.println(atGoal);
+			
+			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=stepSize) atGoal = true;
 		}
 		
 	}
