@@ -216,7 +216,7 @@ public class RRT {
 	// MAIN
 	public static void main(String[] args)
 	{
-		RRT test = new RRT(500,500,1);
+		RRT test = new RRT(500,500,5);
 		test.show();
 	}
 

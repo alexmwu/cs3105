@@ -3,7 +3,7 @@ package skynet;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import renderables.*;
+import renderables.RenderablePoint;
 import dataStructures.RRNode;
 import dataStructures.RRTree;
 import easyGui.EasyGui;
@@ -26,13 +26,10 @@ public class RRT {
 	
 	private final int statusLabelId;
 	
-	private boolean started;
-	
 	private boolean atGoal;
 	
 	private Random randGen;
 	private int pixelX,pixelY,stepSize;
-	
 	
 	public RRT(int x,int y,int step){
 		// Create a new EasyGui instance with a 500x500pixel graphics panel.
@@ -40,9 +37,6 @@ public class RRT {
 		pixelY=y;
 		stepSize=step;
 		gui = new EasyGui(pixelX, pixelY);
-		
-		// So doesn't throw an error with move or goal button used before initialization
-		started = false;
 		
 		// New Random generator
 		randGen = new Random();
@@ -81,6 +75,11 @@ public class RRT {
 		// instance of the RRT class.
 		gui.addButton(4, 0, "Start", this, "start");
 		
+		// Add a move button to the right of start
+		gui.addButton(4,1,"Move",this,"move");
+		
+		// Goal button to go straight to the solution/////////////////////////////
+		
 		// Status label
 		statusLabelId = gui.addLabel(5,3,"Enter in coordinates and click start to begin.");
 	}
@@ -92,12 +91,6 @@ public class RRT {
 	
 	public void start(){
 		atGoal=false;
-		if(!started){
-			// Add a move and goal button to the right of start
-			gui.addButton(4,1,"Move",this,"move");
-			gui.addButton(4, 2, "Goal", this, "toGoal");
-			started = true;
-		}
 		
 		startX=Integer.parseInt(gui.getTextFieldContent(startFieldIdX));
 		startY=Integer.parseInt(gui.getTextFieldContent(startFieldIdY));
@@ -159,7 +152,9 @@ public class RRT {
 			randPoint.setProperties(Color.RED, 7.5f);
 			gui.draw(randPoint);
 			*/
-
+			
+			// Update GUI
+			gui.update();
 			
 			// If reached goal, stop and give a message
 			if(dist(goalX-moveTo.x, goalY-moveTo.y)<=goalSize){
@@ -170,28 +165,18 @@ public class RRT {
 				RRNode last = tree.getNearestNeighbour(moveTo);
 				
 				// This prints the route we used.
-				ArrayList<IntPoint> route = tree.getPathFromRootTo(last);
-				RenderablePolyline path = new RenderablePolyline();
-				for(IntPoint p : route){
-					path.addPoint(p.x, p.y);
-				}
-				
-				// Set properties and then draw
-				path.setProperties(Color.RED, 2.5f);
-				gui.draw(path);
+				ArrayList<IntPoint> path = tree.getPathFromRootTo(last);
+				RenderablePoint pathPoint = new RenderablePoint(0,0);
+				pathPoint.setProperties(Color.RED, 7.5f);
+				for(IntPoint p : path)
+					pathPoint.x = p.x;
+					pathPoint.y = p.y;
+					
 					
 			}
 			
-			
-			// Update GUI
-			gui.update();
-			
 		}
 		
-	}
-	
-	public void toGoal(){
-		while(!atGoal) move();
 	}
 	
 	public double dist(int distX, int distY){
@@ -216,7 +201,7 @@ public class RRT {
 	// MAIN
 	public static void main(String[] args)
 	{
-		RRT test = new RRT(500,500,1);
+		RRT test = new RRT(500,500,10);
 		test.show();
 	}
 
