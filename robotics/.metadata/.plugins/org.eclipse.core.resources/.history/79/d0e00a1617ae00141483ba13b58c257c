@@ -110,8 +110,8 @@ public class RRT {
 				i--;
 				tmp=null;
 				continue;
-			}
-			else{*/
+			}*/
+			else{
 				obstacles.add(tmp);
 				gui.draw(tmp.getRenderable());
 			//}

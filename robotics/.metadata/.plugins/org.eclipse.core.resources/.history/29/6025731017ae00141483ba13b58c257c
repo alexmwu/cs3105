@@ -105,16 +105,10 @@ public class RRT {
 			r=randGen.nextInt(goalSize+1);
 			tmp = new Obstacle(x,y,r);
 			// If obstacles intersects with the start or goal
-			//causes error for some reason
-		/*	if(tmp.didCollide(IntPoint(startX,startY)) || tmp.didIntersect(goalX, goalY, goalSize)){
-				i--;
-				tmp=null;
-				continue;
-			}
-			else{*/
+
 				obstacles.add(tmp);
 				gui.draw(tmp.getRenderable());
-			//}
+			
 		}
 	}
 	
