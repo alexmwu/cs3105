@@ -2,14 +2,13 @@ package skynet;
 
 import java.awt.Color;
 import java.util.ArrayList;
-
 import renderables.*;
 import dataStructures.RRNode;
 import dataStructures.RRTree;
 import easyGui.EasyGui;
 import geometry.IntPoint;
-
 import java.util.Random;
+
 
 public class RRT {
 
@@ -21,10 +20,11 @@ public class RRT {
 	private final int goalFieldIdX;
 	private final int goalFieldIdY;
 	private final int goalSizeId;
-	
-	private int startX,startY,goalX,goalY,goalSize;
-	
 	private final int statusLabelId;
+	private final int stepSizeId;
+	
+
+	private int startX,startY,goalX,goalY,goalSize;
 	
 	private boolean started;
 	
@@ -33,12 +33,13 @@ public class RRT {
 	private Random randGen;
 	private int pixelX,pixelY,stepSize;
 	
-	
+	private ArrayList<Obstacle> obstacles;
+
 	public RRT(int x,int y,int step){
+		
 		// Create a new EasyGui instance with a 500x500pixel graphics panel.
 		pixelX=x;
 		pixelY=y;
-		stepSize=step;
 		gui = new EasyGui(pixelX, pixelY);
 		
 		// So doesn't throw an error with move or goal button used before initialization
@@ -76,6 +77,11 @@ public class RRT {
 		// Add label above it
 		gui.addLabel(2, 2, "Goal Size");
 		
+		// Step Size
+		stepSizeId = gui.addTextField(1,2,Integer.toString(step));
+		// Add label above it
+		gui.addLabel(0,2,"Step Size");
+		
 		// Add a button in row 0 column 1. The button is labeled "Start" and
 		// when pressed it will call the method called start in "this"
 		// instance of the RRT class.
@@ -85,6 +91,28 @@ public class RRT {
 		statusLabelId = gui.addLabel(5,3,"Enter in coordinates and click start to begin.");
 	}
 	
+	public void initObstacles(){
+		int x,y,r;
+		Obstacle tmp;
+		int num = randGen.nextInt(5);
+		for(int i=0;i<num;i++){
+			x=randGen.nextInt(pixelX+1);
+			y=randGen.nextInt(pixelY+1);
+			r=randGen.nextInt(goalSize+1);
+			tmp = new Obstacle(x,y,r);
+			if(tmp.didCollide(IntPoint(startX,startY)) || tmp.didIntersect(goalX, goalY, goalSize)){
+				i--;
+				continue;
+			}
+			else obstacles.add(tmp);
+		}
+	}
+	
+	private IntPoint IntPoint(int startX2, int startY2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void show(){
 		// Displays GUI
 		gui.show();
@@ -104,6 +132,7 @@ public class RRT {
 		goalX=Integer.parseInt(gui.getTextFieldContent(goalFieldIdX));
 		goalY=Integer.parseInt(gui.getTextFieldContent(goalFieldIdY));
 		goalSize=Integer.parseInt(gui.getTextFieldContent(goalSizeId));
+		stepSize=Integer.parseInt(gui.getTextFieldContent(stepSizeId));
 		
 		// If already at goal
 		if(dist(goalX-startX, goalY-startY)<=stepSize){
@@ -142,9 +171,17 @@ public class RRT {
 	public void move(){
 		if(atGoal) return;
 		else{
+			int randomX=0,randomY=0;
+			boolean collide=true;
 			// Random  point
-			int randomX = randGen.nextInt(pixelX+1);
-			int randomY = randGen.nextInt(pixelY+1);
+			while(collide){
+				randomX = randGen.nextInt(pixelX+1);
+				randomY = randGen.nextInt(pixelY+1);
+				for(int i=0;i<obstacles.size();i++){
+					if(!obstacles.get(i).didCollide(new IntPoint(randomX,randomY))) collide=false;
+				}
+			}
+			
 			
 			// Returns the nearest node to the random point
 			RRNode nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
@@ -153,6 +190,7 @@ public class RRT {
 			IntPoint moveTo = step(randomX,randomY,nearest.x,nearest.y);
 			
 			tree.addNode(nearest, moveTo);
+			
 			/*
 			// Draws a red dot at random point
 			RenderablePoint randPoint = new RenderablePoint(randomX,randomY);
@@ -216,8 +254,9 @@ public class RRT {
 	// MAIN
 	public static void main(String[] args)
 	{
+
 		RRT test = new RRT(500,500,10);
 		test.show();
 	}
-
+	
 }
