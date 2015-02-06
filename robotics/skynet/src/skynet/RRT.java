@@ -94,17 +94,21 @@ public class RRT {
 	public void initObstacles(){
 		int x,y,r;
 		Obstacle tmp;
-		int num = randGen.nextInt(5);
+		
+		// Number of obstacles
+		int num = randGen.nextInt(11);
+		
+		
 		for(int i=0;i<num;i++){
 			x=randGen.nextInt(pixelX+1);
 			y=randGen.nextInt(pixelY+1);
 			r=randGen.nextInt(goalSize+1);
 			tmp = new Obstacle(x,y,r);
-			if(tmp.didCollide(IntPoint(startX,startY)) || tmp.didIntersect(goalX, goalY, goalSize)){
-				i--;
-				continue;
-			}
-			else obstacles.add(tmp);
+			// If obstacles intersects with the start or goal
+
+				obstacles.add(tmp);
+				gui.draw(tmp.getRenderable());
+			
 		}
 	}
 	
@@ -161,6 +165,10 @@ public class RRT {
 		// there is nothing to draw yet but there will be later on.
 		gui.draw(tree);
 		
+		// Initialize obstacles
+		obstacles = new ArrayList<Obstacle>();
+		if(!atGoal)	initObstacles();
+		
 		// User instructions
 		if(!atGoal) gui.setLabelText(statusLabelId,"Please press move to move the robot");
 		
@@ -172,22 +180,39 @@ public class RRT {
 		if(atGoal) return;
 		else{
 			int randomX=0,randomY=0;
+			RRNode nearest=null;
+			IntPoint moveTo=null;
 			boolean collide=true;
 			// Random  point
 			while(collide){
 				randomX = randGen.nextInt(pixelX+1);
 				randomY = randGen.nextInt(pixelY+1);
-				for(int i=0;i<obstacles.size();i++){
-					if(!obstacles.get(i).didCollide(new IntPoint(randomX,randomY))) collide=false;
+				
+				// Returns the nearest node to the random point
+				nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
+				
+				// Get point to move to
+				moveTo = step(randomX,randomY,nearest.x,nearest.y);
+				
+				// Set it to false
+				collide=false;
+				
+				// If there are obstacles
+				if(!obstacles.isEmpty()){
+					for(Obstacle i : obstacles){
+
+						
+						System.out.println(moveTo.x+", "+moveTo.y);
+						System.out.println(i.getX()+", "+i.getY()+", "+i.getR()+":\t"+i.didCollide(moveTo));
+						System.out.println();
+						
+						// If it collides with something, set it back to true
+						if(i.didCollide(moveTo)) collide=true;
+					}
 				}
 			}
 			
 			
-			// Returns the nearest node to the random point
-			RRNode nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
-			
-			// Get point to move to
-			IntPoint moveTo = step(randomX,randomY,nearest.x,nearest.y);
 			
 			tree.addNode(nearest, moveTo);
 			

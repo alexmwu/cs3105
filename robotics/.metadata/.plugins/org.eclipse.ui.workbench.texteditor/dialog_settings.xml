@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="307" key="DIALOG_X_ORIGIN"/>
+		<item value="387" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="setStar" key="selection"/>
+		<item value="goalSize" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="goalsize"/>
+			<item value="show"/>
+			<item value="stepsize"/>
 			<item value="setstar"/>
 			<item value="rrt"/>
 			<item value="fextfiel"/>
 			<item value="fextfile"/>
 			<item value="fextfi"/>
-			<item value="tool"/>
 		</list>
 		<list key="replacehistory">
 		</list>

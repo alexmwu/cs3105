@@ -14,7 +14,27 @@ public class Obstacle {
 		radius=r;
 	}
 	
+	public boolean isEmpty(){
+		return ob==null;
+	}
+	
 	RenderableOval getObstacle(){
+		return ob;
+	}
+	
+	public int getX(){
+		return xCenter;
+	}
+	
+	public int getY(){
+		return yCenter;
+	}
+	
+	public int getR(){
+		return radius;
+	}
+	
+	public RenderableOval getRenderable(){
 		return ob;
 	}
 	
