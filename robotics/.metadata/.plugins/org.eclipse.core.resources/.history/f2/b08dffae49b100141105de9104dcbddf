@@ -27,9 +27,6 @@ public class Robot extends Object{
 		yId=yid;
 		radiusId=rid;
 		stepId=sid;
-
-		// Create an RRTree to be used later.
-		tree = new RRTree(Color.BLACK);
 	}
 	
 	private void setRenderable(){
@@ -49,6 +46,8 @@ public class Robot extends Object{
 
 		gui.clearGraphicsPanel();
 		
+		// Create an RRTree to be used later.
+		tree = new RRTree(Color.BLACK);
 		
 		//grab gui strings for the input values and parse into the object variables (i.e., into
 		//x,y,radius,and step
@@ -73,6 +72,7 @@ public class Robot extends Object{
 	public boolean move(EasyGui gui, ArrayList<Obstacle> obstacles, int randomX, int randomY){
 		RRNode nearest=null;
 		IntPoint moveTo=null;
+		Object tmp;
 		
 		// Returns the nearest node to the random point
 		nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));

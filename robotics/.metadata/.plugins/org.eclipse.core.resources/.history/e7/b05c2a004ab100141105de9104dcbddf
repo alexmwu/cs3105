@@ -67,6 +67,7 @@ public class Robot extends Object{
 		
 		// Tell the GUI to draw this tree (start and goal)
 		gui.draw(tree);
+		gui.update();
 	}
 	
 	//returns next point if there is no obstacle collision; null otherwise

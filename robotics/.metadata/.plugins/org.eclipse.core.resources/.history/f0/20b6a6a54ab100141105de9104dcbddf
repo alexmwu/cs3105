@@ -136,9 +136,8 @@ public class RRT {
 		}	
 		
 		// Start simulation robot and goal with user values
-		goal.start(gui);
 		explorer.start(gui,goal);
-
+		goal.start(gui);
 		
 		// If already at goal
 		if(explorer.didCollide(goal)){

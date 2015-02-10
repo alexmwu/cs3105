@@ -1,5 +1,6 @@
 package skynet;
 
+import renderables.RenderableOval;
 import easyGui.EasyGui;
 
 public class Goal extends Object{
