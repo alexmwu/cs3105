@@ -57,8 +57,16 @@ public class Object{
 		else return false;
 	}
 	
+	//for x,y,r ints (does same thing as above function)
+	public boolean didCollide(int x,int y,int r){
+		int distX=xCenter-x;
+		int distY=yCenter-y;
+		if(dist(distX,distY)<=r+radius) return true;
+		else return false;
+	}
 	
-	private double dist(int distX, int distY){
+	
+	public double dist(int distX, int distY){
 		return Math.sqrt(distX*distX+distY*distY);
 	}
 }
