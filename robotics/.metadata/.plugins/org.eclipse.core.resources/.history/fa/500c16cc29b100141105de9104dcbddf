@@ -1,0 +1,31 @@
+package skynet;
+
+import geometry.IntPoint;
+
+public class Point {
+	private IntPoint point;
+	
+	Point(IntPoint p){
+		point=p;
+	}
+	
+	Point(int x,int y){
+		point=new IntPoint(x,y);
+	}
+	
+	int getX(){
+		return point.x;
+	}
+	
+	int getY(){
+		return point.y;
+	}
+	
+	void setX(int x){
+		point.x=x;
+	}
+	
+	void setY(int y){
+		point.y=y;
+	}
+}

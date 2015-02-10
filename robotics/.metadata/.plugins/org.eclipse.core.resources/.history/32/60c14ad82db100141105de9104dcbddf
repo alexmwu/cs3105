@@ -1,0 +1,94 @@
+package skynet;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import renderables.*;
+import geometry.IntPoint;
+
+public class Obstacle {
+	private RenderableOval ob;
+	private int xCenter,yCenter,radius;
+	
+	Obstacle(int cX, int cY, int r){
+		ob = new RenderableOval(cX,cY,2*r,2*r);
+		xCenter=cX;
+		yCenter=cY;
+		radius=r;
+	}
+	
+	public boolean isEmpty(){
+		return ob==null;
+	}
+	
+	RenderableOval getObstacle(){
+		return ob;
+	}
+	
+	public int getX(){
+		return xCenter;
+	}
+	
+	public int getY(){
+		return yCenter;
+	}
+	
+	public int getR(){
+		return radius;
+	}
+	
+	public RenderableOval getRenderable(){
+		return ob;
+	}
+	
+	//for point intersecting with obstacle
+	public boolean didCollide(IntPoint p){
+		int distX=xCenter-p.x;
+		int distY=yCenter-p.y;
+		if(dist(distX,distY)<=radius) return true;
+		else return false;
+	}
+	
+	//for circle intersecting with obstacle
+	public boolean didIntersect(int x,int y,int r){
+		int distX=xCenter-x;
+		int distY=yCenter-y;
+		if(dist(distX,distY)<=r+radius) return true;
+		else return false;
+	}
+	
+	public static ArrayList<Obstacle> initObstacles(int ){
+		int x,y,r;
+		Obstacle tmp;
+		ArrayList<Obstacle> obstacles;
+		
+		// New Random generator
+		Random randGen = new Random();
+		
+		// Number of obstacles
+		int num = randGen.nextInt(11);
+		
+		
+		for(int i=0;i<num;i++){
+			x=randGen.nextInt(pixelX+1);
+			y=randGen.nextInt(pixelY+1);
+			r=randGen.nextInt(goalSize+1);
+			tmp = new Obstacle(x,y,r);
+			// If obstacles intersects with the start or goal
+			if(tmp.didCollide(new IntPoint(startX,startY)) || tmp.didIntersect(goalX, goalY, goalSize)){
+				i--;
+				tmp=null;
+				continue;
+			}
+			else{
+				obstacles.add(tmp);
+				gui.draw(tmp.getRenderable());
+			}
+		}
+		return obstacles;
+	}
+	
+	public double dist(int distX, int distY){
+		return Math.sqrt(distX*distX+distY*distY);
+	}
+}

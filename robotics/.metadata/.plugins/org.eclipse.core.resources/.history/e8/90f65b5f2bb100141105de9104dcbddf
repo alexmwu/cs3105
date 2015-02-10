@@ -1,0 +1,60 @@
+package skynet;
+
+
+public class Object {
+	private int xCenter,yCenter;
+	private int radius;
+
+	Object(int x,int y,int r){
+		xCenter=x;
+		yCenter=y;
+		radius=r;
+	}
+	
+	public int getX(){
+		return xCenter;
+	}
+	
+	public int getY(){
+		return yCenter;
+	}
+	
+	public int getRadius(){
+		return radius;
+	}
+	
+	public void setX(int x){
+		xCenter=x;
+	}
+	
+	public void setY(int y){
+		yCenter=y;
+	}
+	
+	public void setRadius(int r){
+		radius=r;
+	}
+	
+	
+	//for point intersecting with obstacle
+	public boolean didCollide(int x,int y){
+		int distX=xCenter-x;
+		int distY=yCenter-y;
+		if(dist(distX,distY)<=radius) return true;
+		else return false;
+	}
+	
+	
+	//for circle intersecting with obstacle
+	public boolean didCollide(int x,int y,int r){
+		int distX=xCenter-x;
+		int distY=yCenter-y;
+		if(dist(distX,distY)<=r+radius) return true;
+		else return false;
+	}
+	
+	
+	public double dist(int distX, int distY){
+		return Math.sqrt(distX*distX+distY*distY);
+	}
+}

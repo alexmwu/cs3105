@@ -1,0 +1,18 @@
+package skynet;
+
+import renderables.RenderableOval;
+
+public class Robot extends Object{
+	private RenderableOval rob;
+	
+	Robot(int cX, int cY, int r){
+		super(cX,cY,r);
+		rob = new RenderableOval(cX,cY,2*r,2*r);
+	}
+	
+	public RenderableOval getRenderable(){
+		return rob;
+	}
+	
+	
+}
