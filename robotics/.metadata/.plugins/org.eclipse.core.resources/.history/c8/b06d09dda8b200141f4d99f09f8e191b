@@ -77,7 +77,6 @@ public class RRT {
 	public ArrayList<Obstacle> initRandObstacles(){
 		int x,y,r;
 		Obstacle tmp;
-		ArrayList<Obstacle> randObst = new ArrayList<Obstacle>();
 		boolean collided = false;
 		
 		// Number of obstacles (from 0 to 10)
@@ -90,8 +89,8 @@ public class RRT {
 			r=randGen.nextInt(goal.getRadius()+1);
 			
 			//if obstacles intersect with other obstacles
-			for(Obstacle o : randObst){
-				if(o.didCollide(x,y,r)) collided=true;
+			for(i=0;i<obstacles.size();i++){
+				if(obstacles.get(i).didCollide(x,y,r)) collided=true;
 
 			}
 			
@@ -102,11 +101,11 @@ public class RRT {
 			}
 			else{
 				tmp = new Obstacle(x,y,r);
-				randObst.add(tmp);
+				obstacles.add(tmp);
 				gui.draw(tmp.getRenderable());
 			}
 		}
-		return randObst;
+		return obstacles;
 	}
 
 	
@@ -144,6 +143,7 @@ public class RRT {
 		
 		// Initialize obstacles
 		if(!atGoal){
+			obstacles = new ArrayList<Obstacle>();
 			obstacles = initRandObstacles();
 		}
 		

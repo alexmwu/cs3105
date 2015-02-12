@@ -77,8 +77,8 @@ public class RRT {
 	public ArrayList<Obstacle> initRandObstacles(){
 		int x,y,r;
 		Obstacle tmp;
-		ArrayList<Obstacle> randObst = new ArrayList<Obstacle>();
 		boolean collided = false;
+		obstacles = new ArrayList<Obstacle>();
 		
 		// Number of obstacles (from 0 to 10)
 		int num = randGen.nextInt(11);
@@ -88,25 +88,25 @@ public class RRT {
 			x=randGen.nextInt(xPixels+1);
 			y=randGen.nextInt(yPixels+1);
 			r=randGen.nextInt(goal.getRadius()+1);
+			tmp = new Obstacle(x,y,r);
 			
 			//if obstacles intersect with other obstacles
-			for(Obstacle o : randObst){
-				if(o.didCollide(x,y,r)) collided=true;
+			for(Obstacle o : obstacles){
+				if(tmp.didCollide(o)) collided=true;
 
 			}
 			
 			// If obstacles intersects with the start or goal
-			if(explorer.didCollide(x,y,r) || goal.didCollide(x,y,r) || collided){
+			if(tmp.didCollide(explorer) || tmp.didCollide(goal) || collided){
 				i--;
 				continue;
 			}
 			else{
-				tmp = new Obstacle(x,y,r);
-				randObst.add(tmp);
+				obstacles.add(tmp);
 				gui.draw(tmp.getRenderable());
 			}
 		}
-		return randObst;
+		return obstacles;
 	}
 
 	
@@ -143,9 +143,7 @@ public class RRT {
 
 		
 		// Initialize obstacles
-		if(!atGoal){
-			obstacles = initRandObstacles();
-		}
+		if(!atGoal)	obstacles = initRandObstacles();
 		
 		// User instructions
 		if(!atGoal) gui.setLabelText(statusLabelId,"Please press Move for one step and Goal for solution");

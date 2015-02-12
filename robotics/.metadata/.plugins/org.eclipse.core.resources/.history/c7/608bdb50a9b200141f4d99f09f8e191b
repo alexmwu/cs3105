@@ -90,8 +90,8 @@ public class RRT {
 			r=randGen.nextInt(goal.getRadius()+1);
 			
 			//if obstacles intersect with other obstacles
-			for(Obstacle o : randObst){
-				if(o.didCollide(x,y,r)) collided=true;
+			for(i=0;i<randObst.size();i++){
+				if(randObst.get(i).didCollide(x,y,r)) collided=true;
 
 			}
 			
