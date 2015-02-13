@@ -122,6 +122,7 @@ public class RRT {
 	}
 	
 	public void start(){
+		atGoal=false;
 		if(!started){
 			// Add a move and goal button to the right of start
 			gui.addButton(4,1,"Move",this,"move");
@@ -149,8 +150,7 @@ public class RRT {
 		
 		// User instructions
 		if(!atGoal) gui.setLabelText(statusLabelId,"Please press Move for one step and Goal for solution");
-
-		atGoal=false;
+		
 		// Refresh the GUI
 		gui.update();
 	}
@@ -166,7 +166,7 @@ public class RRT {
 			while(true){
 				randomX = randGen.nextInt((int)xPixels+2*(xPixels/bufferFactor))-(xPixels/bufferFactor);
 				randomY = randGen.nextInt((int)yPixels+2*(yPixels/bufferFactor))-(yPixels/bufferFactor);
-				//if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
+				if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
 				if(explorer.move(gui,obstacles,randomX,randomY)) break;
 			}
 			
@@ -179,14 +179,14 @@ public class RRT {
 
 			gui.draw(explorer.getRenderable());	
 			
+			// Update GUI
+			gui.update();
+			
 			if(explorer.didCollide(goal)){
 				atGoal = true;
 				gui.setLabelText(statusLabelId, "You've reached the goal.");
 				end();
 			}
-			
-			// Update GUI
-			gui.update();
 		}
 		
 	}

@@ -23,7 +23,7 @@ public class RRT {
 	private Goal goal;
 	
 	private Random randGen;
-	private int xPixels,yPixels,bufferFactor;	//bufferFactor to pick random ints in buffer around window
+	private int xPixels,yPixels;
 	
 	private ArrayList<Obstacle> obstacles;
 	
@@ -31,12 +31,11 @@ public class RRT {
 	//the goal, and whether the user wants to display the random red dots, respectively
 	private boolean started,atGoal,displayRandomDots;
 
-	public RRT(int x,int y,int buffer){
+	public RRT(int x,int y){
 		
 		// Create a new EasyGui instance with a 500x500pixel graphics panel.
 		xPixels=x;
 		yPixels=y;
-		bufferFactor=buffer;
 		gui = new EasyGui(xPixels, yPixels);
 		
 		// Initialize the robot with ids and values for starting coordinates, radius, and step
@@ -122,6 +121,7 @@ public class RRT {
 	}
 	
 	public void start(){
+		atGoal=false;
 		if(!started){
 			// Add a move and goal button to the right of start
 			gui.addButton(4,1,"Move",this,"move");
@@ -149,8 +149,7 @@ public class RRT {
 		
 		// User instructions
 		if(!atGoal) gui.setLabelText(statusLabelId,"Please press Move for one step and Goal for solution");
-
-		atGoal=false;
+		
 		// Refresh the GUI
 		gui.update();
 	}
@@ -164,9 +163,8 @@ public class RRT {
 			// hits obstacles
 			
 			while(true){
-				randomX = randGen.nextInt((int)xPixels+2*(xPixels/bufferFactor))-(xPixels/bufferFactor);
-				randomY = randGen.nextInt((int)yPixels+2*(yPixels/bufferFactor))-(yPixels/bufferFactor);
-				//if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
+				randomX = randGen.nextInt(xPixels+1);
+				randomY = randGen.nextInt(yPixels+1);
 				if(explorer.move(gui,obstacles,randomX,randomY)) break;
 			}
 			
@@ -179,14 +177,14 @@ public class RRT {
 
 			gui.draw(explorer.getRenderable());	
 			
+			// Update GUI
+			gui.update();
+			
 			if(explorer.didCollide(goal)){
 				atGoal = true;
 				gui.setLabelText(statusLabelId, "You've reached the goal.");
 				end();
 			}
-			
-			// Update GUI
-			gui.update();
 		}
 		
 	}
@@ -206,7 +204,7 @@ public class RRT {
 	public static void main(String[] args)
 	{
 
-		RRT rrt = new RRT(500,500,10);
+		RRT rrt = new RRT(500,500);
 		rrt.show();
 	}
 	
