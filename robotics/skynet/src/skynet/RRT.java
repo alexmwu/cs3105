@@ -14,8 +14,6 @@ import geometry.IntPoint;
 
 public class RRT {
 
-	private final EasyGui gui;
-
 	private final int statusLabelId;
 	
 	private RRTRobot explorer;
@@ -31,13 +29,12 @@ public class RRT {
 	//the goal, and whether the user wants to display the random red dots, respectively
 	private boolean started,atGoal,displayRandomDots;
 
-	public RRT(int x,int y,int buffer){
+	public RRT(EasyGui gui, int x,int y,int buffer){
 		
 		// Create a new EasyGui instance with a 500x500pixel graphics panel.
 		xPixels=x;
 		yPixels=y;
 		bufferFactor=buffer;
-		gui = new EasyGui(xPixels, yPixels);
 		
 		// Initialize the robot with ids and values for starting coordinates, radius, and step
 		explorer = new RRTRobot(gui.addTextField(1, 0, "0"),gui.addTextField(1, 1, "0"),
@@ -200,14 +197,6 @@ public class RRT {
 	
 	public void toGoal(){
 		while(!atGoal) move();
-	}
-	
-	// MAIN
-	public static void main(String[] args)
-	{
-
-		RRT rrt = new RRT(500,500,10);
-		rrt.show();
 	}
 	
 }
