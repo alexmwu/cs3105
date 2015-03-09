@@ -17,7 +17,7 @@ public class RRT {
 	private RRTRobot explorer;
 	
 	private Goal goal;
-	private GUI gui;
+	private Robot rob;
 	
 	private Random randGen;
 	private int bufferFactor;	//bufferFactor to pick random ints in buffer around window
@@ -28,16 +28,16 @@ public class RRT {
 	//the goal, and whether the user wants to display the random red dots, respectively
 	private boolean started,atGoal,displayRandomDots;
 
-	public RRT(GUI g,int buffer){
+	public RRT(Robot g,int buffer){
 		
 		bufferFactor=buffer;
-		gui=g;
+		rob=g;
 		
 		// Initialize the robot with ids and values for starting coordinates, radius, and step
-		explorer = new RRTRobot(gui);
+		explorer = new RRTRobot(rob);
 		
 		// Initialize goal with ids for starting coordinates and radius
-		goal = new Goal(gui);
+		goal = new Goal(rob);
 
 		// So doesn't throw an error with move or goal button used before initialization
 		started = false;
@@ -62,8 +62,8 @@ public class RRT {
 		
 		
 		for(int i=0;i<num;i++){
-			x=randGen.nextInt(xPixels+1);
-			y=randGen.nextInt(yPixels+1);
+			x=randGen.nextInt(rob.getxPixels()+1);
+			y=randGen.nextInt(rob.getyPixels()+1);
 			r=randGen.nextInt(goal.getRadius()+1);
 			
 			//if obstacles intersect with other obstacles
@@ -80,7 +80,7 @@ public class RRT {
 			else{
 				tmp = new Obstacle(x,y,r);
 				randObst.add(tmp);
-				gui.draw(tmp.getRenderable());
+				rob.getGui().draw(tmp.getRenderable());
 			}
 		}
 		return randObst;
@@ -89,7 +89,7 @@ public class RRT {
 	
 	public void show(){
 		// Displays GUI
-		gui.show();
+		rob.getGui().show();
 	}
 	
 	public void randomDots(){
@@ -99,18 +99,18 @@ public class RRT {
 	
 	public void start(){
 		if(!started){
-			gui.startRRT();
+			rob.startRRT();
 			started = true;
 		}	
 
 		// Start simulation robot and goal with user values
-		goal.start(gui);
-		explorer.start(gui,goal);
+		goal.start(rob.getGui());
+		explorer.start(rob.getGui(),goal);
 		
 		// If already at goal
 		if(explorer.didCollide(goal)){
 			atGoal = true;
-			gui.setLabelText(statusLabelId, "You are already at the goal.");
+			rob.setStatusLabelText("You are already at the goal.");
 		}
 
 		
@@ -120,11 +120,11 @@ public class RRT {
 		}
 		
 		// User instructions
-		if(!atGoal) gui.setLabelText(statusLabelId,"Please press Move for one step and Goal for solution");
+		if(!atGoal) rob.setStatusLabelText("Please press Move for one step and Goal for solution");
 
 		atGoal=false;
 		// Refresh the GUI
-		gui.update();
+		rob.getGui().update();
 	}
 	
 	public void move(){
@@ -136,38 +136,38 @@ public class RRT {
 			// hits obstacles
 			
 			while(true){
-				randomX = randGen.nextInt((int)xPixels+2*(xPixels/bufferFactor))-(xPixels/bufferFactor);
-				randomY = randGen.nextInt((int)yPixels+2*(yPixels/bufferFactor))-(yPixels/bufferFactor);
+				randomX = randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
+				randomY = randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
 				//if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
-				if(explorer.move(gui,obstacles,randomX,randomY)) break;
+				if(explorer.move(rob.getGui(),obstacles,randomX,randomY)) break;
 			}
 			
 			// Draws a red dot at random point
 			if(displayRandomDots){
 				RenderablePoint randPoint = new RenderablePoint(randomX,randomY);
 				randPoint.setProperties(Color.RED, 7.5f);
-				gui.draw(randPoint);
+				rob.getGui().draw(randPoint);
 			}
 
-			gui.draw(explorer.getRenderable());	
+			rob.getGui().draw(explorer.getRenderable());	
 			
 			if(explorer.didCollide(goal)){
 				atGoal = true;
-				gui.setLabelText(statusLabelId, "You've reached the goal.");
+				rob.setStatusLabelText("You've reached the goal.");
 				end();
 			}
 			
 			// Update GUI
-			gui.update();
+			rob.getGui().update();
 		}
 		
 	}
 
 	public void end(){
-		explorer.end(gui);
+		explorer.end(rob.getGui());
 		
 		// Update GUI
-		gui.update();
+		rob.getGui().update();
 	}
 	
 	public void toGoal(){

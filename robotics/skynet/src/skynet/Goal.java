@@ -5,7 +5,7 @@ import easyGui.EasyGui;
 public class Goal extends Object{
 	private final int radiusId,xId,yId;
 	
-	Goal(GUI g){
+	Goal(Robot g){
 		xId=g.getGoalXText();
 		yId=g.getGoalYText();
 		radiusId=g.getGoalSizeText();

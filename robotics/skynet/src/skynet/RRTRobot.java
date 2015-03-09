@@ -22,11 +22,11 @@ public class RRTRobot extends Object{
 	private boolean atGoal;
 	
 	//ids for the x,y coordinates at start and for the radius and step of robot
-	RRTRobot(GUI g){
-		xId=g.getStartXText();
-		yId=g.getStartYText();
-		radiusId=g.getRobotSizeText();
-		stepId=g.getStepSizeText();
+	RRTRobot(Robot r){
+		xId=r.getStartXText();
+		yId=r.getStartYText();
+		radiusId=r.getRobotSizeText();
+		stepId=r.getStepSizeText();
 
 		// Create an RRTree to be used later.
 		tree = new RRTree(Color.BLACK);
