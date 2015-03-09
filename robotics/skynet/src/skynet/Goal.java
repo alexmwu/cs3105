@@ -5,10 +5,10 @@ import easyGui.EasyGui;
 public class Goal extends Object{
 	private final int radiusId,xId,yId;
 	
-	Goal(int xid, int yid, int rid){
-		xId=xid;
-		yId=yid;
-		radiusId=rid;
+	Goal(GUI g){
+		xId=g.getGoalXText();
+		yId=g.getGoalYText();
+		radiusId=g.getGoalSizeText();
 	}
 	
 	public void start(EasyGui gui){

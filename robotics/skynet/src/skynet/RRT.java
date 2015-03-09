@@ -13,15 +13,14 @@ import geometry.IntPoint;
 
 
 public class RRT {
-
-	private final int statusLabelId;
 	
 	private RRTRobot explorer;
 	
 	private Goal goal;
+	private GUI gui;
 	
 	private Random randGen;
-	private int xPixels,yPixels,bufferFactor;	//bufferFactor to pick random ints in buffer around window
+	private int bufferFactor;	//bufferFactor to pick random ints in buffer around window
 	
 	private ArrayList<Obstacle> obstacles;
 	
@@ -29,35 +28,17 @@ public class RRT {
 	//the goal, and whether the user wants to display the random red dots, respectively
 	private boolean started,atGoal,displayRandomDots;
 
-	public RRT(EasyGui gui, int x,int y,int buffer){
+	public RRT(GUI g,int buffer){
 		
-		// Create a new EasyGui instance with a 500x500pixel graphics panel.
-		xPixels=x;
-		yPixels=y;
 		bufferFactor=buffer;
+		gui=g;
 		
 		// Initialize the robot with ids and values for starting coordinates, radius, and step
-		explorer = new RRTRobot(gui.addTextField(1, 0, "0"),gui.addTextField(1, 1, "0"),
-				gui.addTextField(1,2,"10"),gui.addTextField(1,3,"10"));
-		// Add labels above the gui text fields for robot x,y starting coords and size and step
-		gui.addLabel(0,0,"Starting X");
-		gui.addLabel(0,1,"Starting Y");
-		gui.addLabel(0,2,"Robot Size");
-		gui.addLabel(0,3,"Step Size");
+		explorer = new RRTRobot(gui);
 		
 		// Initialize goal with ids for starting coordinates and radius
-		goal = new Goal(gui.addTextField(3, 0, "0"),gui.addTextField(3, 1, "0"),gui.addTextField(3,2,"40"));
+		goal = new Goal(gui);
 
-		// Add labels above gui text fields for goal x,y, and radius
-		gui.addLabel(2,0,"Goal X");
-		gui.addLabel(2,1,"Goal Y");
-		gui.addLabel(2,2,"Goal Size");
-		
-		// Add a button in row 0 column 1. The button is labeled "Start" and
-		// when pressed it will call the method called start in "this"
-		// instance of the RRT class.
-		gui.addButton(4, 0, "Start", this, "start");
-		
 		// So doesn't throw an error with move or goal button used before initialization
 		started = false;
 		
@@ -67,8 +48,6 @@ public class RRT {
 		// New Random generator
 		randGen = new Random();
 		
-		// Status label
-		statusLabelId = gui.addLabel(5,4,"Enter in coordinates and click start to begin.");
 	}
 
 	//generate random obstacles on a gui field
@@ -120,17 +99,13 @@ public class RRT {
 	
 	public void start(){
 		if(!started){
-			// Add a move and goal button to the right of start
-			gui.addButton(4,1,"Move",this,"move");
-			gui.addButton(4, 2, "Goal", this, "toGoal");
-			gui.addButton(4, 3, "Toggle Dots", this, "randomDots");
+			gui.startRRT();
 			started = true;
 		}	
-		
+
 		// Start simulation robot and goal with user values
 		goal.start(gui);
 		explorer.start(gui,goal);
-
 		
 		// If already at goal
 		if(explorer.didCollide(goal)){
@@ -197,6 +172,11 @@ public class RRT {
 	
 	public void toGoal(){
 		while(!atGoal) move();
+	}
+	
+	//an internal stop to be used when other functions need control of the GUI
+	public void stop(){
+		atGoal=true;
 	}
 	
 }
