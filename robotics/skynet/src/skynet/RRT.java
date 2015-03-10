@@ -33,6 +33,8 @@ public class RRT {
 		bufferFactor=buffer;
 		rob=g;
 		
+		initGUI();
+		
 		// Initialize the robot with ids and values for starting coordinates, radius, and step
 		explorer = new RRTRobot(rob);
 		
@@ -48,6 +50,30 @@ public class RRT {
 		// New Random generator
 		randGen = new Random();
 		
+	}
+	
+	//initialize rrt gui
+	public void initGUI(){		
+		//rrt goal size label
+		rob.setGoalSizeLabel(rob.getGui().addLabel(3,2,"Goal Size"));
+		
+		//rrt goal size text
+		rob.setGoalSizeText(rob.getGui().addTextField(4,2,"40"));
+		
+		// Add a button in row 0 column 1. The button is labeled "Start" and
+		// when pressed it will call the method called start in "this"
+		// instance of the RRT class.
+		rob.setStartButton(rob.getGui().addButton(5, 0, "Start", this, "start"));
+		
+		// Add a move and goal button to the right of start
+		rob.setMoveButton(rob.getGui().addButton(5,1,"Move",this,"move"));
+		rob.getGui().setButtonEnabled(rob.getMoveButton(),false);
+		rob.setGoalButton(rob.getGui().addButton(5, 2, "Goal", this, "toGoal"));
+		rob.getGui().setButtonEnabled(rob.getGoalButton(),false);
+		
+		//rrt toggle dots
+		rob.setToggleDotsButton(rob.getGui().addButton(5, 3, "Toggle Dots", this, "randomDots"));
+		rob.getGui().setButtonEnabled(rob.getToggleDotsButton(),false);
 	}
 
 	//generate random obstacles on a gui field
@@ -101,7 +127,9 @@ public class RRT {
 		if(!started){
 			rob.startRRT();
 			started = true;
-		}	
+		}
+		
+		atGoal=false;
 
 		// Start simulation robot and goal with user values
 		goal.start(rob.getGui());
@@ -111,18 +139,17 @@ public class RRT {
 		if(explorer.didCollide(goal)){
 			atGoal = true;
 			rob.setStatusLabelText("You are already at the goal.");
+			rob.getGui().update();
+			return;
 		}
 
 		
 		// Initialize obstacles
-		if(!atGoal){
-			obstacles = initRandObstacles();
-		}
+		obstacles = initRandObstacles();
 		
 		// User instructions
-		if(!atGoal) rob.setStatusLabelText("Please press Move for one step and Goal for solution");
+		rob.setStatusLabelText("Please press Move for one step and Goal for solution");
 
-		atGoal=false;
 		// Refresh the GUI
 		rob.getGui().update();
 	}

@@ -8,9 +8,4 @@
 		<item value="false" key="moveWizard.updateQualifiedNames"/>
 		<item value="*" key="patterns"/>
 	</section>
-	<section name="RefactoringStatusDialog">
-		<item value="808" key="DIALOG_WIDTH"/>
-		<item value="1|Cantarell|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
-		<item value="505" key="DIALOG_HEIGHT"/>
-	</section>
 </section>

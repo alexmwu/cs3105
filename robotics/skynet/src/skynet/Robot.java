@@ -45,6 +45,8 @@ public class Robot {
 	
 	Robot(int x,int y, int buffer, boolean sType){
 		gui=new EasyGui(x,y);
+		xPixels=x;
+		yPixels=y;
 		
 		// Add labels above the gui text fields for robot x,y starting coords and size and step
 		startXLabel=gui.addLabel(1,0,"Starting X");
@@ -79,54 +81,42 @@ public class Robot {
 		
 		simType=sType;
 		if(simType==true){
-			initRRT();
+			startRRT();
 		}
 		else{
-			initPotFields();
+			startPotFields();
 		}
 		
 		//show gui
 		gui.show();
 	}
 
-	public void initRRT(){		
-		//rrt goal size label
-		goalSizeLabel=gui.addLabel(3,2,"Goal Size");
-		
-		//rrt goal size text
-		goalSizeText=gui.addTextField(4,2,"40");
-		
-		// Add a button in row 0 column 1. The button is labeled "Start" and
-		// when pressed it will call the method called start in "this"
-		// instance of the RRT class.
-		startButton=gui.addButton(5, 0, "Start", rrt, "start");
-		
-		// Add a move and goal button to the right of start
-		moveButton=gui.addButton(5,1,"Move",rrt,"move");
-		gui.setButtonEnabled(moveButton,false);
-		goalButton=gui.addButton(5, 2, "Goal", rrt, "toGoal");
-		gui.setButtonEnabled(goalButton,false);
-		
-		//rrt toggle dots
-		toggleDotsButton=gui.addButton(5, 3, "Toggle Dots", rrt, "randomDots");
-		gui.setButtonEnabled(toggleDotsButton,false);
-		
-		//set status label text
-		gui.setLabelText(statusLabel, "Enter in coordinates and click start to begin RRT simulation.");
-	}
+
 	
 	public void startRRT(){
 		//enable move, to goal, and toggle dots buttons
 		gui.setButtonEnabled(moveButton,true);
 		gui.setButtonEnabled(goalButton, true);
 		gui.setButtonEnabled(toggleDotsButton, true);
+		
+		//set status label text
+		gui.setLabelText(statusLabel, "Enter in coordinates and click start to begin RRT simulation.");
 	}
 	
 	public void stopRRT(){
+		//stop if simulation running
 		rrt.stop();
+		//disable rrt buttons
+		gui.setButtonEnabled(moveButton,false);
+		gui.setButtonEnabled(goalButton,false);
+		gui.setButtonEnabled(toggleDotsButton,false);
 	}
 	
-	public void initPotFields(){
+	public void startPotFields(){
+		
+	}
+	
+	public void stopPotFields(){
 		
 	}
 	
@@ -134,11 +124,14 @@ public class Robot {
 	public void changeSim(){
 		if(simType==true){
 			stopRRT();
-			
+			startPotFields();
 			simType=false;
+			//show updated gui
+			gui.show();
 		}
 		else{
-			
+			////////////////////
+			stopPotFields();
 			simType=true;
 		}
 	}
@@ -327,7 +320,7 @@ public class Robot {
 	// MAIN
 	public static void main(String[] args)
 	{
-		Robot r =new Robot(500,500,10,false);
+		Robot r =new Robot(500,500,10,true);
 		
 	}
 }
