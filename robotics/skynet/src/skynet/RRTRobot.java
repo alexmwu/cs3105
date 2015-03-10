@@ -42,10 +42,7 @@ public class RRTRobot extends Object{
 	}
 	
 	public void start(EasyGui gui,Goal goal){
-
-
 		gui.clearGraphicsPanel();
-		
 		
 		//grab gui strings for the input values and parse into the object variables (i.e., into
 		//x,y,radius,and step
@@ -67,7 +64,7 @@ public class RRTRobot extends Object{
 	}
 	
 	//returns next point if there is no obstacle collision; null otherwise
-	public boolean move(EasyGui gui, ArrayList<Obstacle> obstacles, int randomX, int randomY){
+	public boolean move(EasyGui gui, ArrayList<Obstacle> obstacles, int randomX, int randomY,boolean draw){
 		// Returns the nearest node to the random point
 		RRNode nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
 			
@@ -88,7 +85,10 @@ public class RRTRobot extends Object{
 			}
 		}
 		tree.addNode(nearest, moveTo);
-		gui.draw(tree);
+
+        //only if told to draw
+        if(draw) gui.draw(tree);
+
 		setX(moveTo.x);
 		setY(moveTo.y);
 		rendOv.centreX=getX();

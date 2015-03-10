@@ -10,12 +10,19 @@ public class Robot {
 	
 	//text fields for both
 	private int startXText,startYText,robotSizeText,stepSizeText,goalXText,goalYText;
-	
-	//buttons for both
-	private int startButton;
-    private int moveButton;
-    private int goalButton;
 
+
+    //action buttons for pf
+    private int pfStartButton;
+    private int pfMoveButton;
+    private int pfGoalButton;
+
+	//action buttons for rrt
+	private int rrtStartButton;
+    private int rrtMoveButton;
+    private int rrtGoalButton;
+
+    //unique solution button to rrt
     private int solutionButton;
 	
 	//labels for rrt
@@ -55,7 +62,7 @@ public class Robot {
 		startXText=gui.addTextField(2, 0, "0");
 		startYText=gui.addTextField(2, 1, "0");
 		robotSizeText=gui.addTextField(2,2,"10");
-		stepSizeText=gui.addTextField(2,3,"15");
+		stepSizeText=gui.addTextField(2,3,"20");
 		
 		//add goal fields for both rrt and pot fields
 		goalXText=gui.addTextField(4, 0, "0");
@@ -86,9 +93,10 @@ public class Robot {
 
 	public void startRRT(){
         stopPotFields();
-		//enable move, to goal, and toggle dots buttons
-		gui.setButtonEnabled(moveButton,true);
-		gui.setButtonEnabled(goalButton, true);
+
+		//enable rrt move, to goal, solution, and toggle dots buttons
+		gui.setButtonEnabled(rrtMoveButton,true);
+		gui.setButtonEnabled(rrtGoalButton, true);
 		gui.setButtonEnabled(toggleDotsButton, true);
         gui.setButtonEnabled(solutionButton,true);
 		
@@ -104,16 +112,18 @@ public class Robot {
 		//stop if simulation running
 		rrt.stop();
 		//disable rrt buttons
-		gui.setButtonEnabled(moveButton,false);
-		gui.setButtonEnabled(goalButton,false);
+		gui.setButtonEnabled(rrtMoveButton,false);
+		gui.setButtonEnabled(rrtGoalButton,false);
 		gui.setButtonEnabled(toggleDotsButton,false);
+        gui.setButtonEnabled(solutionButton,false);
 	}
 	
 	public void startPotFields(){
 		stopRRT();
-        //enable pot fields buttons
-        /////////////////////////////
 
+        //enable pot fields move and goal buttons
+        gui.setButtonEnabled(pfMoveButton,true);
+        gui.setButtonEnabled(pfGoalButton,true);
 
         //wipe gui and update
         gui.clearGraphicsPanel();
@@ -121,8 +131,12 @@ public class Robot {
 	}
 	
 	public void stopPotFields(){
+        //stop if simulation running
+        pf.stop();
+
 		//disable potfields buttons
-        //////////////////////////
+        gui.setButtonEnabled(pfMoveButton,false);
+        gui.setButtonEnabled(pfGoalButton,false);
 	}
 	
 	public void setStatusLabelText(String s){
@@ -265,28 +279,28 @@ public class Robot {
 		this.yPixels = yPixels;
 	}
 	
-	public int getStartButton() {
-		return startButton;
+	public int getRrtStartButton() {
+		return rrtStartButton;
 	}
 
-	public void setStartButton(int startButton) {
-		this.startButton = startButton;
+	public void setRrtStartButton(int rrtStartButton) {
+		this.rrtStartButton = rrtStartButton;
 	}
 
-	public int getMoveButton() {
-		return moveButton;
+	public int getRrtMoveButton() {
+		return rrtMoveButton;
 	}
 
-	public void setMoveButton(int moveButton) {
-		this.moveButton = moveButton;
+	public void setRrtMoveButton(int rrtMoveButton) {
+		this.rrtMoveButton = rrtMoveButton;
 	}
 
-	public int getGoalButton() {
-		return goalButton;
+	public int getRrtGoalButton() {
+		return rrtGoalButton;
 	}
 
-	public void setGoalButton(int goalButton) {
-		this.goalButton = goalButton;
+	public void setRrtGoalButton(int rrtGoalButton) {
+		this.rrtGoalButton = rrtGoalButton;
 	}
 
 	public int getToggleDotsButton() {
@@ -313,6 +327,29 @@ public class Robot {
         this.solutionButton = solutionButton;
     }
 
+    public int getPfStartButton() {
+        return pfStartButton;
+    }
+
+    public void setPfStartButton(int pfStartButton) {
+        this.pfStartButton = pfStartButton;
+    }
+
+    public int getPfMoveButton() {
+        return pfMoveButton;
+    }
+
+    public void setPfMoveButton(int pfMoveButton) {
+        this.pfMoveButton = pfMoveButton;
+    }
+
+    public int getPfGoalButton() {
+        return pfGoalButton;
+    }
+
+    public void setPfGoalButton(int pfGoalButton) {
+        this.pfGoalButton = pfGoalButton;
+    }
 	
 	// MAIN
 	public static void main(String[] args)

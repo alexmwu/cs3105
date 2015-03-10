@@ -1,12 +1,5 @@
 package skynet;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
-import renderables.RenderablePoint;
-import dataStructures.RRNode;
-import dataStructures.RRTree;
-import easyGui.EasyGui;
 import geometry.IntPoint;
 
 public class PotFields {
@@ -15,6 +8,10 @@ public class PotFields {
 	private Robot rob;
 
     private IntPoint goal;
+
+    private boolean started;
+
+    private boolean atGoal;
 
 	public PotFields(Robot r){
         rob=r;
@@ -25,20 +22,22 @@ public class PotFields {
 
         //initialize goal with user points
         goal=new IntPoint();
-        getUserGoal();
+
+        // So doesn't throw an error with move or goal button used before initialization
+        started = false;
 
         rob.getGui().update();
 	}
-	
-	public void initGui(){
+
+    public void initGui() {
         //add start button for potential fields
-        rob.setStartButton(rob.getGui().addButton(6, 0, "Initialize PF", this, "init"));
+        rob.setPfStartButton(rob.getGui().addButton(6, 0, "Initialize PF", this, "init"));
 
         // Add a move and goal button to the right of start
-        rob.setMoveButton(rob.getGui().addButton(6,1,"Move PF",this,"move"));
-        rob.getGui().setButtonEnabled(rob.getMoveButton(),false);
-        rob.setGoalButton(rob.getGui().addButton(6, 2, "To Goal", this, "toGoal"));
-        rob.getGui().setButtonEnabled(rob.getGoalButton(),false);
+        rob.setPfMoveButton(rob.getGui().addButton(6, 1, "Move PF", this, "move"));
+        rob.getGui().setButtonEnabled(rob.getPfMoveButton(),false);
+        rob.setPfGoalButton(rob.getGui().addButton(6, 2, "To Goal", this, "toGoal"));
+        rob.getGui().setButtonEnabled(rob.getPfGoalButton(),false);
 	}
 
     public void getUserGoal(){
@@ -47,7 +46,7 @@ public class PotFields {
     }
 
     public void init(){
-     /*   if(!started){
+        if(!started){
             rob.startRRT();
             started = true;
         }
@@ -55,11 +54,11 @@ public class PotFields {
         atGoal=false;
 
         // Start simulation robot and goal with user values
-        goal.start(rob.getGui());
-        explorer.start(rob.getGui(),goal);
+        getUserGoal();
+        explorer.start(rob.getGui());
 
         // If already at goal
-        if(explorer.didCollide(goal)){
+        if(explorer.atGoal(goal)){
             atGoal = true;
             rob.setStatusLabelText("You are already at the goal.");
             rob.getGui().update();
@@ -67,10 +66,10 @@ public class PotFields {
         }
 
         // User instructions
-        rob.setStatusLabelText("Please press Move for one step and Goal for solution");
+        rob.setStatusLabelText("Pick a movement mode (Move, Animate).");
 
         // Refresh the GUI
-        rob.getGui().update();*/
+        rob.getGui().update();
     }
 
 
@@ -83,6 +82,8 @@ public class PotFields {
 
     }
 
+    public void stop(){
 
+    }
 	
 }

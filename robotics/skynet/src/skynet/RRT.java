@@ -56,18 +56,18 @@ public class RRT {
 		rob.setGoalSizeText(rob.getGui().addTextField(4,2,"40"));
 		
 		//add start button for rrt
-		rob.setStartButton(rob.getGui().addButton(5, 0, "Initialize RRT", this, "init"));
+		rob.setRrtStartButton(rob.getGui().addButton(5, 0, "Initialize RRT", this, "init"));
 		
 		// Add a move, solution, and goal button to the right of start
-		rob.setMoveButton(rob.getGui().addButton(5,1,"Move RRT",this,"move"));
-		rob.getGui().setButtonEnabled(rob.getMoveButton(),false);
-		rob.setGoalButton(rob.getGui().addButton(5, 2, "Animate", this, "toGoal"));
-		rob.getGui().setButtonEnabled(rob.getGoalButton(),false);
+		rob.setRrtMoveButton(rob.getGui().addButton(5, 1, "Move RRT", this, "move"));
+		rob.getGui().setButtonEnabled(rob.getRrtMoveButton(),false);
+		rob.setRrtGoalButton(rob.getGui().addButton(5, 2, "Animate", this, "toGoal"));
+		rob.getGui().setButtonEnabled(rob.getRrtGoalButton(),false);
         rob.setSolutionButton(rob.getGui().addButton(5, 3, "Solution", this, "solution"));
 		rob.getGui().setButtonEnabled(rob.getSolutionButton(),false);
 
 		//rrt toggle dots
-		rob.setToggleDotsButton(rob.getGui().addButton(5, 3, "Toggle Dots", this, "randomDots"));
+		rob.setToggleDotsButton(rob.getGui().addButton(5, 4, "Toggle Dots", this, "randomDots"));
 		rob.getGui().setButtonEnabled(rob.getToggleDotsButton(),false);
 	}
 
@@ -140,7 +140,7 @@ public class RRT {
 		obstacles = initRandObstacles();
 		
 		// User instructions
-		rob.setStatusLabelText("Please press Move for one step and Goal for solution");
+		rob.setStatusLabelText("Pick a movement mode (Move, Animate, Solution).");
 
         atGoal=false;
 		// Refresh the GUI
@@ -159,7 +159,7 @@ public class RRT {
 				randomX = randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
 				randomY = randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
 				//if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
-				if(explorer.move(rob.getGui(),obstacles,randomX,randomY)) break;
+				if(explorer.move(rob.getGui(),obstacles,randomX,randomY,true)) break;
 			}
 			
 			// Draws a red dot at random point
@@ -180,7 +180,6 @@ public class RRT {
 			// Update GUI
 			rob.getGui().update();
 		}
-		
 	}
 
 	public void end(){
@@ -189,7 +188,8 @@ public class RRT {
 		// Update GUI
 		rob.getGui().update();
 	}
-	
+
+    //quite a bit slower than solution, even after it finishes up (slow to drag gui image around)
 	public void toGoal(){
         while(!atGoal) move();
 	}
@@ -205,17 +205,8 @@ public class RRT {
                     randomX = randGen.nextInt((int) rob.getxPixels() + 2 * (rob.getxPixels() / bufferFactor)) - (rob.getxPixels() / bufferFactor);
                     randomY = randGen.nextInt((int) rob.getyPixels() + 2 * (rob.getyPixels() / bufferFactor)) - (rob.getyPixels() / bufferFactor);
                     //if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
-                    if (explorer.move(rob.getGui(), obstacles, randomX, randomY)) break;
+                    if (explorer.move(rob.getGui(), obstacles, randomX, randomY,false)) break;
                 }
-
-                // Draws a red dot at random point
-                if (displayRandomDots) {
-                    RenderablePoint randPoint = new RenderablePoint(randomX, randomY);
-                    randPoint.setProperties(Color.RED, 7.5f);
-                    rob.getGui().draw(randPoint);
-                }
-
-                //rob.getGui().draw(explorer.getRenderable());
 
                 if (explorer.didCollide(goal)) {
                     atGoal = true;

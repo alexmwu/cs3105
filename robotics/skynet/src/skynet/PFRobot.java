@@ -1,18 +1,22 @@
 package skynet;
 
 import dataStructures.RRTree;
+import easyGui.EasyGui;
 import geometry.IntPoint;
 import renderables.RenderableOval;
+import renderables.RenderablePoint;
+
+import java.awt.*;
 
 /**
  * Created by aw246 on 10/03/15.
  */
-public class PFRobot {
+public class PFRobot{
 
     private int sonarRange;	//size of sonar
     private int sensingRadius; //radius of sensing region; should be greater than robot size
     private int robotSize;
-    private RenderableOval rendOv;	//draw robot on screen based on radius
+    private int xCenter,yCenter;
 
     //ids for starting input
     private int xId,yId,radiusId,sonarId;
@@ -27,37 +31,82 @@ public class PFRobot {
     //step between sample points
     private double step;
 
-    //is the robot at the goal
-    private boolean atGoal;
-
     PFRobot(Robot r){
         xId=r.getStartXText();
         yId=r.getStartYText();
         radiusId=r.getRobotSizeText();
         sonarId=r.getStepSizeText();
 
-        sonarRange=Integer.parseInt(r.getGui().getTextFieldContent(sonarId));
-        //size of robot
-        robotSize=Integer.parseInt(r.getGui().getTextFieldContent(radiusId));
-
         //7 sampling points
         numSamples=7;
 
-        //sensing radius of 10 from robot center
-        sensingRadius=10;
+        //allocate memory
+        sensingSamples=new IntPoint[numSamples];
+
+        angle=0;
     }
 
-    public void init(){
-        step=Math.PI/Math.floor((double) numSamples);
+    //initialize pf variables and gui
+    public void start(EasyGui gui){
+        gui.clearGraphicsPanel();
+
+        //initialize intpoints in array
+        for(int i=0;i<sensingSamples.length;i++)
+            sensingSamples[i]=new IntPoint();
+
+        //initialize step of angle calculations
+        step=Math.PI/(numSamples-1);
+        //get range of robot sonar
+        sonarRange=Integer.parseInt(gui.getTextFieldContent(sonarId));
+        //size of robot
+        robotSize=Integer.parseInt(gui.getTextFieldContent(radiusId));
+        //get initial location
+        xCenter=Integer.parseInt(gui.getTextFieldContent(xId));
+        yCenter=Integer.parseInt(gui.getTextFieldContent(yId));
+        //sensing radius is initially halfway between robot size and sonar size
+        sensingRadius=(robotSize+sonarRange)/2;
+        //get sensing sample coord points
+        calculateSensingSamples();
+
+        //draw robot and its system
+        draw(gui);
 
     }
 
+    public void draw(EasyGui gui){
+        //draw sensing region
+        for(int i=0;i<sensingSamples.length;i++){
+            RenderablePoint p=new RenderablePoint(sensingSamples[i].x,sensingSamples[i].y);
+            p.setProperties(Color.RED,4.0f);
+            gui.draw(p);
+        }
+
+        //draw sonar
+        RenderableOval sonar=new RenderableOval(xCenter,yCenter,2*sonarRange,2*sonarRange);
+        sonar.setProperties(Color.GREEN,0.5f,false);
+        gui.draw(sonar);
+        //draw actual robot
+        gui.draw(new RenderableOval(xCenter,yCenter,2*robotSize,2*robotSize));
+    }
 
     public void calculateSensingSamples(){
         double from=angle-(Math.PI/2.0);
         double to=angle+(Math.PI/2.0);
+        int i=0;
+       // System.out.println(from+" "+to);
         for(double d=from;d<=to;d+=step){
-            
+            sensingSamples[i].x=(int) (sensingRadius*Math.cos(d)) + xCenter;
+            sensingSamples[i].y=(int) (sensingRadius*Math.sin(d)) + yCenter;
+            i++;
         }
+    }
+
+    public boolean atGoal(IntPoint p){
+        if(dist(p.x,p.y,xCenter,yCenter)<robotSize) return true;
+        else return false;
+    }
+
+    public double dist(int x1,int y1, int x2,int y2){
+        return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
     }
 }
