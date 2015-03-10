@@ -1,6 +1,9 @@
 package skynet;
 
 import geometry.IntPoint;
+import renderables.RenderablePoint;
+
+import java.awt.*;
 
 public class PotFields {
 
@@ -8,6 +11,7 @@ public class PotFields {
 	private Robot rob;
 
     private IntPoint goal;
+    private RenderablePoint rendGoal;
 
     private boolean started;
 
@@ -47,7 +51,7 @@ public class PotFields {
 
     public void init(){
         if(!started){
-            rob.startRRT();
+            rob.startPotFields();
             started = true;
         }
 
@@ -56,6 +60,11 @@ public class PotFields {
         // Start simulation robot and goal with user values
         getUserGoal();
         explorer.start(rob.getGui());
+
+        //draw goal
+        rendGoal=new RenderablePoint(goal.x,goal.y);
+        rendGoal.setProperties(Color.BLUE,20.0f);
+        rob.getGui().draw(rendGoal);
 
         // If already at goal
         if(explorer.atGoal(goal)){
@@ -68,13 +77,20 @@ public class PotFields {
         // User instructions
         rob.setStatusLabelText("Pick a movement mode (Move, Animate).");
 
+        atGoal=false;
+
+
         // Refresh the GUI
         rob.getGui().update();
     }
 
 
-    public void move(){
 
+    public void move(){
+        if(atGoal) return;
+        else{
+
+        }
     }
 
 

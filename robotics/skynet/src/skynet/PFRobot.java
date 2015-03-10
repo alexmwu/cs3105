@@ -5,8 +5,10 @@ import easyGui.EasyGui;
 import geometry.IntPoint;
 import renderables.RenderableOval;
 import renderables.RenderablePoint;
+import renderables.RenderablePolyline;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by aw246 on 10/03/15.
@@ -23,6 +25,8 @@ public class PFRobot{
 
     //sensing points
     private IntPoint[] sensingSamples;
+    //int point for where robot is pointing
+    private IntPoint pointing;
     //number of sample points; should be odd
     private int numSamples;
 
@@ -87,6 +91,13 @@ public class PFRobot{
         gui.draw(sonar);
         //draw actual robot
         gui.draw(new RenderableOval(xCenter,yCenter,2*robotSize,2*robotSize));
+
+        //draw line to show where robot is pointing
+        RenderablePolyline pl=new RenderablePolyline();
+        pl.addPoint(pointing.x,pointing.y);
+        pl.addPoint(xCenter,yCenter);
+        pl.setProperties(Color.BLACK,2.0f);
+        gui.draw(pl);
     }
 
     public void calculateSensingSamples(){
@@ -97,9 +108,29 @@ public class PFRobot{
         for(double d=from;d<=to;d+=step){
             sensingSamples[i].x=(int) (sensingRadius*Math.cos(d)) + xCenter;
             sensingSamples[i].y=(int) (sensingRadius*Math.sin(d)) + yCenter;
+            //return center point of sensing samples
+            if(i==(numSamples/2)){
+                pointing=sensingSamples[i];
+            }
             i++;
         }
     }
+
+    //calculates
+    public double[] getPotential(IntPoint goal,ArrayList<Obstacle> obs){
+        double[] potentials=new double[numSamples];
+        if(obs!=null){
+
+        }
+
+        for(int i)
+
+        return potentials;
+    }
+
+    //formula for potential between two points
+    //public double potential(int x1,int y1, int x2, int y2){
+    //}
 
     public boolean atGoal(IntPoint p){
         if(dist(p.x,p.y,xCenter,yCenter)<robotSize) return true;
