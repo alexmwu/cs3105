@@ -1,2 +1,0 @@
-INDEX VERSION 1.127+/cs/home/aw246/public_html/cs3105/robotics/.metadata/.plugins/org.eclipse.jdt.core
-3696331971.index
