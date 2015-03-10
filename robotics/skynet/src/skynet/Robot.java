@@ -52,7 +52,7 @@ public class Robot {
 		startXLabel=gui.addLabel(1,0,"Starting X");
 		startYLabel=gui.addLabel(1,1,"Starting Y");
 		robotSizeLabel=gui.addLabel(1,2,"Robot Size");
-		stepSizeLabel=gui.addLabel(1,3,"Step Size");
+		stepSizeLabel=gui.addLabel(1,3,"Step/Sonar Size");
 
 		// Add labels above gui text fields for goal x,y
 		goalXLabel=gui.addLabel(3,0,"Goal X");
@@ -68,9 +68,8 @@ public class Robot {
 		goalXText=gui.addTextField(4, 0, "0");
 		goalYText=gui.addTextField(4, 1, "0");
 		
-		//add button and text for changing simulation types
-		simulationText=gui.addLabel(0, 0, "Robot Simulations");
-		simulationButton=gui.addButton(0,1,"Change Sim",this,"changeSim");
+		//top row of gui
+		/////////////////////////////////////
 		
 		// Status label
 		statusLabel=gui.addLabel(6,4,"Pick a robot to begin");

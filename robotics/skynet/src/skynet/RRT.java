@@ -63,12 +63,12 @@ public class RRT {
 		// Add a button in row 0 column 1. The button is labeled "Start" and
 		// when pressed it will call the method called start in "this"
 		// instance of the RRT class.
-		rob.setStartButton(rob.getGui().addButton(5, 0, "Start", this, "start"));
+		rob.setStartButton(rob.getGui().addButton(5, 0, "Start RRT", this, "start"));
 		
 		// Add a move and goal button to the right of start
-		rob.setMoveButton(rob.getGui().addButton(5,1,"Move",this,"move"));
+		rob.setMoveButton(rob.getGui().addButton(5,1,"Move RRT",this,"move"));
 		rob.getGui().setButtonEnabled(rob.getMoveButton(),false);
-		rob.setGoalButton(rob.getGui().addButton(5, 2, "Goal", this, "toGoal"));
+		rob.setGoalButton(rob.getGui().addButton(5, 2, "To Goal", this, "toGoal"));
 		rob.getGui().setButtonEnabled(rob.getGoalButton(),false);
 		
 		//rrt toggle dots

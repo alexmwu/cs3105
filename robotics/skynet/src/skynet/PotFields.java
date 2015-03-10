@@ -29,11 +29,8 @@ public class PotFields {
 		goalFieldId = gui.addTextField(1, 0, "0,0");
 	}
 	
-	
-	// MAIN
-	public static void main(String[] args)
-	{
-		PotFields test = new PotFields();
-		test.move();
+	public void initGui(){
+		
 	}
+	
 }
