@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import renderables.*;
-import dataStructures.RRNode;
-import dataStructures.RRTree;
-import easyGui.EasyGui;
-import geometry.IntPoint;
-
 
 
 public class RRT {
@@ -28,10 +23,10 @@ public class RRT {
 	//the goal, and whether the user wants to display the random red dots, respectively
 	private boolean started,atGoal,displayRandomDots;
 
-	public RRT(Robot g,int buffer){
+	public RRT(Robot r,int buffer){
 		
 		bufferFactor=buffer;
-		rob=g;
+		rob=r;
 		
 		initGUI();
 		
@@ -60,17 +55,17 @@ public class RRT {
 		//rrt goal size text
 		rob.setGoalSizeText(rob.getGui().addTextField(4,2,"40"));
 		
-		// Add a button in row 0 column 1. The button is labeled "Start" and
-		// when pressed it will call the method called start in "this"
-		// instance of the RRT class.
-		rob.setStartButton(rob.getGui().addButton(5, 0, "Start RRT", this, "start"));
+		//add start button for rrt
+		rob.setStartButton(rob.getGui().addButton(5, 0, "Initialize RRT", this, "init"));
 		
-		// Add a move and goal button to the right of start
+		// Add a move, solution, and goal button to the right of start
 		rob.setMoveButton(rob.getGui().addButton(5,1,"Move RRT",this,"move"));
 		rob.getGui().setButtonEnabled(rob.getMoveButton(),false);
-		rob.setGoalButton(rob.getGui().addButton(5, 2, "To Goal", this, "toGoal"));
+		rob.setGoalButton(rob.getGui().addButton(5, 2, "Animate", this, "toGoal"));
 		rob.getGui().setButtonEnabled(rob.getGoalButton(),false);
-		
+        rob.setSolutionButton(rob.getGui().addButton(5, 3, "Solution", this, "solution"));
+		rob.getGui().setButtonEnabled(rob.getSolutionButton(),false);
+
 		//rrt toggle dots
 		rob.setToggleDotsButton(rob.getGui().addButton(5, 3, "Toggle Dots", this, "randomDots"));
 		rob.getGui().setButtonEnabled(rob.getToggleDotsButton(),false);
@@ -82,22 +77,22 @@ public class RRT {
 		Obstacle tmp;
 		ArrayList<Obstacle> randObst = new ArrayList<Obstacle>();
 		boolean collided = false;
-		
+
 		// Number of obstacles (from 0 to 10)
 		int num = randGen.nextInt(11);
-		
-		
+
+
 		for(int i=0;i<num;i++){
 			x=randGen.nextInt(rob.getxPixels()+1);
 			y=randGen.nextInt(rob.getyPixels()+1);
 			r=randGen.nextInt(goal.getRadius()+1);
-			
+
 			//if obstacles intersect with other obstacles
 			for(Obstacle o : randObst){
 				if(o.didCollide(x,y,r)) collided=true;
 
 			}
-			
+
 			// If obstacles intersects with the start or goal
 			if(explorer.didCollide(x,y,r) || goal.didCollide(x,y,r) || collided){
 				i--;
@@ -106,7 +101,7 @@ public class RRT {
 			else{
 				tmp = new Obstacle(x,y,r);
 				randObst.add(tmp);
-				rob.getGui().draw(tmp.getRenderable());
+				rob.getGui().draw(tmp.getRenderableOval());
 			}
 		}
 		return randObst;
@@ -123,18 +118,16 @@ public class RRT {
 		else displayRandomDots=true;
 	}
 	
-	public void start(){
+	public void init(){
 		if(!started){
 			rob.startRRT();
 			started = true;
 		}
-		
-		atGoal=false;
 
 		// Start simulation robot and goal with user values
 		goal.start(rob.getGui());
 		explorer.start(rob.getGui(),goal);
-		
+
 		// If already at goal
 		if(explorer.didCollide(goal)){
 			atGoal = true;
@@ -143,13 +136,13 @@ public class RRT {
 			return;
 		}
 
-		
 		// Initialize obstacles
 		obstacles = initRandObstacles();
 		
 		// User instructions
 		rob.setStatusLabelText("Please press Move for one step and Goal for solution");
 
+        atGoal=false;
 		// Refresh the GUI
 		rob.getGui().update();
 	}
@@ -198,8 +191,43 @@ public class RRT {
 	}
 	
 	public void toGoal(){
-		while(!atGoal) move();
+        while(!atGoal) move();
 	}
+
+    public void solution(){
+        while(!atGoal) {
+                int randomX = 0, randomY = 0;
+
+                // if it returns IntPoint, break out of loop; else continue (it won't return if it
+                // hits obstacles
+
+                while (true) {
+                    randomX = randGen.nextInt((int) rob.getxPixels() + 2 * (rob.getxPixels() / bufferFactor)) - (rob.getxPixels() / bufferFactor);
+                    randomY = randGen.nextInt((int) rob.getyPixels() + 2 * (rob.getyPixels() / bufferFactor)) - (rob.getyPixels() / bufferFactor);
+                    //if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
+                    if (explorer.move(rob.getGui(), obstacles, randomX, randomY)) break;
+                }
+
+                // Draws a red dot at random point
+                if (displayRandomDots) {
+                    RenderablePoint randPoint = new RenderablePoint(randomX, randomY);
+                    randPoint.setProperties(Color.RED, 7.5f);
+                    rob.getGui().draw(randPoint);
+                }
+
+                //rob.getGui().draw(explorer.getRenderable());
+
+                if (explorer.didCollide(goal)) {
+                    atGoal = true;
+                    rob.setStatusLabelText("You've reached the goal. Please wait for GUI to update.");
+                    end();
+                }
+        }
+
+
+        // Update GUI
+        rob.getGui().update();
+    }
 	
 	//an internal stop to be used when other functions need control of the GUI
 	public void stop(){

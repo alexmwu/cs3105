@@ -1,9 +1,0 @@
-package skynet;
-
-public class Goal extends Object{
-	private final int sizeId,xId,yId;
-	
-	Goal(){
-		
-	}
-}

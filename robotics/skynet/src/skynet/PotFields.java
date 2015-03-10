@@ -10,27 +10,79 @@ import easyGui.EasyGui;
 import geometry.IntPoint;
 
 public class PotFields {
-	
-	private final EasyGui gui;
-	
-	private final int startFieldId;
-	private final int goalFieldId;
-	
-	public PotFields(){
-		// Create a new EasyGui instance with a 500x500pixel graphics panel.
-		gui = new EasyGui(500, 500);
-		
-		// Add text field for starting point in row 0 and column 0. The returned ID is
-		// stored in startFieldId to allow access to the field later on.
-		startFieldId = gui.addTextField(0, 0, "0,0");
-		
-		// Add text field for goal point in row 1 and column 0. The returned ID is
-		// stored in goalFieldId to allow access to the field later on.
-		goalFieldId = gui.addTextField(1, 0, "0,0");
+
+    private PFRobot explorer;
+	private Robot rob;
+
+    private IntPoint goal;
+
+	public PotFields(Robot r){
+        rob=r;
+        initGui();
+
+        //initialize pfrobot
+        explorer=new PFRobot(rob);
+
+        //initialize goal with user points
+        goal=new IntPoint();
+        getUserGoal();
+
+        rob.getGui().update();
 	}
 	
 	public void initGui(){
-		
+        //add start button for potential fields
+        rob.setStartButton(rob.getGui().addButton(6, 0, "Initialize PF", this, "init"));
+
+        // Add a move and goal button to the right of start
+        rob.setMoveButton(rob.getGui().addButton(6,1,"Move PF",this,"move"));
+        rob.getGui().setButtonEnabled(rob.getMoveButton(),false);
+        rob.setGoalButton(rob.getGui().addButton(6, 2, "To Goal", this, "toGoal"));
+        rob.getGui().setButtonEnabled(rob.getGoalButton(),false);
 	}
+
+    public void getUserGoal(){
+        goal.x=Integer.parseInt(rob.getGui().getTextFieldContent(rob.getGoalXText()));
+        goal.y=Integer.parseInt(rob.getGui().getTextFieldContent(rob.getGoalYText()));
+    }
+
+    public void init(){
+     /*   if(!started){
+            rob.startRRT();
+            started = true;
+        }
+
+        atGoal=false;
+
+        // Start simulation robot and goal with user values
+        goal.start(rob.getGui());
+        explorer.start(rob.getGui(),goal);
+
+        // If already at goal
+        if(explorer.didCollide(goal)){
+            atGoal = true;
+            rob.setStatusLabelText("You are already at the goal.");
+            rob.getGui().update();
+            return;
+        }
+
+        // User instructions
+        rob.setStatusLabelText("Please press Move for one step and Goal for solution");
+
+        // Refresh the GUI
+        rob.getGui().update();*/
+    }
+
+
+    public void move(){
+
+    }
+
+
+    public void toGoal(){
+
+    }
+
+
 	
 }

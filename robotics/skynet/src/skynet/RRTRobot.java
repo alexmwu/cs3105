@@ -12,14 +12,11 @@ import geometry.IntPoint;
 
 public class RRTRobot extends Object{
 	private int step;	//size of robot moves
-	private RenderableOval rob;	//draw robot on screen based on radius
+	private RenderableOval rendOv;	//draw robot on screen based on radius
 	
 	//ids for starting input
 	private int xId,yId,radiusId,stepId;
 	private RRTree tree;
-	
-	//is the robot at the goal
-	private boolean atGoal;
 	
 	//ids for the x,y coordinates at start and for the radius and step of robot
 	RRTRobot(Robot r){
@@ -33,11 +30,11 @@ public class RRTRobot extends Object{
 	}
 	
 	private void setRenderable(){
-		rob = new RenderableOval(getX(),getY(),2*getRadius(),2*getRadius());
+		rendOv = new RenderableOval(getX(),getY(),2*getRadius(),2*getRadius());
 	}
 	
 	public RenderableOval getRenderable(){
-		return rob;
+		return rendOv;
 	}
 	
 	public IntPoint getIntPoint(){
@@ -58,7 +55,7 @@ public class RRTRobot extends Object{
 		step=Integer.parseInt(gui.getTextFieldContent(stepId));
 		setRenderable();
 		
-		gui.draw(rob);
+		gui.draw(rendOv);
 		
 		// Set the start and goal positions based on input.
 		// The goal radius is 40. A path that ends in the circle of this radius around
@@ -71,14 +68,11 @@ public class RRTRobot extends Object{
 	
 	//returns next point if there is no obstacle collision; null otherwise
 	public boolean move(EasyGui gui, ArrayList<Obstacle> obstacles, int randomX, int randomY){
-		RRNode nearest=null;
-		IntPoint moveTo=null;
-		
 		// Returns the nearest node to the random point
-		nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
+		RRNode nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
 			
 		// Get point to move to
-		moveTo = step(randomX,randomY,nearest.x,nearest.y);
+		IntPoint moveTo = step(randomX,randomY,nearest.x,nearest.y);
 		
 			// If there are obstacles
 		if(!obstacles.isEmpty()){
@@ -97,8 +91,8 @@ public class RRTRobot extends Object{
 		gui.draw(tree);
 		setX(moveTo.x);
 		setY(moveTo.y);
-		rob.centreX=getX();
-		rob.centreY=getY();
+		rendOv.centreX=getX();
+		rendOv.centreY=getY();
 		return true;
 	}
 

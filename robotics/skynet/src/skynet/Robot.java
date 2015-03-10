@@ -1,8 +1,6 @@
 package skynet;
 
 import easyGui.EasyGui;
-import genericGui.GenericGui;
-import genericGui.GenericGuiProperties;
 
 public class Robot {
 	private EasyGui gui;
@@ -14,7 +12,11 @@ public class Robot {
 	private int startXText,startYText,robotSizeText,stepSizeText,goalXText,goalYText;
 	
 	//buttons for both
-	private int startButton,moveButton,goalButton;
+	private int startButton;
+    private int moveButton;
+    private int goalButton;
+
+    private int solutionButton;
 	
 	//labels for rrt
 	private int goalSizeLabel;
@@ -27,18 +29,9 @@ public class Robot {
 	
 	//status label for gui
 	private int statusLabel;
-	
-	//label for simulation text
-	private int simulationText;
-	
-	//button for toggling simulations
-	private int simulationButton;
-	
+
 	//pixel height and length of gui
 	private int xPixels,yPixels;
-	
-	//which type of simulation: true for rrt, false for pot fields
-	private boolean simType;
 	
 	private RRT rrt;
 	private PotFields pf;
@@ -62,7 +55,7 @@ public class Robot {
 		startXText=gui.addTextField(2, 0, "0");
 		startYText=gui.addTextField(2, 1, "0");
 		robotSizeText=gui.addTextField(2,2,"10");
-		stepSizeText=gui.addTextField(2,3,"10");
+		stepSizeText=gui.addTextField(2,3,"15");
 		
 		//add goal fields for both rrt and pot fields
 		goalXText=gui.addTextField(4, 0, "0");
@@ -72,34 +65,39 @@ public class Robot {
 		/////////////////////////////////////
 		
 		// Status label
-		statusLabel=gui.addLabel(6,4,"Pick a robot to begin");
+		statusLabel=gui.addLabel(6,5,"Pick a robot to begin");
 		
 		//create two simulations
-		pf=new PotFields();
+		pf=new PotFields(this);
 		rrt=new RRT(this,buffer);
 		
-		simType=sType;
+		/*simType=sType;
 		if(simType==true){
 			startRRT();
 		}
 		else{
 			startPotFields();
-		}
+		}*/
 		
 		//show gui
 		gui.show();
 	}
 
 
-	
 	public void startRRT(){
+        stopPotFields();
 		//enable move, to goal, and toggle dots buttons
 		gui.setButtonEnabled(moveButton,true);
 		gui.setButtonEnabled(goalButton, true);
 		gui.setButtonEnabled(toggleDotsButton, true);
+        gui.setButtonEnabled(solutionButton,true);
 		
 		//set status label text
 		gui.setLabelText(statusLabel, "Enter in coordinates and click start to begin RRT simulation.");
+
+        //wipe gui and update
+        gui.clearGraphicsPanel();
+        gui.update();
 	}
 	
 	public void stopRRT(){
@@ -112,27 +110,19 @@ public class Robot {
 	}
 	
 	public void startPotFields(){
-		
+		stopRRT();
+        //enable pot fields buttons
+        /////////////////////////////
+
+
+        //wipe gui and update
+        gui.clearGraphicsPanel();
+        gui.update();
 	}
 	
 	public void stopPotFields(){
-		
-	}
-	
-	//change simulation type
-	public void changeSim(){
-		if(simType==true){
-			stopRRT();
-			startPotFields();
-			simType=false;
-			//show updated gui
-			gui.show();
-		}
-		else{
-			////////////////////
-			stopPotFields();
-			simType=true;
-		}
+		//disable potfields buttons
+        //////////////////////////
 	}
 	
 	public void setStatusLabelText(String s){
@@ -315,11 +305,19 @@ public class Robot {
 		this.statusLabel = statusLabel;
 	}
 
+    public int getSolutionButton() {
+        return solutionButton;
+    }
+
+    public void setSolutionButton(int solutionButton) {
+        this.solutionButton = solutionButton;
+    }
+
 	
 	// MAIN
 	public static void main(String[] args)
 	{
-		Robot r =new Robot(500,500,10,true);
+		Robot r =new Robot(600,600,10,true);
 		
 	}
 }
