@@ -123,14 +123,22 @@ public class PFRobot{
 
         }
 
-        for(int i)
+        //for(int i)
 
         return potentials;
     }
 
+    //get goal potential
+
+
     //formula for potential between two points
-    //public double potential(int x1,int y1, int x2, int y2){
-    //}
+   /* public double potential(int x1,int y1, int x2, int y2){
+        double d=dist(x1,y1,x2,y2);
+        if(d>=sensingRadius) return 0;
+        else if{d==0
+
+        }
+    }*/
 
     public boolean atGoal(IntPoint p){
         if(dist(p.x,p.y,xCenter,yCenter)<robotSize) return true;
