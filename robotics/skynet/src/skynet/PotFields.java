@@ -4,6 +4,8 @@ import geometry.IntPoint;
 import renderables.RenderablePoint;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class PotFields {
 
@@ -15,6 +17,10 @@ public class PotFields {
 
     private boolean atGoal;
 
+    private ArrayList<Obstacle> obstacles;
+
+    private Random randGen;
+
 	public PotFields(Robot r){
         rob=r;
         initGui();
@@ -24,6 +30,9 @@ public class PotFields {
 
         //initialize goal with user points
         goal=new IntPoint();
+
+        //init random generator
+        randGen=new Random();
 
         rob.getGui().update();
 	}
@@ -43,6 +52,36 @@ public class PotFields {
         goal.x=Integer.parseInt(rob.getGui().getTextFieldContent(rob.getGoalXText()));
         goal.y=Integer.parseInt(rob.getGui().getTextFieldContent(rob.getGoalYText()));
     }
+
+    //needs to be implemented differently because of differences in class structure between pf/pfrobot and rrt/rrtrobot
+   public ArrayList<Obstacle> initRandObstacles(int maxObstacles){
+       Obstacle tmp;
+       ArrayList<Obstacle> randObst=new ArrayList<Obstacle>();
+       boolean collided=false;
+
+       //number of obstacles (from 0 to 10)
+       int num=randGen.nextInt(maxObstacles);
+
+       for(int i=0;i<num;i++){
+            tmp=Obstacle.generateRandomObstacle(rob,randGen);
+
+           //if obstacles interact with other obstacles
+           for(Obstacle o : randObst){
+               if(o.didCollide(tmp)) collided=true;
+           }
+
+           //if new obst intersects with the start or goal
+           if(tmp.didCollide(explorer.getxCenter(),explorer.getyCenter(),explorer.getRobotSize()) || tmp.didCollide(goal.x,goal.y) || collided){
+               i--;
+               continue;
+           }
+            else{
+               randObst.add(tmp);
+               rob.getGui().draw(tmp.getRenderableOval());
+           }
+       }
+       return randObst;
+   }
 
     public void init(){
         rob.startPotFields();
@@ -64,6 +103,9 @@ public class PotFields {
             return;
         }
 
+        //initialize obstacles
+        obstacles=initRandObstacles(11);
+
         // User instructions
         rob.setStatusLabelText("Pick a movement mode (Move, Animate).");
 
@@ -79,11 +121,9 @@ public class PotFields {
         if(atGoal) return;
         else{
 
-            if(explorer.atGoal(goal)){
-                atGoal=true;
-                rob.setStatusLabelText("You've reached the goal.");
-                return;
-            }
+//            while(true){
+
+ //           }
 
            // rob.getGui().clearGraphicsPanel();
 
@@ -99,6 +139,11 @@ public class PotFields {
 
             explorer.draw(rob.getGui());
 
+            if(explorer.atGoal(goal)){
+                atGoal=true;
+                rob.setStatusLabelText("You've reached the goal.");
+            }
+
             rob.getGui().update();
         }
     }
@@ -111,7 +156,7 @@ public class PotFields {
 
     public void drawGoal(){
         rendGoal = new RenderablePoint(goal.x, goal.y);
-        rendGoal.setProperties(Color.BLUE, 20.0f);
+        rendGoal.setProperties(Color.BLUE, 10.0f);
         rob.getGui().draw(rendGoal);
     }
 

@@ -17,6 +17,7 @@ public class PFRobot{
 
     private int sonarRange;	//size of sonar
     private int sensingRadius; //radius of sensing region; should be greater than robot size
+
     private int robotSize;
     private int xCenter;
     private int yCenter;
@@ -229,4 +230,13 @@ public class PFRobot{
     public void setAngle(double angle) {
         this.angle = angle;
     }
+
+    public int getRobotSize() {
+        return robotSize;
+    }
+
+    public void setRobotSize(int robotSize) {
+        this.robotSize = robotSize;
+    }
+
 }

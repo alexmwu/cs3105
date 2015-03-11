@@ -18,5 +18,16 @@ public class Obstacle extends Object{
 		return obst;
 	}
 
+    public static Obstacle generateRandomObstacle(Robot rob,Random randGen){
+        int x,y,r;
+        Obstacle tmp;
 
+
+        x=randGen.nextInt(rob.getxPixels()+1);
+        y=randGen.nextInt(rob.getyPixels()+1);
+        r=randGen.nextInt((int) (Math.sqrt(Math.pow(rob.getxPixels(),2)+Math.pow(rob.getyPixels(),2))/10.0));
+
+        tmp=new Obstacle(x,y,r);
+        return tmp;
+    }
 }

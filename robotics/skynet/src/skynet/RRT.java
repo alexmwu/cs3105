@@ -69,34 +69,29 @@ public class RRT {
 	}
 
 	//generate random obstacles on a gui field
-	public ArrayList<Obstacle> initRandObstacles(){
-		int x,y,r;
-		Obstacle tmp;
-		ArrayList<Obstacle> randObst = new ArrayList<Obstacle>();
-		boolean collided = false;
+	public ArrayList<Obstacle> initRandObstacles(int maxObstacles){
+        Obstacle tmp;
+        ArrayList<Obstacle> randObst = new ArrayList<Obstacle>();
+        boolean collided = false;
 
-		// Number of obstacles (from 0 to 10)
-		int num = randGen.nextInt(11);
-
+        // Number of obstacles (from 0 to 10)
+        int num = randGen.nextInt(maxObstacles);
 
 		for(int i=0;i<num;i++){
-			x=randGen.nextInt(rob.getxPixels()+1);
-			y=randGen.nextInt(rob.getyPixels()+1);
-			r=randGen.nextInt(goal.getRadius()+1);
+            tmp=Obstacle.generateRandomObstacle(rob,randGen);
 
 			//if obstacles intersect with other obstacles
 			for(Obstacle o : randObst){
-				if(o.didCollide(x,y,r)) collided=true;
+				if(o.didCollide(tmp)) collided=true;
 
 			}
 
-			// If obstacles intersects with the start or goal
-			if(explorer.didCollide(x,y,r) || goal.didCollide(x,y,r) || collided){
+			// If new obst intersects with the start or goal
+			if(explorer.didCollide(tmp) || goal.didCollide(tmp) || collided){
 				i--;
 				continue;
 			}
 			else{
-				tmp = new Obstacle(x,y,r);
 				randObst.add(tmp);
 				rob.getGui().draw(tmp.getRenderableOval());
 			}
@@ -131,7 +126,7 @@ public class RRT {
 		}
 
 		// Initialize obstacles
-		obstacles = initRandObstacles();
+		obstacles = initRandObstacles(11);
 		
 		// User instructions
 		rob.setStatusLabelText("Pick a movement mode (Move, Animate, Solution).");
