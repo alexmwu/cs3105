@@ -123,7 +123,7 @@ public class PFRobot{
     }
 
     //calculates all sensing sample potentials and returns point with the lowest one
-    public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs){
+    public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs,EasyGui gui){
         ArrayList<IntPoint> intersectedPoints=null; //intersected points that rays have detected
         double currObstPot,currGoalPot, currTotalPot;   //current obstacle, goal, and total potential
         ArrayList<Obstacle> detectedObs=new ArrayList<Obstacle>();    //obstacles in sonar range
@@ -140,7 +140,8 @@ public class PFRobot{
             }
         }
 
-
+        if(intersectedPoints!=null)
+        drawIntersectedPoints(gui,intersectedPoints);
 
         //index of minimum potential and minimum potential
         int minPotIndex=0;
@@ -156,15 +157,21 @@ public class PFRobot{
             else{
                 currObstPot=0;
                 for(IntPoint ip : intersectedPoints){
-                    if()
+                    double potential=potential(sensingSamples[i].x,sensingSamples[i].y,ip.x,ip.y);
+                    //return null to tell main that there has been an error
+                    if(potential==-1)
+                        return null;
+                    else{
+                        currObstPot+=potential;
+                    }
                 }
             }
 
             //total potential
             currTotalPot=currGoalPot+currObstPot;
-            if(currGoalPot<minPot){
+            if(currTotalPot<minPot){
                 minPotIndex=i;
-                minPot=currGoalPot;
+                minPot=currTotalPot;
             }
         }
 
@@ -264,12 +271,23 @@ public class PFRobot{
         return intersections;
     }
 
+    public void drawIntersectedPoints(EasyGui gui,ArrayList<IntPoint> intersections){
+        for(IntPoint ip : intersections){
+            gui.draw(new RenderablePoint(ip.x,ip.y));
+        }
+    }
+
     //formula for potential between two points
     public double potential(int x1, int y1, int x2, int y2){
         double d=dist(x1,y1,x2,y2);
         if(d>=sensingRadius) return 0;
-        else if{d==0
-
+        else if(d==0){
+            //return error to be handled above
+            return -1;
+        }
+        else{
+            double a=sonarRange-d;
+            return Math.exp(-1.0/a)/d;
         }
     }
 

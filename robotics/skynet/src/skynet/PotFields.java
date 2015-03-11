@@ -123,8 +123,11 @@ public class PotFields {
 
            // rob.getGui().clearGraphicsPanel();
 
-            IntPoint best=explorer.getBestSample(goal,null);
-
+            IntPoint best=explorer.getBestSample(goal,null,rob.getGui());
+            if(best==null){
+                stop();
+                rob.setStatusLabelText("Error: there was a collision between sensing sample and obstacle.");
+            }
             //draw new location for path
             drawPoint(best);
 
