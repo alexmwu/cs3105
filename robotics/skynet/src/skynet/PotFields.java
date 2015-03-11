@@ -89,17 +89,24 @@ public class PotFields {
     public void move(){
         if(atGoal) return;
         else{
+            IntPoint best=explorer.getBestSample(goal,null);
 
+            explorer.setxCenter(best.x);
+            explorer.setyCenter(best.y);
+
+            explorer.draw(rob.getGui());
+
+            rob.getGui().update();
         }
     }
 
 
     public void toGoal(){
-
+        while(!atGoal) move();
     }
 
     public void stop(){
-
+        atGoal=true;
     }
 	
 }

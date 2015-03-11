@@ -18,7 +18,8 @@ public class PFRobot{
     private int sonarRange;	//size of sonar
     private int sensingRadius; //radius of sensing region; should be greater than robot size
     private int robotSize;
-    private int xCenter,yCenter;
+    private int xCenter;
+    private int yCenter;
 
     //ids for starting input
     private int xId,yId,radiusId,sonarId;
@@ -78,6 +79,7 @@ public class PFRobot{
     }
 
     public void draw(EasyGui gui){
+        gui.clearGraphicsPanel();
         //draw sensing region
         for(int i=0;i<sensingSamples.length;i++){
             RenderablePoint p=new RenderablePoint(sensingSamples[i].x,sensingSamples[i].y);
@@ -116,19 +118,33 @@ public class PFRobot{
         }
     }
 
-    //calculates
-    public double[] getPotential(IntPoint goal,ArrayList<Obstacle> obs){
+    //calculates all sensing sample potentials and returns point with the lowest one
+    public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs){
         double[] potentials=new double[numSamples];
         if(obs!=null){
 
         }
 
-        //for(int i)
+        //index of minimum potential and minimum potential
+        int minPotIndex=0;
+        double minPot=0;
 
-        return potentials;
+        for(int i=0;i<sensingSamples.length;i++){
+            double currGoalPot=getGoalPotential(goal,sensingSamples[i]);
+            if(currGoalPot<minPot){
+                minPotIndex=i;
+                minPot=currGoalPot;
+            }
+        }
+
+        return sensingSamples[minPotIndex];
     }
 
-    //get goal potential
+    //get goal potential; temporary placeholder equation
+    public double getGoalPotential(IntPoint goal,IntPoint sensingSample){
+        return -Math.pow(sonarRange,2)/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
+    }
+
 
 
     //formula for potential between two points
@@ -147,5 +163,29 @@ public class PFRobot{
 
     public double dist(int x1,int y1, int x2,int y2){
         return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
+    }
+
+    public int getyCenter() {
+        return yCenter;
+    }
+
+    public void setyCenter(int yCenter) {
+        this.yCenter = yCenter;
+    }
+
+    public int getxCenter() {
+        return xCenter;
+    }
+
+    public void setxCenter(int xCenter) {
+        this.xCenter = xCenter;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 }
