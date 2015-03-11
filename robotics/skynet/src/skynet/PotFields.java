@@ -121,10 +121,6 @@ public class PotFields {
         if(atGoal) return;
         else{
 
-//            while(true){
-
- //           }
-
            // rob.getGui().clearGraphicsPanel();
 
             IntPoint best=explorer.getBestSample(goal,null);
