@@ -52,7 +52,7 @@ public class PFRobot{
     }
 
     //initialize pf variables and gui
-    public void start(EasyGui gui){
+    public void start(EasyGui gui,IntPoint goal){
         gui.clearGraphicsPanel();
 
         //initialize intpoints in array
@@ -70,6 +70,10 @@ public class PFRobot{
         yCenter=Integer.parseInt(gui.getTextFieldContent(yId));
         //sensing radius is initially halfway between robot size and sonar size
         sensingRadius=(robotSize+sonarRange)/2;
+
+        //get angle between robot and goal
+        angle=getAngle(xCenter,yCenter,goal.x,goal.y);
+
         //get sensing sample coord points
         calculateSensingSamples();
 
@@ -79,7 +83,6 @@ public class PFRobot{
     }
 
     public void draw(EasyGui gui){
-        gui.clearGraphicsPanel();
         //draw sensing region
         for(int i=0;i<sensingSamples.length;i++){
             RenderablePoint p=new RenderablePoint(sensingSamples[i].x,sensingSamples[i].y);
@@ -94,12 +97,12 @@ public class PFRobot{
         //draw actual robot
         gui.draw(new RenderableOval(xCenter,yCenter,2*robotSize,2*robotSize));
 
-        //draw line to show where robot is pointing
+        /*//draw line to show where robot is pointing
         RenderablePolyline pl=new RenderablePolyline();
         pl.addPoint(pointing.x,pointing.y);
         pl.addPoint(xCenter,yCenter);
         pl.setProperties(Color.BLACK,2.0f);
-        gui.draw(pl);
+        gui.draw(pl);*/
     }
 
     public void calculateSensingSamples(){
@@ -118,9 +121,16 @@ public class PFRobot{
         }
     }
 
+    public double getAngle(int x1, int y1, int x2, int y2){
+        int dX=x2-x1;
+        int dY=y2-y1;
+        return Math.atan((double) dY / (double) dX);
+    }
+
     //calculates all sensing sample potentials and returns point with the lowest one
     public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs){
         double[] potentials=new double[numSamples];
+
         if(obs!=null){
 
         }
@@ -129,6 +139,7 @@ public class PFRobot{
         int minPotIndex=0;
         double minPot=0;
 
+        //return index of sensing sample point with lowest potential
         for(int i=0;i<sensingSamples.length;i++){
             double currGoalPot=getGoalPotential(goal,sensingSamples[i]);
             if(currGoalPot<minPot){
@@ -137,7 +148,37 @@ public class PFRobot{
             }
         }
 
-        return sensingSamples[minPotIndex];
+
+        return smoothPath(minPotIndex);
+    }
+
+    //smooth path for new point and change robot location and angle
+    public IntPoint smoothPath(int minPotIndex){
+        //angle of best sensing sample ponts
+        double bestAngle=smoothPathAngle(minPotIndex);
+        //fraction of radius that should be applied to move (1 for straight, less for any other angle that is not straight)
+        double radialFactor=getRadialFactor(bestAngle);
+
+        //new point of robot
+        IntPoint best=new IntPoint((int)(sensingRadius*radialFactor*Math.cos(bestAngle))+xCenter,(int)(sensingRadius*radialFactor*Math.sin(bestAngle))+yCenter);
+
+        //set new location and angle
+        xCenter=best.x;
+        yCenter=best.y;
+        angle=bestAngle;
+
+        return best;
+    }
+
+    //angle of index of best sensing sample
+    public double smoothPathAngle(int minPotIndex){
+        //calculate "best" angle from index (current angle minus pi/2 is lowest sample angle. this plus step*minPotIndex equals the angle of
+        //sensing sample with minimum potential
+        return angle-(Math.PI/2.0)+(minPotIndex*step);
+    }
+
+    public double getRadialFactor(double bestAngle){
+        return 1-(Math.abs(bestAngle-angle)/(Math.PI/2));
     }
 
     //get goal potential; temporary placeholder equation
@@ -156,8 +197,8 @@ public class PFRobot{
         }
     }*/
 
-    public boolean atGoal(IntPoint p){
-        if(dist(p.x,p.y,xCenter,yCenter)<robotSize) return true;
+    public boolean atGoal(IntPoint goal){
+        if(dist(goal.x,goal.y,xCenter,yCenter)<robotSize) return true;
         else return false;
     }
 

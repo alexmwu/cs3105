@@ -13,8 +13,6 @@ public class PotFields {
     private IntPoint goal;
     private RenderablePoint rendGoal;
 
-    private boolean started;
-
     private boolean atGoal;
 
 	public PotFields(Robot r){
@@ -26,9 +24,6 @@ public class PotFields {
 
         //initialize goal with user points
         goal=new IntPoint();
-
-        // So doesn't throw an error with move or goal button used before initialization
-        started = false;
 
         rob.getGui().update();
 	}
@@ -50,21 +45,16 @@ public class PotFields {
     }
 
     public void init(){
-        if(!started){
-            rob.startPotFields();
-            started = true;
-        }
+        rob.startPotFields();
 
         atGoal=false;
 
         // Start simulation robot and goal with user values
         getUserGoal();
-        explorer.start(rob.getGui());
+        explorer.start(rob.getGui(),goal);
 
         //draw goal
-        rendGoal=new RenderablePoint(goal.x,goal.y);
-        rendGoal.setProperties(Color.BLUE,20.0f);
-        rob.getGui().draw(rendGoal);
+        drawGoal();
 
         // If already at goal
         if(explorer.atGoal(goal)){
@@ -85,14 +75,27 @@ public class PotFields {
     }
 
 
-
     public void move(){
         if(atGoal) return;
         else{
+
+            if(explorer.atGoal(goal)){
+                atGoal=true;
+                rob.setStatusLabelText("You've reached the goal.");
+                return;
+            }
+
+           // rob.getGui().clearGraphicsPanel();
+
             IntPoint best=explorer.getBestSample(goal,null);
 
-            explorer.setxCenter(best.x);
-            explorer.setyCenter(best.y);
+            //draw new location for path
+            drawPoint(best);
+
+            drawGoal();
+
+            //recalculate samples after changing location
+            explorer.calculateSensingSamples();
 
             explorer.draw(rob.getGui());
 
@@ -100,9 +103,30 @@ public class PotFields {
         }
     }
 
+    public void drawPoint(IntPoint p){
+        RenderablePoint rp=new RenderablePoint(p.x,p.y);
+        rp.setProperties(Color.RED,10.0f);
+        rob.getGui().draw(rp);
+    }
+
+    public void drawGoal(){
+        rendGoal = new RenderablePoint(goal.x, goal.y);
+        rendGoal.setProperties(Color.BLUE, 20.0f);
+        rob.getGui().draw(rendGoal);
+    }
+
 
     public void toGoal(){
-        while(!atGoal) move();
+        while(!atGoal)
+        {
+            move();
+            /*//sleep a bit to make animation seem more fluid
+            try {
+                Thread.sleep(25);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+        }
     }
 
     public void stop(){

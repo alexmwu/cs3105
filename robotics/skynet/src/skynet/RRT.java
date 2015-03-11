@@ -21,7 +21,7 @@ public class RRT {
 	
 	// whether gui has initially started (produces two more buttons), whether current robot is at 
 	//the goal, and whether the user wants to display the random red dots, respectively
-	private boolean started,atGoal,displayRandomDots;
+	private boolean atGoal,displayRandomDots;
 
 	public RRT(Robot r,int buffer){
 		
@@ -35,9 +35,6 @@ public class RRT {
 		
 		// Initialize goal with ids for starting coordinates and radius
 		goal = new Goal(rob);
-
-		// So doesn't throw an error with move or goal button used before initialization
-		started = false;
 		
 		// do not display random dots to start with
 		displayRandomDots=false;
@@ -119,10 +116,7 @@ public class RRT {
 	}
 	
 	public void init(){
-		if(!started){
-			rob.startRRT();
-			started = true;
-		}
+		rob.startRRT();
 
 		// Start simulation robot and goal with user values
 		goal.start(rob.getGui());
