@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public class PFRobot{
 
+
     private int sonarRange;	//size of sonar
     private int sensingRadius; //radius of sensing region; should be greater than robot size
 
@@ -38,6 +39,10 @@ public class PFRobot{
     //step between sample points
     private double step;
 
+    private RenderableOval robot;
+    private RenderableOval sonar;
+    private RenderablePoint[] sensingPoints;
+
     PFRobot(Robot r){
         xId=r.getStartXText();
         yId=r.getStartYText();
@@ -49,6 +54,7 @@ public class PFRobot{
 
         //allocate memory
         sensingSamples=new IntPoint[numSamples];
+        sensingPoints=new RenderablePoint[numSamples];
 
         angle=0;
     }
@@ -71,7 +77,7 @@ public class PFRobot{
         xCenter=Integer.parseInt(gui.getTextFieldContent(xId));
         yCenter=Integer.parseInt(gui.getTextFieldContent(yId));
         //sensing radius is initially halfway between robot size and sonar size
-        sensingRadius=(robotSize+sonarRange)/2;
+        sensingRadius=calculateSamplingRadius();
 
         //get angle between robot and goal
         angle=getAngle(xCenter,yCenter,goal.x,goal.y);
@@ -87,24 +93,27 @@ public class PFRobot{
     public void draw(EasyGui gui) {
         //draw sensing region
         for (int i = 0; i < sensingSamples.length; i++) {
-            RenderablePoint p = new RenderablePoint(sensingSamples[i].x, sensingSamples[i].y);
-            p.setProperties(Color.RED, 4.0f);
-            gui.draw(p);
+            gui.unDraw(sensingPoints[i]);
+            sensingPoints[i] = new RenderablePoint(sensingSamples[i].x, sensingSamples[i].y);
+            sensingPoints[i].setProperties(Color.RED,5.0f);
+            gui.draw(sensingPoints[i]);
         }
+        gui.unDraw(sonar);
+        gui.unDraw(robot);
 
         //draw sonar
-        RenderableOval sonar = new RenderableOval(xCenter, yCenter, 2 * sonarRange, 2 * sonarRange);
+        sonar = new RenderableOval(xCenter, yCenter, 2 * sonarRange, 2 * sonarRange);
         sonar.setProperties(Color.GREEN, 0.5f, false);
         gui.draw(sonar);
         //draw actual robot
-        gui.draw(new RenderableOval(xCenter, yCenter, 2 * robotSize, 2 * robotSize));
+        robot=new RenderableOval(xCenter, yCenter, 2 * robotSize, 2 * robotSize);
+        gui.draw(robot);
     }
 
     public void calculateSensingSamples(){
         double from=angle-(Math.PI/2.0);
         double to=angle+(Math.PI/2.0);
         int i=0;
-       // System.out.println(from+" "+to);
         for(double d=from;d<=to;d+=step){
             sensingSamples[i].x=(int) (sensingRadius*Math.cos(d)) + xCenter;
             sensingSamples[i].y=(int) (sensingRadius*Math.sin(d)) + yCenter;
@@ -131,12 +140,22 @@ public class PFRobot{
         //store obstacles that can be seen by sonar in detectedObs
         if(obs!=null){
             for(Obstacle o : obs){
+        //        System.out.println("ox: "+o.getX()+", oy: "+o.getY()+", or: "+o.getRadius()+", xc: "+xCenter+", yc: "+yCenter+", sonar: "+sonarRange+", dist: "+dist(o.getX(),o.getY(),xCenter,yCenter));
                 if(o.didCollide(xCenter,yCenter,sonarRange)){
                     detectedObs.add(o);
+         //           System.out.println("collision: "+o.getX()+" "+o.getY());
                 }
             }
             if(!detectedObs.isEmpty()){
+                //new sensing radius
+                int newSR=(int) getNearestObstacleDist(detectedObs);
+                if(newSR<sensingRadius){
+                    sensingRadius=newSR;
+                }
                 intersectedPoints=getRayIntersections(detectedObs);
+            }
+            else{
+                sensingRadius=calculateSamplingRadius();
             }
         }
 
@@ -193,6 +212,7 @@ public class PFRobot{
         xCenter=best.x;
         yCenter=best.y;
         angle=bestAngle;
+        //System.out.println(xCenter + " " + yCenter);
 
         return best;
     }
@@ -213,8 +233,20 @@ public class PFRobot{
         return -Math.pow(sonarRange,2)/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
     }
 
+    public double getNearestObstacleDist(ArrayList<Obstacle> obstacles){
+        double dist=sonarRange;
+        for(Obstacle o : obstacles){
+            double d=dist(o.getX(),o.getY(),xCenter,yCenter);
+            if(d<dist){
+                dist=d;
+            }
+        }
+        return dist;
+    }
+
     //adapted from http://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
     public IntPoint getCloserIntersection(IntPoint sensingSample,double ang,Obstacle o){
+        //System.out.println(sensingSample.x+" "+sensingSample.y+" "+o.getX()+" "+o.getY());
         //length of ray
         double lengthSampleRay=(sonarRange-sensingRadius);
         //end point of ray (where sensing sample ray from center of robot intersects with sonar circle)
@@ -268,12 +300,19 @@ public class PFRobot{
             }
             i=0;
         }
+
         return intersections;
     }
 
     public void drawIntersectedPoints(EasyGui gui,ArrayList<IntPoint> intersections){
         for(IntPoint ip : intersections){
             gui.draw(new RenderablePoint(ip.x,ip.y));
+        }
+    }
+
+    public void printIntersectedPoints(ArrayList<IntPoint> intersections){
+        for(IntPoint ip: intersections){
+            System.out.println(ip.x+" "+ip.y);
         }
     }
 
@@ -289,6 +328,10 @@ public class PFRobot{
             double a=sonarRange-d;
             return Math.exp(-1.0/a)/d;
         }
+    }
+
+    public int calculateSamplingRadius(){
+        return (robotSize+sonarRange)/2;
     }
 
     public boolean atGoal(IntPoint goal){
@@ -332,4 +375,11 @@ public class PFRobot{
         this.robotSize = robotSize;
     }
 
+    public int getSonarRange() {
+        return sonarRange;
+    }
+
+    public void setSonarRange(int sonarRange) {
+        this.sonarRange = sonarRange;
+    }
 }

@@ -21,7 +21,7 @@ public class Obstacle extends Object{
     public static Obstacle generateRandomObstacle(Robot rob,Random randGen){
         int x,y,r;
         Obstacle tmp;
-
+        randGen.setSeed(System.currentTimeMillis());
 
         x=randGen.nextInt(rob.getxPixels()+1);
         y=randGen.nextInt(rob.getyPixels()+1);

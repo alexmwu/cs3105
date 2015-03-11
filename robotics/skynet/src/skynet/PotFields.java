@@ -17,6 +17,10 @@ public class PotFields {
 
     private boolean atGoal;
 
+
+    //whether simulation has been started
+    private boolean started;
+
     private ArrayList<Obstacle> obstacles;
 
     private Random randGen;
@@ -33,6 +37,8 @@ public class PotFields {
 
         //init random generator
         randGen=new Random();
+
+        started=false;
 
         rob.getGui().update();
 	}
@@ -64,14 +70,17 @@ public class PotFields {
 
        for(int i=0;i<num;i++){
             tmp=Obstacle.generateRandomObstacle(rob,randGen);
-
+            collided=false;
            //if obstacles interact with other obstacles
            for(Obstacle o : randObst){
-               if(o.didCollide(tmp)) collided=true;
+               if(o.didCollide(tmp)){
+                   collided=true;
+                   break;
+               }
            }
 
            //if new obst intersects with the start or goal
-           if(tmp.didCollide(explorer.getxCenter(),explorer.getyCenter(),explorer.getRobotSize()) || tmp.didCollide(goal.x,goal.y) || collided){
+           if(tmp.didCollide(explorer.getxCenter(),explorer.getyCenter(),explorer.getSonarRange()) || tmp.didCollide(goal.x,goal.y) || collided){
                i--;
                continue;
            }
@@ -79,14 +88,16 @@ public class PotFields {
                randObst.add(tmp);
                rob.getGui().draw(tmp.getRenderableOval());
            }
+
        }
        return randObst;
    }
 
     public void init(){
-        rob.startPotFields();
-
-        atGoal=false;
+        if(!started) {
+            rob.startPotFields();
+            started=true;
+        }
 
         // Start simulation robot and goal with user values
         getUserGoal();
@@ -121,12 +132,13 @@ public class PotFields {
         if(atGoal) return;
         else{
 
-           // rob.getGui().clearGraphicsPanel();
+            //rob.getGui().clearGraphicsPanel();
 
-            IntPoint best=explorer.getBestSample(goal,null,rob.getGui());
+            IntPoint best=explorer.getBestSample(goal,obstacles,rob.getGui());
             if(best==null){
                 stop();
                 rob.setStatusLabelText("Error: there was a collision between sensing sample and obstacle.");
+                return;
             }
             //draw new location for path
             drawPoint(best);
@@ -161,20 +173,24 @@ public class PotFields {
 
 
     public void toGoal(){
-        while(!atGoal)
+/*        while(!atGoal)
         {
             move();
-            /*//sleep a bit to make animation seem more fluid
-            try {
-                Thread.sleep(25);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
         }
+        */
     }
 
     public void stop(){
         atGoal=true;
+        rob.disablePotFields();
+        started=false;
     }
-	
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
 }

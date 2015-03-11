@@ -18,10 +18,11 @@ public class RRT {
 	private int bufferFactor;	//bufferFactor to pick random ints in buffer around window
 	
 	private ArrayList<Obstacle> obstacles;
-	
-	// whether gui has initially started (produces two more buttons), whether current robot is at 
+
+
+    // whether gui has initially started (produces two more buttons), whether current robot is at
 	//the goal, and whether the user wants to display the random red dots, respectively
-	private boolean atGoal,displayRandomDots;
+	private boolean started,atGoal,displayRandomDots;
 
 	public RRT(Robot r,int buffer){
 		
@@ -38,7 +39,9 @@ public class RRT {
 		
 		// do not display random dots to start with
 		displayRandomDots=false;
-		
+
+        started=false;
+
 		// New Random generator
 		randGen = new Random();
 		
@@ -79,11 +82,13 @@ public class RRT {
 
 		for(int i=0;i<num;i++){
             tmp=Obstacle.generateRandomObstacle(rob,randGen);
-
+            collided=false;
 			//if obstacles intersect with other obstacles
 			for(Obstacle o : randObst){
-				if(o.didCollide(tmp)) collided=true;
-
+				if(o.didCollide(tmp)){
+                    collided=true;
+                    break;
+                }
 			}
 
 			// If new obst intersects with the start or goal
@@ -91,10 +96,10 @@ public class RRT {
 				i--;
 				continue;
 			}
-			else{
-				randObst.add(tmp);
-				rob.getGui().draw(tmp.getRenderableOval());
-			}
+			else {
+                randObst.add(tmp);
+                rob.getGui().draw(tmp.getRenderableOval());
+            }
 		}
 		return randObst;
 	}
@@ -111,7 +116,10 @@ public class RRT {
 	}
 	
 	public void init(){
-		rob.startRRT();
+        if(!started){
+            rob.startRRT();
+            started=true;
+        }
 
 		// Start simulation robot and goal with user values
 		goal.start(rob.getGui());
@@ -213,5 +221,12 @@ public class RRT {
 	public void stop(){
 		atGoal=true;
 	}
-	
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
 }

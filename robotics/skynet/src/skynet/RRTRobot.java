@@ -74,12 +74,6 @@ public class RRTRobot extends Object{
 			// If there are obstacles
 		if(!obstacles.isEmpty()){
 			for(Obstacle i : obstacles){
-				/*
-				System.out.println(moveTo.x+", "+moveTo.y);
-				System.out.println(i.getX()+", "+i.getY()+", "+i.getR()+":\t"+i.didCollide(moveTo));
-				System.out.println();
-				*/
-				
 				// If it collides with something, set it back to true
 				if(i.didCollide(moveTo.x,moveTo.y,getRadius())) return false;
 			}

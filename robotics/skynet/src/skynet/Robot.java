@@ -70,7 +70,7 @@ public class Robot {
 		
 		//top row of gui
 		/////////////////////////////////////
-		
+
 		// Status label
 		statusLabel=gui.addLabel(6,5,"Pick a robot to begin");
 		
@@ -111,12 +111,21 @@ public class Robot {
 	public void stopRRT(){
 		//stop if simulation running
 		rrt.stop();
-		//disable rrt buttons
+
+        disableRRT();
+
+         //logic to ensure that buttons are reenabled on restarting the simulation
+        rrt.setStarted(false);
+	}
+
+    public void disableRRT(){
+       	//disable rrt buttons
 		gui.setButtonEnabled(rrtMoveButton,false);
 		gui.setButtonEnabled(rrtGoalButton,false);
 		gui.setButtonEnabled(toggleDotsButton,false);
         gui.setButtonEnabled(solutionButton,false);
-	}
+
+    }
 	
 	public void startPotFields(){
 		stopRRT();
@@ -129,14 +138,22 @@ public class Robot {
         gui.clearGraphicsPanel();
         gui.update();
 	}
-	
+
+    public void disablePotFields() {
+        //disable potfields buttons
+        gui.setButtonEnabled(pfMoveButton, false);
+        gui.setButtonEnabled(pfGoalButton, false);
+
+    }
+    
 	public void stopPotFields(){
         //stop if simulation running
         pf.stop();
 
-		//disable potfields buttons
-        gui.setButtonEnabled(pfMoveButton,false);
-        gui.setButtonEnabled(pfGoalButton,false);
+        disablePotFields();
+
+        //logic to ensure that buttons are reenabled on restarting the simulation
+        pf.setStarted(false);
 	}
 	
 	public void setStatusLabelText(String s){
