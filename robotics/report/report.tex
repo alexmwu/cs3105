@@ -10,36 +10,43 @@ CS3105\\
 Practical 1, Robotics
 \end{flushright}
 
-\section{RRT Free Space Travel}
+\section{Free Space Travel}
 \paragraph*{Completeness}
-\paragraph*{Output}
-\paragraph*{Efficiency}
-\paragraph*{Move Parameters}
-\paragraph*{Smoothing}
-\paragraph*{
+Both the Rapidly Exploring Random Tree (RRT) robot and the Potential Fields (PF) robot exhibit completeness. With the RRT robot, it will find a path between any starting and ending point in free space, as long as the goal is within the starting GUI width and height. The starting point of the robot it allowed to be outside of the displayable region. The PF robot can also navigate from any arbitrary point to another arbitrary point, even outside the displayable region.
 
+\paragraph*{Output}
+As seen in Figure 1, the output of the RRT shows the entire developed tree as well as the final path outlined in red. To show the step-by-step development, the user can press the "Move" button. To see the development animated, press the "Animate" button. For the PF, the user can see the development of the path (planning and execution occur in the same step) by either pressing "Move" for one step or "Animate" for all of the steps. Animate is shown with a delay in order to see the PF robot movement from one point to the next.
+\paragraph*{Efficiency}
+
+\paragraph*{Move Parameters}
+To find the next move for the RRT, a random point is taken. The possible coordinate values for x and y, respectively, are from 0 to the width and 0 to the height, plus some buffer region for each. The buffer, ten percent outside of the displayable region, is needed in case the goal is at the edge of the displayable region. If this is the case, then it is much more difficult to re
+\paragraph*{Smoothing}
 \section{Free Space Planner Superiority}
 
 
 \section{Obstacle Navigation}
 \paragraph*{Output}
+\paragraph*{Efficiency}
+\paragraph*{Global Map and Local Sensing}
+In addition to the move parameters described for free space, both the RRT and PF robots use additional information about the environment to avoid the obstacle. The RRT has a global map. As such, it knows if an obstacle is in the way of its next move. If so, it discards this move. The PF uses a sensor region to detect nearby obstacles. Obstacles the PF sees apply a repulsive potential that force it away. The PF also knows where the goal is without its sensors, and the goal provides an attractive potential. The RRT did not experience any problems with any of the obstacle courses. The only situation where it could not find a solution was when the robot size parameters were 
+\paragraph*{Planner Superiority}
+\paragraph*{Enhancements}
+Several enhancements were added on top of the existing programs. 
+\section{Overview Questions}
+
+\section{Compiling and Running}
+\paragraph*{Compiling}
+\begin{verbatim}
+\end{verbatim}
+\paragraph*{Running}
 
 
 %figures go here
 \begin{figure}
 \centering
-\includegraphics[width=220]{file_transfers.png}
-\caption{Transfers times using P2P for files and different number of nodes.}
-\end{figure}
-From the graph, it appears that most of the files appear to have the same rate of change. This is because chunking was never implemented and the file transfers are done file-by-file. It almost looks linear, suggesting that the whole file transfer does not provide many of the benefits of P2P.
-
-\begin{figure}
-\centering
-\includegraphics[width=220]{p2pvssftp.png}
-\caption{Transfer times of SFTP vs P2P.}
-\end{figure}
-
-This figure shows that, while slight, the P2P does appear to be faster than the SFTP. Also, on this scale, even with the whole file transfer, the system seems to be enjoying some of the advantages of P2P as the number of nodes increases.
+\includegraphics[width=220]{two_obstacles.png}
+\caption{The PF robot stuck in a local minimum point between two obstacles.}
+\end{figure}.
 
 
 

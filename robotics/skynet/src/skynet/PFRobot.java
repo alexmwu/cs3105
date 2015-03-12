@@ -243,11 +243,11 @@ public class PFRobot{
         //new point of robot
         IntPoint best=new IntPoint((int)(sensingRadius*radialFactor*Math.cos(bestAngle))+xCenter,(int)(sensingRadius*radialFactor*Math.sin(bestAngle))+yCenter);
 
-        //to ensure that robot keeps moving and doesn't get stuck in a turning loop
+      /*  //to ensure that robot keeps moving and doesn't get stuck in a turning loop
         if((best.x-xCenter==0)&&(best.y-yCenter==0)){
 
         }
-
+*/
         //set new location and angle
         xCenter=best.x;
         yCenter=best.y;
@@ -265,7 +265,7 @@ public class PFRobot{
 
     public double getRadialFactor(double bestAngle){
         //should always move. thus it should never return 0
-        return 1-(.9*(Math.abs(bestAngle-angle)/(Math.PI/2)));
+        return 1-(.5*(Math.abs(bestAngle-angle)/(Math.PI/2)));
     }
 
     //get goal potential; temporary placeholder equation

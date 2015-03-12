@@ -51,7 +51,7 @@ public class PotFields {
         // Add a move and goal button to the right of start
         rob.setPfMoveButton(rob.getGui().addButton(6, 1, "Move PF", this, "move"));
         rob.getGui().setButtonEnabled(rob.getPfMoveButton(),false);
-        rob.setPfGoalButton(rob.getGui().addButton(6, 2, "To Goal", this, "toGoal"));
+        rob.setPfGoalButton(rob.getGui().addButton(6, 2, "Animate", this, "toGoal"));
         rob.getGui().setButtonEnabled(rob.getPfGoalButton(),false);
 	}
 
