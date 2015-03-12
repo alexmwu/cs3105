@@ -173,11 +173,14 @@ public class PotFields {
 
 
     public void toGoal(){
-/*        while(!atGoal)
-        {
+        while(!atGoal){
             move();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        */
     }
 
     public void stop(){

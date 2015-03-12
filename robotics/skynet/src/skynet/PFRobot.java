@@ -150,9 +150,13 @@ public class PFRobot{
                 //new sensing radius
                 int newSR=(int) getNearestObstacleDist(detectedObs);
                 if(newSR<sensingRadius){
-                    sensingRadius=newSR;
+                    //make sensingradius less than nearest obstacle and give buffer region
+                    sensingRadius=(int)(newSR-(newSR/10.0));
                 }
+                calculateSamplingRadius();
                 intersectedPoints=getRayIntersections(detectedObs);
+                draw(gui);
+                gui.update();
             }
             else{
                 sensingRadius=calculateSamplingRadius();
@@ -230,7 +234,7 @@ public class PFRobot{
 
     //get goal potential; temporary placeholder equation
     public double getGoalPotential(IntPoint goal,IntPoint sensingSample){
-        return -Math.pow(sonarRange,2)/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
+        return -Math.pow(sonarRange,1)/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
     }
 
     public double getNearestObstacleDist(ArrayList<Obstacle> obstacles){
@@ -296,6 +300,12 @@ public class PFRobot{
                 inter=getCloserIntersection(sensingSamples[i], d, o);
                 if(inter!=null)
                     intersections.add(inter);
+                else{
+                    /////////////////////needs work
+                    sensingRadius/=2;
+                    calculateSensingSamples();
+                    i--;
+                }
                 i++;
             }
             i=0;

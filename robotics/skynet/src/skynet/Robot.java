@@ -65,8 +65,8 @@ public class Robot {
 		stepSizeText=gui.addTextField(2,3,"40");
 		
 		//add goal fields for both rrt and pot fields
-		goalXText=gui.addTextField(4, 0, "0");
-		goalYText=gui.addTextField(4, 1, "0");
+		goalXText=gui.addTextField(4, 0, "500");
+		goalYText=gui.addTextField(4, 1, "500");
 		
 		//top row of gui
 		/////////////////////////////////////
