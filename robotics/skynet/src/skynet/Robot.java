@@ -62,7 +62,7 @@ public class Robot {
 		startXText=gui.addTextField(2, 0, "0");
 		startYText=gui.addTextField(2, 1, "0");
 		robotSizeText=gui.addTextField(2,2,"10");
-		stepSizeText=gui.addTextField(2,3,"40");
+		stepSizeText=gui.addTextField(2,3,"60");
 		
 		//add goal fields for both rrt and pot fields
 		goalXText=gui.addTextField(4, 0, "500");
@@ -155,6 +155,10 @@ public class Robot {
         //logic to ensure that buttons are reenabled on restarting the simulation
         pf.setStarted(false);
 	}
+
+    public double diagonalDistance(){
+        return Math.sqrt(Math.pow(xPixels,2)+Math.pow(yPixels,2));
+    }
 	
 	public void setStatusLabelText(String s){
 		gui.setLabelText(statusLabel, s);

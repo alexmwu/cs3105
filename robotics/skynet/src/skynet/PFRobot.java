@@ -77,7 +77,7 @@ public class PFRobot{
         xCenter=Integer.parseInt(gui.getTextFieldContent(xId));
         yCenter=Integer.parseInt(gui.getTextFieldContent(yId));
         //sensing radius is initially halfway between robot size and sonar size
-        sensingRadius=calculateSamplingRadius();
+        sensingRadius=calculateSensingRadius();
 
         //get angle between robot and goal
         angle=getAngle(xCenter,yCenter,goal.x,goal.y);
@@ -132,7 +132,7 @@ public class PFRobot{
     }
 
     //calculates all sensing sample potentials and returns point with the lowest one
-    public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs,EasyGui gui){
+    public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs,Robot rob){
         ArrayList<IntPoint> intersectedPoints=null; //intersected points that rays have detected
         double currObstPot,currGoalPot, currTotalPot;   //current obstacle, goal, and total potential
         ArrayList<Obstacle> detectedObs=new ArrayList<Obstacle>();    //obstacles in sonar range
@@ -150,19 +150,18 @@ public class PFRobot{
                 if(newSR<sensingRadius){
                     //make sensingradius less than nearest obstacle and give buffer region
                     sensingRadius=(int)(newSR-(newSR/10.0));
+                    sensingRadiusCheck();
                     calculateSensingSamples();
                 }
                 intersectedPoints=getRayIntersections(detectedObs);
-                draw(gui);
-                gui.update();
             }
             else{
-                sensingRadius=calculateSamplingRadius();
+                sensingRadius=calculateSensingRadius();
             }
         }
 
         if(intersectedPoints!=null)
-        drawIntersectedPoints(gui,intersectedPoints);
+        drawIntersectedPoints(rob.getGui(),intersectedPoints);
 
         //index of minimum potential and minimum potential
         int minPotIndex=0;
@@ -171,7 +170,7 @@ public class PFRobot{
 
         //return index of sensing sample point with lowest potential
         for(int i=0;i<sensingSamples.length;i++){
-            currGoalPot=getGoalPotential(goal,sensingSamples[i]);
+            currGoalPot=getGoalPotential(goal,sensingSamples[i],rob);
             //if no obstacles seen or no intersected points, there should be no obstacle potential
             if(detectedObs.isEmpty() || intersectedPoints==null)
                 currObstPot=0;
@@ -230,8 +229,8 @@ public class PFRobot{
     }
 
     //get goal potential; temporary placeholder equation
-    public double getGoalPotential(IntPoint goal,IntPoint sensingSample){
-        return -Math.pow(sonarRange,1)/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
+    public double getGoalPotential(IntPoint goal,IntPoint sensingSample,Robot rob){
+        return -rob.diagonalDistance()/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
     }
 
     //distance from nearest obstacle
@@ -334,7 +333,7 @@ public class PFRobot{
     //formula for potential between two points
     public double potential(int x1, int y1, int x2, int y2){
         double d=dist(x1,y1,x2,y2);
-        if(d>=sensingRadius) return 0;
+        if(d>=sonarRange) return 0;
         else if(d==0){
             //return error to be handled above
             return -1;
@@ -345,8 +344,14 @@ public class PFRobot{
         }
     }
 
-    public int calculateSamplingRadius(){
-        return (robotSize+sonarRange)/2;
+    public int calculateSensingRadius(){
+        return sonarRange/3;
+    }
+
+    public void sensingRadiusCheck(){
+        if(sensingRadius<robotSize){
+            sensingRadius=robotSize+1;
+        }
     }
 
     public boolean atGoal(IntPoint goal){

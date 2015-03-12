@@ -25,7 +25,7 @@ public class Obstacle extends Object{
 
         x=randGen.nextInt(rob.getxPixels()+1);
         y=randGen.nextInt(rob.getyPixels()+1);
-        r=randGen.nextInt((int) (Math.sqrt(Math.pow(rob.getxPixels(),2)+Math.pow(rob.getyPixels(),2))/10.0));
+        r=randGen.nextInt((int) rob.diagonalDistance()/10);
 
         tmp=new Obstacle(x,y,r);
         return tmp;

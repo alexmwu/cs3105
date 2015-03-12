@@ -134,7 +134,7 @@ public class PotFields {
 
             //rob.getGui().clearGraphicsPanel();
 
-            IntPoint best=explorer.getBestSample(goal,obstacles,rob.getGui());
+            IntPoint best=explorer.getBestSample(goal,obstacles,rob);
             if(best==null){
                 stop();
                 rob.setStatusLabelText("Error: there was a collision between sensing sample and obstacle.");
