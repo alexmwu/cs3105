@@ -81,7 +81,7 @@ public class PotFields {
            }
 
            //if new obst intersects with the start or goal
-           if(tmp.didCollide(explorer.getxCenter(),explorer.getyCenter(),explorer.getSonarRange()) || tmp.didCollide(goal.x,goal.y) || collided){
+           if(tmp.didCollide(explorer.getxCenter(),explorer.getyCenter(),explorer.getSonarRange()) || tmp.didCollide(goal.x,goal.y,explorer.getRobotSize()) || collided){
                i--;
                continue;
            }
@@ -144,7 +144,7 @@ public class PotFields {
 
             //draw intersected points
             if(intersectedPoints!=null)
-                 explorer.drawIntersectedPoints(rob.getGui(),intersectedPoints);
+                 explorer.drawIntersectedPoints(rob.getGui(), intersectedPoints);
 
             explorer.drawRays(rob.getGui());
 
@@ -152,9 +152,11 @@ public class PotFields {
 
             rob.getGui().update();
 
-            int best=explorer.getBestSample(goal,intersectedPoints,rob);
+            int best=explorer.getBestSample(goal,intersectedPoints,detectedObs,rob);
 
             IntPoint bp=explorer.smoothPath(best);
+
+            System.out.println(bp);
 
             explorer.calculateSensingSamples();
             explorer.calculateRayEnds();

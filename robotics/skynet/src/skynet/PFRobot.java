@@ -162,12 +162,12 @@ public class PFRobot{
                     calculateSensingSamples();
                     calculateRayEnds();
                 }
+                else{
+                    sensingRadius=calculateSensingRadius();
+                }
                 intersectedPoints=getRayIntersections(detectedObs);
             }
-            else{
-                sensingRadius=calculateSensingRadius();
-            }
-        return intersectedPoints;
+       return intersectedPoints;
     }
 
     public ArrayList<Obstacle> getDetectedObstacles(ArrayList<Obstacle> obs){
@@ -185,9 +185,9 @@ public class PFRobot{
     }
 
     //calculates all sensing sample potentials and returns point with the lowest one
-    public int getBestSample(IntPoint goal, ArrayList<IntPoint> intersectedPoints, Robot rob){
+    public int getBestSample(IntPoint goal, ArrayList<IntPoint> intersectedPoints, ArrayList<Obstacle> detectedObs,Robot rob){
         double currObstPot,currGoalPot, currTotalPot;   //current obstacle, goal, and total potential
-
+        boolean collided=false; //if a sensing point collided with obstacle (to correct for double to int error)
         //index of minimum potential and minimum potential
         int minPotIndex=0;
         double minPot=0;
@@ -195,6 +195,7 @@ public class PFRobot{
 
         //return index of sensing sample point with lowest potential
         for(int i=0;i<sensingSamples.length;i++){
+            collided=false;
             currGoalPot=getGoalPotential(goal,sensingSamples[i],rob);
             //if no obstacles seen or no intersected points, there should be no obstacle potential
             if(intersectedPoints==null)
@@ -210,13 +211,24 @@ public class PFRobot{
 
             //total potential
             currTotalPot=currGoalPot+currObstPot;
+
+            //add extra check in case the lowest potential is at a sensing point that would collide with a detected object (if moved there)
+            //adjusts for errors caused by rounding from double to int
+            for(Obstacle o : detectedObs){
+                if(o.didCollide(sensingSamples[i].x,sensingSamples[i].y,robotSize)){
+                    collided=true;
+                    break;
+                }
+            }
+
+            if(collided) continue;
+
+            //if the current total is less than minimum, there is a new best sample
             if(currTotalPot<minPot){
                 minPotIndex=i;
                 minPot=currTotalPot;
             }
         }
-
-
         return minPotIndex;
     }
 
@@ -230,6 +242,8 @@ public class PFRobot{
 
         //new point of robot
         IntPoint best=new IntPoint((int)(sensingRadius*radialFactor*Math.cos(bestAngle))+xCenter,(int)(sensingRadius*radialFactor*Math.sin(bestAngle))+yCenter);
+
+        //to ensure that robot keeps moving and doesn't get stuck in a turning loop
 
         //set new location and angle
         xCenter=best.x;
@@ -253,14 +267,14 @@ public class PFRobot{
 
     //get goal potential; temporary placeholder equation
     public double getGoalPotential(IntPoint goal,IntPoint sensingSample,Robot rob){
-        return -rob.diagonalDistance()/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
+        return -(rob.diagonalDistance())/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
     }
 
     //distance from nearest obstacle
     public double getNearestObstacleDist(ArrayList<Obstacle> obstacles){
         double dist=sonarRange;
         for(Obstacle o : obstacles){
-            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius()+sensingRadius;
+            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius()-sensingRadius;
             if(d<dist){
                 dist=d;
             }
@@ -317,7 +331,6 @@ public class PFRobot{
         double to=angle+(Math.PI/2.0);
         int i=0;
         for(Obstacle o : detectedObs) {
-            o.print();
             for (double d = from; d <= to; d += step) {
                 inter=getCloserIntersection(sensingSamples[i], rayEnds[i], o);
                 if(inter!=null)
@@ -333,7 +346,6 @@ public class PFRobot{
             }
             i=0;
         }
-        printIntersectedPoints(intersections);
         return intersections;
     }
 
