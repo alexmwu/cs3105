@@ -133,7 +133,7 @@ public class PFRobot{
     public double getAngle(int x1, int y1, int x2, int y2){
         int dX=x2-x1;
         int dY=y2-y1;
-        return Math.atan((double) dY / (double) dX);
+        return Math.atan2((double) dY , (double) dX);
     }
 
 
@@ -244,6 +244,9 @@ public class PFRobot{
         IntPoint best=new IntPoint((int)(sensingRadius*radialFactor*Math.cos(bestAngle))+xCenter,(int)(sensingRadius*radialFactor*Math.sin(bestAngle))+yCenter);
 
         //to ensure that robot keeps moving and doesn't get stuck in a turning loop
+        if((best.x-xCenter==0)&&(best.y-yCenter==0)){
+
+        }
 
         //set new location and angle
         xCenter=best.x;
