@@ -69,6 +69,10 @@ public class Object{
 	public double dist(int distX, int distY){
 		return Math.sqrt(distX*distX+distY*distY);
 	}
+
+    public void print(){
+        System.out.println("x: "+xCenter+", y: "+yCenter+", r: "+radius);
+    }
 }
 
 

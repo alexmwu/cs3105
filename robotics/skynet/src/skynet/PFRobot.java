@@ -140,10 +140,8 @@ public class PFRobot{
         //store obstacles that can be seen by sonar in detectedObs
         if(obs!=null){
             for(Obstacle o : obs){
-        //        System.out.println("ox: "+o.getX()+", oy: "+o.getY()+", or: "+o.getRadius()+", xc: "+xCenter+", yc: "+yCenter+", sonar: "+sonarRange+", dist: "+dist(o.getX(),o.getY(),xCenter,yCenter));
                 if(o.didCollide(xCenter,yCenter,sonarRange)){
                     detectedObs.add(o);
-         //           System.out.println("collision: "+o.getX()+" "+o.getY());
                 }
             }
             if(!detectedObs.isEmpty()){
@@ -152,8 +150,8 @@ public class PFRobot{
                 if(newSR<sensingRadius){
                     //make sensingradius less than nearest obstacle and give buffer region
                     sensingRadius=(int)(newSR-(newSR/10.0));
+                    calculateSensingSamples();
                 }
-                calculateSamplingRadius();
                 intersectedPoints=getRayIntersections(detectedObs);
                 draw(gui);
                 gui.update();
@@ -216,7 +214,6 @@ public class PFRobot{
         xCenter=best.x;
         yCenter=best.y;
         angle=bestAngle;
-        //System.out.println(xCenter + " " + yCenter);
 
         return best;
     }
@@ -237,10 +234,11 @@ public class PFRobot{
         return -Math.pow(sonarRange,1)/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
     }
 
+    //distance from nearest obstacle
     public double getNearestObstacleDist(ArrayList<Obstacle> obstacles){
         double dist=sonarRange;
         for(Obstacle o : obstacles){
-            double d=dist(o.getX(),o.getY(),xCenter,yCenter);
+            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius();
             if(d<dist){
                 dist=d;
             }
@@ -250,7 +248,6 @@ public class PFRobot{
 
     //adapted from http://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
     public IntPoint getCloserIntersection(IntPoint sensingSample,double ang,Obstacle o){
-        //System.out.println(sensingSample.x+" "+sensingSample.y+" "+o.getX()+" "+o.getY());
         //length of ray
         double lengthSampleRay=(sonarRange-sensingRadius);
         //end point of ray (where sensing sample ray from center of robot intersects with sonar circle)
@@ -264,6 +261,10 @@ public class PFRobot{
 
         //value t of closest point to the circle
         double closestT=rayXDir*(o.getX()- sensingSample.x)+rayYDir*(o.getY()-sensingSample.y);
+
+        if(closestT<0){
+            return null;
+        }
 
         //coordinates of a point on line closes to circle
         double closestX=closestT*rayXDir+sensingSample.x;
@@ -296,27 +297,31 @@ public class PFRobot{
         double to=angle+(Math.PI/2.0);
         int i=0;
         for(Obstacle o : detectedObs) {
+            o.print();
             for (double d = from; d <= to; d += step) {
                 inter=getCloserIntersection(sensingSamples[i], d, o);
                 if(inter!=null)
                     intersections.add(inter);
-                else{
+                /*else{
                     /////////////////////needs work
                     sensingRadius/=2;
                     calculateSensingSamples();
                     i--;
-                }
+                    d-=step;
+                }*/
                 i++;
             }
             i=0;
         }
-
+        printIntersectedPoints(intersections);
         return intersections;
     }
 
     public void drawIntersectedPoints(EasyGui gui,ArrayList<IntPoint> intersections){
         for(IntPoint ip : intersections){
-            gui.draw(new RenderablePoint(ip.x,ip.y));
+            RenderablePoint rp=new RenderablePoint(ip.x,ip.y);
+            rp.setProperties(Color.PINK,5.0f);
+            gui.draw(rp);
         }
     }
 

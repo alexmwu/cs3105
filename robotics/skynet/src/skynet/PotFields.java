@@ -161,7 +161,7 @@ public class PotFields {
 
     public void drawPoint(IntPoint p){
         RenderablePoint rp=new RenderablePoint(p.x,p.y);
-        rp.setProperties(Color.RED,10.0f);
+        rp.setProperties(Color.CYAN,5.0f);
         rob.getGui().draw(rp);
     }
 
