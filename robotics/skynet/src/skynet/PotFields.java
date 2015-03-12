@@ -1,6 +1,7 @@
 package skynet;
 
 import geometry.IntPoint;
+import renderables.RenderableOval;
 import renderables.RenderablePoint;
 
 import java.awt.*;
@@ -131,31 +132,54 @@ public class PotFields {
     public void move(){
         if(atGoal) return;
         else{
+            ArrayList<IntPoint> intersectedPoints=null;
+            ArrayList<Obstacle> detectedObs=null;
 
-            //rob.getGui().clearGraphicsPanel();
+            detectedObs=explorer.getDetectedObstacles(obstacles);
 
-            IntPoint best=explorer.getBestSample(goal,obstacles,rob);
-            if(best==null){
-                stop();
-                rob.setStatusLabelText("Error: there was a collision between sensing sample and obstacle.");
-                return;
-            }
-            //draw new location for path
-            drawPoint(best);
+            //draw detected obstacles
+            explorer.drawDetectedObstacles(detectedObs,rob.getGui());
 
-            drawGoal();
+            intersectedPoints=explorer.getIntersectedPoints(detectedObs);
 
-            //recalculate samples after changing location
-            explorer.calculateSensingSamples();
+            //draw intersected points
+            if(intersectedPoints!=null)
+                 explorer.drawIntersectedPoints(rob.getGui(),intersectedPoints);
+
+            explorer.drawRays(rob.getGui());
 
             explorer.draw(rob.getGui());
 
+            rob.getGui().update();
+
+            int best=explorer.getBestSample(goal,intersectedPoints,rob);
+
+            IntPoint bp=explorer.smoothPath(best);
+
+            explorer.calculateSensingSamples();
+            explorer.calculateRayEnds();
+
+            //draw new location for path
+            drawPoint(bp);
+
+//            drawGoal();
+
+
+ //           explorer.draw(rob.getGui());
+
+            //at goal updates to place robot at goal if goal is within range of sensing samples
             if(explorer.atGoal(goal)){
+                //update sensingsample placement
+                explorer.calculateSensingSamples();
+                //update ray placement
+                explorer.calculateRayEnds();
                 atGoal=true;
                 rob.setStatusLabelText("You've reached the goal.");
+                explorer.draw(rob.getGui());
+                explorer.drawRays(rob.getGui());
+                rob.getGui().update();
             }
 
-            rob.getGui().update();
         }
     }
 

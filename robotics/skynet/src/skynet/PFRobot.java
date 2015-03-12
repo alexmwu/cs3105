@@ -29,8 +29,8 @@ public class PFRobot{
 
     //sensing points
     private IntPoint[] sensingSamples;
-    //int point for where robot is pointing
-    private IntPoint pointing;
+    //rays of sensing samples
+    private IntPoint[] rayEnds;
     //number of sample points; should be odd
     private int numSamples;
 
@@ -42,6 +42,7 @@ public class PFRobot{
     private RenderableOval robot;
     private RenderableOval sonar;
     private RenderablePoint[] sensingPoints;
+    private RenderablePolyline[] rayPolylines;
 
     PFRobot(Robot r){
         xId=r.getStartXText();
@@ -55,6 +56,8 @@ public class PFRobot{
         //allocate memory
         sensingSamples=new IntPoint[numSamples];
         sensingPoints=new RenderablePoint[numSamples];
+        rayEnds=new IntPoint[numSamples];
+        rayPolylines=new RenderablePolyline[numSamples];
 
         angle=0;
     }
@@ -66,6 +69,9 @@ public class PFRobot{
         //initialize intpoints in array
         for(int i=0;i<sensingSamples.length;i++)
             sensingSamples[i]=new IntPoint();
+        //init ray ends
+        for(int i=0;i<rayEnds.length;i++)
+            rayEnds[i]=new IntPoint();
 
         //initialize step of angle calculations
         step=Math.PI/(numSamples-1);
@@ -84,6 +90,8 @@ public class PFRobot{
 
         //get sensing sample coord points
         calculateSensingSamples();
+        //get ray ends
+        calculateRayEnds();
 
         //draw robot and its system
         draw(gui);
@@ -118,9 +126,6 @@ public class PFRobot{
             sensingSamples[i].x=(int) (sensingRadius*Math.cos(d)) + xCenter;
             sensingSamples[i].y=(int) (sensingRadius*Math.sin(d)) + yCenter;
             //return center point of sensing samples
-            if(i==(numSamples/2)){
-                pointing=sensingSamples[i];
-            }
             i++;
         }
     }
@@ -131,10 +136,41 @@ public class PFRobot{
         return Math.atan((double) dY / (double) dX);
     }
 
-    //calculates all sensing sample potentials and returns point with the lowest one
-    public IntPoint getBestSample(IntPoint goal, ArrayList<Obstacle> obs,Robot rob){
+
+    public void calculateRayEnds(){
+        double from=angle-(Math.PI/2.0);
+        double to=angle+(Math.PI/2.0);
+        int i=0;
+        for(double d=from;d<=to;d+=step){
+            rayEnds[i].x=(int) (sonarRange*Math.cos(d)+xCenter);
+            rayEnds[i].y=(int) (sonarRange*Math.sin(d)+yCenter);
+            //return center point of sensing samples
+            i++;
+        }
+    }
+
+
+    public ArrayList<IntPoint> getIntersectedPoints(ArrayList<Obstacle> detectedObs){
         ArrayList<IntPoint> intersectedPoints=null; //intersected points that rays have detected
-        double currObstPot,currGoalPot, currTotalPot;   //current obstacle, goal, and total potential
+             if(!detectedObs.isEmpty()){
+                //new sensing radius
+                int newSR=(int) getNearestObstacleDist(detectedObs);
+                if(newSR<sensingRadius){
+                    //make sensingradius less than nearest obstacle and give buffer region
+                    sensingRadius=(int)(newSR-(newSR/10.0));
+                    sensingRadiusCheck();
+                    calculateSensingSamples();
+                    calculateRayEnds();
+                }
+                intersectedPoints=getRayIntersections(detectedObs);
+            }
+            else{
+                sensingRadius=calculateSensingRadius();
+            }
+        return intersectedPoints;
+    }
+
+    public ArrayList<Obstacle> getDetectedObstacles(ArrayList<Obstacle> obs){
         ArrayList<Obstacle> detectedObs=new ArrayList<Obstacle>();    //obstacles in sonar range
 
         //store obstacles that can be seen by sonar in detectedObs
@@ -144,24 +180,13 @@ public class PFRobot{
                     detectedObs.add(o);
                 }
             }
-            if(!detectedObs.isEmpty()){
-                //new sensing radius
-                int newSR=(int) getNearestObstacleDist(detectedObs);
-                if(newSR<sensingRadius){
-                    //make sensingradius less than nearest obstacle and give buffer region
-                    sensingRadius=(int)(newSR-(newSR/10.0));
-                    sensingRadiusCheck();
-                    calculateSensingSamples();
-                }
-                intersectedPoints=getRayIntersections(detectedObs);
-            }
-            else{
-                sensingRadius=calculateSensingRadius();
-            }
         }
+        return detectedObs;
+    }
 
-        if(intersectedPoints!=null)
-        drawIntersectedPoints(rob.getGui(),intersectedPoints);
+    //calculates all sensing sample potentials and returns point with the lowest one
+    public int getBestSample(IntPoint goal, ArrayList<IntPoint> intersectedPoints, Robot rob){
+        double currObstPot,currGoalPot, currTotalPot;   //current obstacle, goal, and total potential
 
         //index of minimum potential and minimum potential
         int minPotIndex=0;
@@ -172,18 +197,14 @@ public class PFRobot{
         for(int i=0;i<sensingSamples.length;i++){
             currGoalPot=getGoalPotential(goal,sensingSamples[i],rob);
             //if no obstacles seen or no intersected points, there should be no obstacle potential
-            if(detectedObs.isEmpty() || intersectedPoints==null)
+            if(intersectedPoints==null)
                 currObstPot=0;
             else{
                 currObstPot=0;
                 for(IntPoint ip : intersectedPoints){
                     double potential=potential(sensingSamples[i].x,sensingSamples[i].y,ip.x,ip.y);
                     //return null to tell main that there has been an error
-                    if(potential==-1)
-                        return null;
-                    else{
-                        currObstPot+=potential;
-                    }
+                    currObstPot+=potential;
                 }
             }
 
@@ -196,8 +217,9 @@ public class PFRobot{
         }
 
 
-        return smoothPath(minPotIndex);
+        return minPotIndex;
     }
+
 
     //smooth path for new point and change robot location and angle
     public IntPoint smoothPath(int minPotIndex){
@@ -225,7 +247,8 @@ public class PFRobot{
     }
 
     public double getRadialFactor(double bestAngle){
-        return 1-(Math.abs(bestAngle-angle)/(Math.PI/2));
+        //should always move. thus it should never return 0
+        return 1-(.9*(Math.abs(bestAngle-angle)/(Math.PI/2)));
     }
 
     //get goal potential; temporary placeholder equation
@@ -237,7 +260,7 @@ public class PFRobot{
     public double getNearestObstacleDist(ArrayList<Obstacle> obstacles){
         double dist=sonarRange;
         for(Obstacle o : obstacles){
-            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius();
+            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius()+sensingRadius;
             if(d<dist){
                 dist=d;
             }
@@ -246,11 +269,9 @@ public class PFRobot{
     }
 
     //adapted from http://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
-    public IntPoint getCloserIntersection(IntPoint sensingSample,double ang,Obstacle o){
+    public IntPoint getCloserIntersection(IntPoint sensingSample,IntPoint rayEnd,Obstacle o){
         //length of ray
         double lengthSampleRay=(sonarRange-sensingRadius);
-        //end point of ray (where sensing sample ray from center of robot intersects with sonar circle)
-        IntPoint rayEnd=new IntPoint((int)(sonarRange*Math.cos(ang)+xCenter),(int)(sonarRange*Math.sin(ang)+yCenter));
 
         //direction vectors of ray
         double rayXDir=(rayEnd.x-sensingSample.x)/lengthSampleRay;
@@ -298,7 +319,7 @@ public class PFRobot{
         for(Obstacle o : detectedObs) {
             o.print();
             for (double d = from; d <= to; d += step) {
-                inter=getCloserIntersection(sensingSamples[i], d, o);
+                inter=getCloserIntersection(sensingSamples[i], rayEnds[i], o);
                 if(inter!=null)
                     intersections.add(inter);
                 /*else{
@@ -324,6 +345,17 @@ public class PFRobot{
         }
     }
 
+    public void drawRays(EasyGui gui){
+        for(int i=0;i<sensingSamples.length;i++){
+            gui.unDraw(rayPolylines[i]);
+            rayPolylines[i]=new RenderablePolyline();
+            rayPolylines[i].addPoint(sensingSamples[i].x,sensingSamples[i].y);
+            rayPolylines[i].addPoint(rayEnds[i].x,rayEnds[i].y);
+            rayPolylines[i].setProperties(Color.RED,1.0f);
+            gui.draw(rayPolylines[i]);
+        }
+    }
+
     public void printIntersectedPoints(ArrayList<IntPoint> intersections){
         for(IntPoint ip: intersections){
             System.out.println(ip.x+" "+ip.y);
@@ -335,8 +367,9 @@ public class PFRobot{
         double d=dist(x1,y1,x2,y2);
         if(d>=sonarRange) return 0;
         else if(d==0){
-            //return error to be handled above
-            return -1;
+            //return the highest potential possible (a distance of 1 pixel away)
+            double a=sonarRange-d;
+            return Math.exp(-1/a);
         }
         else{
             double a=sonarRange-d;
@@ -354,8 +387,21 @@ public class PFRobot{
         }
     }
 
+    public void drawDetectedObstacles(ArrayList<Obstacle> detectedObs,EasyGui gui){
+        for(Obstacle o : detectedObs) {
+            RenderableOval tmp = o.getRenderableOval();
+            tmp.setProperties(Color.RED, 1.0f, false);
+            gui.draw(tmp);
+        }
+    }
+
     public boolean atGoal(IntPoint goal){
-        if(dist(goal.x,goal.y,xCenter,yCenter)<robotSize) return true;
+        double d=dist(goal.x,goal.y,xCenter,yCenter);
+        if(d<robotSize+sensingRadius){
+            xCenter=goal.x;
+            yCenter=goal.y;
+            return true;
+        }
         else return false;
     }
 

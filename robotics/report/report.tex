@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{flushright}
+140024255\\
+CS3105\\
+Practical 1, Robotics
+\end{flushright}
+
+\section{RRT Free Space Travel}
+\paragraph*{Completeness}
+\paragraph*{Output}
+\paragraph*{Efficiency}
+\paragraph*{Move Parameters}
+\paragraph*{Smoothing}
+\paragraph*{
+
+\section{Free Space Planner Superiority}
+
+
+\section{Obstacle Navigation}
+\paragraph*{Output}
+
+
+%figures go here
+\begin{figure}
+\centering
+\includegraphics[width=220]{file_transfers.png}
+\caption{Transfers times using P2P for files and different number of nodes.}
+\end{figure}
+From the graph, it appears that most of the files appear to have the same rate of change. This is because chunking was never implemented and the file transfers are done file-by-file. It almost looks linear, suggesting that the whole file transfer does not provide many of the benefits of P2P.
+
+\begin{figure}
+\centering
+\includegraphics[width=220]{p2pvssftp.png}
+\caption{Transfer times of SFTP vs P2P.}
+\end{figure}
+
+This figure shows that, while slight, the P2P does appear to be faster than the SFTP. Also, on this scale, even with the whole file transfer, the system seems to be enjoying some of the advantages of P2P as the number of nodes increases.
+
+
+
+\end{document}
+
