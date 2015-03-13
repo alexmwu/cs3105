@@ -140,6 +140,10 @@ public class RRTRobot extends Object{
         //display tree route
         path.addPoint(route.get(0).x,route.get(0).y);
         for(int i=1;i<numNodes;i++){
+            double currAngle=getAngle(route.get(i).x,route.get(i).y,route.get(i-1).x,route.get(i-1).y);
+            if(currAngle!=lastAngle) numTurns++;
+            lastAngle=currAngle;
+            pathLength+=dist(route.get(i).x,route.get(i).y,route.get(i-1).x,route.get(i-1).y);
             path.addPoint(route.get(i).x, route.get(i).y);
         }
 

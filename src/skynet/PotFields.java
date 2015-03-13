@@ -22,6 +22,8 @@ public class PotFields {
 
     //whether simulation has been started
     private boolean started;
+    //if free space simulation
+    private boolean freeSpace;
 
     private ArrayList<Obstacle> obstacles;
 
@@ -47,6 +49,8 @@ public class PotFields {
 
         numMoves=0;
         pathLength=0;
+
+        freeSpace=false;
 
         rob.getGui().update();
 	}
@@ -122,8 +126,13 @@ public class PotFields {
             return;
         }
 
-        //initialize obstacles
-        obstacles=initRandObstacles(11);
+        //if not free space sim, initialize obstacles
+        if(freeSpace){
+            obstacles=new ArrayList<Obstacle>();
+        }
+        else{
+            obstacles=initRandObstacles(11);
+        }
 
         // User instructions
         rob.setStatusLabelText("Pick a movement mode (Move, Animate).");
@@ -197,6 +206,10 @@ public class PotFields {
             }
 
         }
+    }
+
+    public void freeSpace(){
+        freeSpace=!freeSpace;
     }
 
     public void drawPoint(IntPoint p){
