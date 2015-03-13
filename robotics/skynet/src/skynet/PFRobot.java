@@ -44,6 +44,9 @@ public class PFRobot{
     private RenderablePoint[] sensingPoints;
     private RenderablePolyline[] rayPolylines;
 
+    //efficiency counter for turns
+    int numTurns;
+
     PFRobot(Robot r){
         xId=r.getStartXText();
         yId=r.getStartYText();
@@ -60,6 +63,7 @@ public class PFRobot{
         rayPolylines=new RenderablePolyline[numSamples];
 
         angle=0;
+        numTurns=0;
     }
 
     //initialize pf variables and gui
@@ -87,6 +91,9 @@ public class PFRobot{
 
         //get angle between robot and goal
         angle=getAngle(xCenter,yCenter,goal.x,goal.y);
+
+        //init effiency measure to 0
+        numTurns=0;
 
         //get sensing sample coord points
         calculateSensingSamples();
@@ -248,6 +255,11 @@ public class PFRobot{
 
         }
 */
+        //if angle changed
+        if(angle!=bestAngle){
+            numTurns++;
+        }
+
         //set new location and angle
         xCenter=best.x;
         yCenter=best.y;
@@ -463,4 +475,9 @@ public class PFRobot{
     public void setSonarRange(int sonarRange) {
         this.sonarRange = sonarRange;
     }
+
+    public int getNumTurns() {
+        return numTurns;
+    }
+
 }

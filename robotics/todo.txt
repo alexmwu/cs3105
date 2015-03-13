@@ -1,8 +1,8 @@
 to do (by order of importance)
 
 report
-add efficiency parameters for rrt and pf
-obstacle course loading
+add efficiency parameters for and pf
 add smoothing to rrt
+obstacle course loading
 obstacle course saving
 add lines as obstacles

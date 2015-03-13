@@ -5,6 +5,7 @@ import renderables.RenderableOval;
 import renderables.RenderablePoint;
 
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,6 +27,9 @@ public class PotFields {
 
     private Random randGen;
 
+    private int numMoves;
+    private double pathLength;
+
 	public PotFields(Robot r){
         rob=r;
         initGui();
@@ -40,6 +44,9 @@ public class PotFields {
         randGen=new Random();
 
         started=false;
+
+        numMoves=0;
+        pathLength=0;
 
         rob.getGui().update();
 	}
@@ -122,7 +129,9 @@ public class PotFields {
         rob.setStatusLabelText("Pick a movement mode (Move, Animate).");
 
         atGoal=false;
-
+        //set efficiency measures to 0
+        numMoves=0;
+        pathLength=0;
 
         // Refresh the GUI
         rob.getGui().update();
@@ -134,6 +143,8 @@ public class PotFields {
         else{
             ArrayList<IntPoint> intersectedPoints=null;
             ArrayList<Obstacle> detectedObs=null;
+            int previousX=explorer.getxCenter();
+            int previousY=explorer.getyCenter();
 
             detectedObs=explorer.getDetectedObstacles(obstacles);
 
@@ -156,7 +167,7 @@ public class PotFields {
 
             IntPoint bp=explorer.smoothPath(best);
 
-            System.out.println(bp);
+            pathLength+=explorer.dist(bp.x,bp.y,previousX,previousY);
 
             explorer.calculateSensingSamples();
             explorer.calculateRayEnds();
@@ -164,10 +175,7 @@ public class PotFields {
             //draw new location for path
             drawPoint(bp);
 
-//            drawGoal();
-
-
- //           explorer.draw(rob.getGui());
+            numMoves++;
 
             //at goal updates to place robot at goal if goal is within range of sensing samples
             if(explorer.atGoal(goal)){
@@ -175,11 +183,17 @@ public class PotFields {
                 explorer.calculateSensingSamples();
                 //update ray placement
                 explorer.calculateRayEnds();
-                atGoal=true;
-                rob.setStatusLabelText("You've reached the goal.");
+
+                //update length before display (use current x and y since the explorer is at goal and already added best to previous)
+                pathLength+=explorer.dist(bp.x,bp.y,explorer.getxCenter(),explorer.getyCenter());
+
+                rob.setStatusLabelText("Moves: "+numMoves+" Length: "+ Double.toString(pathLength)+" Turns: "+Integer.toString(explorer.getNumTurns()));
                 explorer.draw(rob.getGui());
                 explorer.drawRays(rob.getGui());
+
                 rob.getGui().update();
+
+                atGoal=true;
             }
 
         }
