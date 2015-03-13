@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.7.2)  13 MAR 2015 17:59
+This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.8.1)  13 MAR 2015 20:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -232,45 +232,116 @@ e
 [1
 
 {/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (7.72495pt too wide) in paragraph at lines 49--51
+Overfull \hbox (7.72495pt too wide) in paragraph at lines 52--53
  \OT1/cmr/bx/n/12 Smooth-ing \OT1/cmr/m/n/12 Smooth-ing for the RRT is rel-a-ti
 vely au-to-matic since it uses the RRTree's
  []
 
-[2] <two_obstacles.png, id=11, 1204.5pt x 647.41875pt>
+[2] [3] <two_obstacles_cropped.png, id=14, 456.20438pt x 351.56343pt>
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.86 ...ludegraphics[width=350]{two_obstacles.png}
+l.72 ...hics[width=350]{two_obstacles_cropped.png}
                                                   
 ? 
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.86 ...ludegraphics[width=350]{two_obstacles.png}
+l.72 ...hics[width=350]{two_obstacles_cropped.png}
                                                   
 ? 
-File: two_obstacles.png Graphic file (type png)
-<use two_obstacles.png>
-Package pdftex.def Info: two_obstacles.png used on input line 86.
-(pdftex.def)             Requested size: 350.0pt x 188.12201pt.
- [3] [4 <./two_obstacles.png>] (./report.aux) ) 
+File: two_obstacles_cropped.png Graphic file (type png)
+<use two_obstacles_cropped.png>
+Package pdftex.def Info: two_obstacles_cropped.png used on input line 72.
+(pdftex.def)             Requested size: 350.0pt x 269.72835pt.
+ [4 <./two_obstacles_cropped.png>] [5]
+<compile.png, id=21, 739.76375pt x 501.875pt>
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.98 \includegraphics[width=350]{compile.png}
+                                             
+? 
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.98 \includegraphics[width=350]{compile.png}
+                                             
+? 
+File: compile.png Graphic file (type png)
+<use compile.png>
+Package pdftex.def Info: compile.png used on input line 98.
+(pdftex.def)             Requested size: 350.0pt x 237.45116pt.
+ <running.png, id=23, 1419.3025pt x 838.13126pt>
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.114 \includegraphics[width=350]{running.png}
+                                              
+? 
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.114 \includegraphics[width=350]{running.png}
+                                              
+? 
+File: running.png Graphic file (type png)
+<use running.png>
+Package pdftex.def Info: running.png used on input line 114.
+(pdftex.def)             Requested size: 350.0pt x 206.68039pt.
+ [6] [7 <./compile.png> <./running.png>]
+<goal_bias_rrt.png, id=34, 1927.2pt x 1084.05pt>
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.127 ...udegraphics[width=350]{goal_bias_rrt.png}
+                                                  
+? 
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.127 ...udegraphics[width=350]{goal_bias_rrt.png}
+                                                  
+? 
+File: goal_bias_rrt.png Graphic file (type png)
+<use goal_bias_rrt.png>
+Package pdftex.def Info: goal_bias_rrt.png used on input line 127.
+(pdftex.def)             Requested size: 350.0pt x 196.87395pt.
+ [8 <./goal_bias_rrt.png>]
+<animate_pf.png, id=39, 1927.2pt x 1084.05pt>
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.135 \includegraphics[width=350]{animate_pf.png}
+                                                 
+? 
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.135 \includegraphics[width=350]{animate_pf.png}
+                                                 
+? 
+File: animate_pf.png Graphic file (type png)
+<use animate_pf.png>
+Package pdftex.def Info: animate_pf.png used on input line 135.
+(pdftex.def)             Requested size: 350.0pt x 196.87395pt.
+ [9 <./animate_pf.png>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 3322 strings out of 495034
- 47891 string characters out of 6181678
- 129945 words of memory out of 5000000
- 6516 multiletter control sequences out of 15000+600000
+ 3345 strings out of 495034
+ 48304 string characters out of 6181678
+ 133945 words of memory out of 5000000
+ 6535 multiletter control sequences out of 15000+600000
  5319 words of font info for 20 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,5n,49p,840b,998s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (4 pages, 122772 bytes).
+ 38i,6n,49p,1362b,998s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmtt10.pfb>
+Output written on report.pdf (9 pages, 689604 bytes).
 PDF statistics:
- 30 PDF objects out of 1000 (max. 8388607)
- 19 compressed objects within 1 object stream
+ 56 PDF objects out of 1000 (max. 8388607)
+ 32 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
