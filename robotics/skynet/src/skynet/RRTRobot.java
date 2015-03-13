@@ -7,6 +7,7 @@ import easyGui.EasyGui;
 import dataStructures.RRNode;
 import dataStructures.RRTree;
 import renderables.RenderableOval;
+import renderables.RenderablePoint;
 import renderables.RenderablePolyline;
 import geometry.IntPoint;
 
@@ -99,17 +100,6 @@ public class RRTRobot extends Object{
 		}
 		tree.addNode(nearest, moveTo);
 
-        //only if told to draw
-        if(draw) gui.draw(tree);
-
-        //see if angle changed before changing current position
-        double ang=getAngle(getX(),getY(),moveTo.x,moveTo.y);
-        if(lastAngle!=ang){
-            numTurns++;
-        }
-        //set this angle for next use of move
-        lastAngle=ang;
-
 		setX(moveTo.x);
 		setY(moveTo.y);
 		rendOv.centreX=getX();
@@ -134,33 +124,82 @@ public class RRTRobot extends Object{
 	}
 	
 	//if goal is reached, returns length of path
-	public ArrayList<IntPoint> end(EasyGui gui){
+	public void end(EasyGui gui){
 		// Last node
 		RRNode last = tree.getNearestNeighbour(getIntPoint());
 		
 		// This prints the route we used.
 		ArrayList<IntPoint> route = tree.getPathFromRootTo(last);
 		RenderablePolyline path = new RenderablePolyline();
+        ArrayList<IntPoint> finalRoute;
+        RenderablePolyline finalPath=new RenderablePolyline();
 
         //number of nodes in path
         numNodes=route.size();
 
+        //display tree route
         path.addPoint(route.get(0).x,route.get(0).y);
-        for(int i=1;i<route.size();i++){
-            pathLength+=dist(route.get(i).x,route.get(i).y,route.get(i-1).x,route.get(i-1).y);
-            path.addPoint(route.get(i).x,route.get(i).y);
+        for(int i=1;i<numNodes;i++){
+            path.addPoint(route.get(i).x, route.get(i).y);
         }
 
 		// Set properties and then draw
-		path.setProperties(Color.RED, 2.5f);
+		path.setProperties(Color.GREEN, 0.0f);
 		gui.draw(path);
-        return route;
+
+
+
+        //get smoothed route
+        finalRoute=smoothPath(route);
+
+        //display smoothed route. add first point of route and first point of finalRoute to finalpath
+        finalPath.addPoint(route.get(0).x,route.get(0).y);
+        finalPath.addPoint(finalRoute.get(0).x,finalRoute.get(0).y);
+        //initial path length
+        pathLength+=dist(route.get(0).x,route.get(0).y,finalRoute.get(0).x,finalRoute.get(0).y);
+        for(int i=1;i<finalRoute.size();i++){
+            pathLength+=dist(finalRoute.get(i).x,finalRoute.get(i).y,finalRoute.get(i-1).x,finalRoute.get(i-1).y);
+            finalPath.addPoint(finalRoute.get(i).x,finalRoute.get(i).y);
+        }
+        //case of final path length
+        pathLength+=dist(route.get(numNodes-1).x,route.get(numNodes-1).y,finalRoute.get(finalRoute.size()-1).x,finalRoute.get(finalRoute.size()-1).y);
+        //add final point in route to drawn line
+        finalPath.addPoint(route.get(numNodes-1).x,route.get(numNodes-1).y);
+//gui.clearGraphicsPanel();
+        //draw
+        finalPath.setProperties(Color.RED,1.0f);
+        gui.draw(finalPath);
 	}
 
-    /*public ArrayList<IntPoint> smoothPath(ArrayList<IntPoint>){
-        double lastA
-    }*/
+   public ArrayList<IntPoint> smoothPath(ArrayList<IntPoint> route){
+        double prevAngle,nextAngle;
 
+        //number of nodes in path
+        numNodes=route.size();
+        ArrayList<IntPoint> smoothedPath=new ArrayList<IntPoint>();
+        for(int i=1;i<numNodes-1;i++) {
+            prevAngle = getAngle(route.get(i - 1).x, route.get(i - 1).y, route.get(i).x, route.get(i).y);
+            nextAngle = getAngle(route.get(i).x, route.get(i).y, route.get(i + 1).x, route.get(i + 1).y);
+            if (Math.abs(nextAngle - prevAngle) > Math.PI / 2) {
+                IntPoint tmp = getMidPoint(route.get(i - 1).x, route.get(i - 1).y, route.get(i + 1).x, route.get(i + 1).y);
+                smoothedPath.add(tmp);
+            }
+            else smoothedPath.add(route.get(i));
+        }
+        return smoothedPath;
+    }
+
+    public IntPoint getMidPoint(int x1,int y1,int x2,int y2){
+        // Point to move to given step
+		int distX = x2-x1;
+		int distY = y2-y1;
+		double distance = dist(distX,distY);
+
+	    //halfway point from x1,y1 to x2,y2
+	    int moveX = x1 + (int)Math.floor(distX*(distance/2));
+		int moveY = y1 + (int)Math.floor(distY*(distance/2));
+		return new IntPoint(moveX,moveY);
+    }
 
     //get angle to see if angle changed
     public double getAngle(int x1, int y1, int x2, int y2){

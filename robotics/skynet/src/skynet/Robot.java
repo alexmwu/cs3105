@@ -24,6 +24,9 @@ public class Robot {
 
     //unique solution button to rrt
     private int solutionButton;
+
+    //goal bias for rrt
+    private int goalBiasButton;
 	
 	//labels for rrt
 	private int goalSizeLabel;
@@ -96,9 +99,10 @@ public class Robot {
 
 		//enable rrt move, to goal, solution, and toggle dots buttons
 		gui.setButtonEnabled(rrtMoveButton,true);
-		gui.setButtonEnabled(rrtGoalButton, true);
+	    //gui.setButtonEnabled(rrtGoalButton, true);
 		gui.setButtonEnabled(toggleDotsButton, true);
         gui.setButtonEnabled(solutionButton,true);
+        gui.setButtonEnabled(goalBiasButton,true);
 
         //set step size to robot size
         gui.setTextFieldContent(stepSizeText,gui.getTextFieldContent(robotSizeText));
@@ -124,10 +128,10 @@ public class Robot {
     public void disableRRT(){
        	//disable rrt buttons
 		gui.setButtonEnabled(rrtMoveButton,false);
-		gui.setButtonEnabled(rrtGoalButton,false);
+		//gui.setButtonEnabled(rrtGoalButton,false);
 		gui.setButtonEnabled(toggleDotsButton,false);
         gui.setButtonEnabled(solutionButton,false);
-
+        gui.setButtonEnabled(goalBiasButton,false);
     }
 	
 	public void startPotFields(){
@@ -377,7 +381,15 @@ public class Robot {
     public void setPfGoalButton(int pfGoalButton) {
         this.pfGoalButton = pfGoalButton;
     }
-	
+
+    public int getGoalBiasButton() {
+        return goalBiasButton;
+    }
+
+    public void setGoalBiasButton(int goalBiasButton) {
+        this.goalBiasButton = goalBiasButton;
+    }
+
 	// MAIN
 	public static void main(String[] args)
 	{

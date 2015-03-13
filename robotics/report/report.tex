@@ -25,7 +25,7 @@ The number of moves for the PF in free space is the same for each run, namely 35
 To find the next move for the RRT, a random point is taken. The possible coordinate values for x and y, respectively, are from 0 to the width and 0 to the height, plus some buffer region for each. The buffer, ten percent outside of the displayable region, is needed in case the goal is at the edge of the displayable region. If this is the case, then it is much more difficult to reach as random points only reach up until the edge of the displayable region. With the buffer region, random points will reach a bit past the displayable region, making is much easier to reach goals at the edge of the displayable region.
 To find the next move for the PF, the robot calculates the potential for each of the sensing points (default of 7). In the absence of obstacles, the potential is calculated solely by a formula that uses the distance from the goal. The PF then picks the sensing sample with the best (lowest) potential.
 \paragraph*{Smoothing}
-Smoothing for the RRT is done by finding angle between the nearest node of the random point and the stepped node. 
+Smoothing for the RRT is relatively automatic since it uses the RRTree's nearest node method. In doing so, it 
 %%Smoothing for the PF is done by decreasing the radius of the step when the angle of movement is different from the current angle in which the robot is facing. That is, if the movement does not continue in a straight line from the robot, the length of the movement from the 
 \paragraph*{Free Space Planner Superiority}
 The PF robot exhibits superiority in free space in a number of aspects. It is able to find a path between any two points in free space, whereas the RRT is limited by the displayable region. Unlike the RRT, the PF does not have to do any planning. Rather, it is pulled to the goal by its attractive potential. Indeed, a lot of computation is wasted in the RRT method by calculating extra unnecessary nodes in the tree. The biggest advantage of all, of course, is that the PF robot is able to move from its starting position to the goal without any turns. Additionally, in reaching the goal in this fashion, the length of the path is reduced significantly from the wavier path of the RRT. In fact, the PF robot's path is the optimal path as it is a straight line.
@@ -53,7 +53,7 @@ Although the user is free to set whatever values for the simulation values such 
 %figures go here
 \begin{figure}
 \centering
-\includegraphics[width=220]{two_obstacles.png}
+\includegraphics[width=350]{two_obstacles.png}
 \caption{The PF robot stuck in a local minimum point between two obstacles.}
 \end{figure}.
 

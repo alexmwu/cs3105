@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.7.2)  13 MAR 2015 11:31
+This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.7.2)  13 MAR 2015 13:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -82,7 +82,7 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen111
 \Gin@req@width=\dimen112
 )
-No file report.aux.
+(./report.aux)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -97,6 +97,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -195,24 +196,30 @@ e
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.53 ...ludegraphics[width=220]{two_obstacles.png}
+l.56 ...ludegraphics[width=350]{two_obstacles.png}
                                                   
+? ^^[[A^^[[A
+Type <return> to proceed, S to scroll future error messages,
+R to run without stopping, Q to run quietly,
+I to insert something, E to edit your file,
+1 or ... or 9 to ignore the next 1 to 9 tokens of input,
+H for help, X to quit.
 ? 
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.53 ...ludegraphics[width=220]{two_obstacles.png}
+l.56 ...ludegraphics[width=350]{two_obstacles.png}
                                                   
 ? 
 File: two_obstacles.png Graphic file (type png)
 <use two_obstacles.png>
-Package pdftex.def Info: two_obstacles.png used on input line 53.
-(pdftex.def)             Requested size: 220.0pt x 118.24925pt.
+Package pdftex.def Info: two_obstacles.png used on input line 56.
+(pdftex.def)             Requested size: 350.0pt x 188.12201pt.
  [3 <./two_obstacles.png>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 1948 strings out of 495034
- 28032 string characters out of 6181678
- 89065 words of memory out of 5000000
+ 1950 strings out of 495034
+ 28054 string characters out of 6181678
+ 90065 words of memory out of 5000000
  5166 multiletter control sequences out of 15000+600000
  5020 words of font info for 19 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -220,7 +227,7 @@ Here is how much of TeX's memory you used:
 </usr/share/texlive/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmr12.pfb>
-Output written on report.pdf (3 pages, 108959 bytes).
+Output written on report.pdf (3 pages, 109464 bytes).
 PDF statistics:
  23 PDF objects out of 1000 (max. 8388607)
  14 compressed objects within 1 object stream

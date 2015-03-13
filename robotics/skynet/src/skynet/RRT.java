@@ -23,7 +23,7 @@ public class RRT {
 
     // whether gui has initially started (produces two more buttons), whether current robot is at
 	//the goal, and whether the user wants to display the random red dots, respectively
-	private boolean started,atGoal,displayRandomDots;
+	private boolean started,atGoal,displayRandomDots,goalBias;
 
     private int totalMoves;
 
@@ -42,6 +42,8 @@ public class RRT {
 		
 		// do not display random dots to start with
 		displayRandomDots=false;
+        //do not have goal bias to start
+        goalBias=false;
 
         started=false;
 
@@ -66,10 +68,14 @@ public class RRT {
 		// Add a move, solution, and goal button to the right of start
 		rob.setRrtMoveButton(rob.getGui().addButton(5, 1, "Move RRT", this, "move"));
 		rob.getGui().setButtonEnabled(rob.getRrtMoveButton(),false);
-		rob.setRrtGoalButton(rob.getGui().addButton(5, 2, "Animate", this, "toGoal"));
-		rob.getGui().setButtonEnabled(rob.getRrtGoalButton(),false);
-        rob.setSolutionButton(rob.getGui().addButton(5, 3, "Solution", this, "solution"));
+		/*rob.setRrtGoalButton(rob.getGui().addButton(5, 2, "Animate", this, "toGoal"));
+		rob.getGui().setButtonEnabled(rob.getRrtGoalButton(),false);*/
+        rob.setSolutionButton(rob.getGui().addButton(5, 2, "Solution", this, "solution"));
 		rob.getGui().setButtonEnabled(rob.getSolutionButton(),false);
+
+        rob.setGoalBiasButton(rob.getGui().addButton(5,3,"Goal Bias",this,"goalBias"));
+        rob.getGui().setButtonEnabled(rob.getGoalBiasButton(),false);
+
 
 		//rrt toggle dots
 		rob.setToggleDotsButton(rob.getGui().addButton(5, 4, "Toggle Dots", this, "randomDots"));
@@ -119,6 +125,10 @@ public class RRT {
 		if(displayRandomDots) displayRandomDots=false;
 		else displayRandomDots=true;
 	}
+
+    public void goalBias(){
+        goalBias=!goalBias;
+    }
 	
 	public void init(){
         if(!started){
@@ -151,20 +161,27 @@ public class RRT {
 	public void move(){
 		if(atGoal) return;
 		else{
-			int randomX=0,randomY=0;
-
 			// if it returns IntPoint, break out of loop; else continue (it won't return if it
 			// hits obstacles
-			
+
+            IntPoint randomPoint=new IntPoint();
+
 			while(true){
-				randomX = randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
-				randomY = randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
-				if(explorer.move(rob.getGui(),obstacles,randomX,randomY,true)) break;
+                if(!goalBias){
+                    randomPoint.x= randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
+                    randomPoint.y= randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
+                }
+                else{
+                    randomPoint.x=(int) ((rob.getxPixels()/4)*randGen.nextGaussian()+goal.getX());
+                    randomPoint.y=(int) ((rob.getyPixels()/4)*randGen.nextGaussian()+goal.getY());
+                    checkBounds(randomPoint);
+                }
+                if(explorer.move(rob.getGui(),obstacles,randomPoint.x,randomPoint.y,true)) break;
 			}
 			
 			// Draws a red dot at random point
 			if(displayRandomDots){
-				RenderablePoint randPoint = new RenderablePoint(randomX,randomY);
+				RenderablePoint randPoint = new RenderablePoint(randomPoint.x,randomPoint.y);
 				randPoint.setProperties(Color.RED, 7.5f);
 				rob.getGui().draw(randPoint);
 			}
@@ -200,17 +217,32 @@ public class RRT {
 
     public void solution(){
         while(!atGoal) {
-            int randomX = 0, randomY = 0;
 
             // if it returns IntPoint, break out of loop; else continue (it won't return if it
             // hits obstacles
 
-            while(true){
-                randomX = randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
-                randomY = randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
-                if(explorer.move(rob.getGui(),obstacles,randomX,randomY,true)) break;
-            }
+            IntPoint randomPoint=new IntPoint();
 
+			while(true){
+                if(!goalBias){
+                    randomPoint.x= randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
+                    randomPoint.y= randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
+                }
+                else{
+                    randomPoint.x=(int) ((rob.getxPixels()/4)*randGen.nextGaussian()+goal.getX());
+                    randomPoint.y=(int) ((rob.getyPixels()/4)*randGen.nextGaussian()+goal.getY());
+                    checkBounds(randomPoint);
+                }
+                if(explorer.move(rob.getGui(),obstacles,randomPoint.x,randomPoint.y,true)) break;
+			}
+
+			// Draws a red dot at random point
+			if(displayRandomDots){
+				RenderablePoint randPoint = new RenderablePoint(randomPoint.x,randomPoint.y);
+				randPoint.setProperties(Color.RED, 7.5f);
+				rob.getGui().draw(randPoint);
+                rob.getGui().update();
+			}
             //another successful move
             totalMoves++;
 
@@ -242,4 +274,27 @@ public class RRT {
     public double dist(int x1,int y1, int x2,int y2){
         return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
     }
+
+    public void checkBounds(IntPoint randP){
+        int buffEdgePX=rob.getxPixels()+(rob.getxPixels()/bufferFactor);
+        int buffEdgeNX=-(rob.getxPixels()/bufferFactor);
+        int buffEdgePY=rob.getyPixels()+(rob.getyPixels()/bufferFactor);
+        int buffEdgeNY=-(rob.getyPixels()/bufferFactor);
+        System.out.println(buffEdgeNX+" "+buffEdgeNY+" "+buffEdgePX+" "+buffEdgePY);
+        //System.out.println(randP);
+        if(randP.x>buffEdgePX){
+            randP.x=buffEdgePX;
+        }
+        else if(randP.x<buffEdgeNX){
+            randP.x=buffEdgeNX;
+        }
+        if(randP.y>buffEdgePY){
+            randP.y=buffEdgePY;
+        }
+        else if(randP.y<buffEdgeNY){
+            randP.y=buffEdgeNY;
+        }
+        //System.out.println(randP);
+    }
+
 }
