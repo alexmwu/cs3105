@@ -1,25 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{geometry}
 \usepackage{graphicx}
-\usepackage{float}
-\usepackage{listings}
 
-\lstset{frame=tb,
-  language=bash,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
-}
 \begin{document}
 
 \begin{flushright}
@@ -64,7 +46,7 @@ In addition to the move parameters described for free space, both the RRT and PF
 %One other error is where the 
 
 \paragraph*{Planner Superiority}
-Overall, the RRT is a better planner when there are obstacles present
+The RRT 
 \paragraph*{Enhancements}
 Several enhancements were added on top of the existing programs. 
 
@@ -72,11 +54,8 @@ Several enhancements were added on top of the existing programs.
 
 \section{Compiling and Running}
 \paragraph*{Compiling}
-The 
-
-\begin{lstlisting}
-make
-\end{lstlisting}
+\begin{verbatim}
+\end{verbatim}
 \paragraph*{Running}
 Although the user is free to set whatever values for the simulation values such as robot size, sonar size, or goal coordinates, there are recommended settings in place. If the parameters are out of the recommended range, the program may exhibit unexpected and/or incorrect behavior.
 
@@ -86,7 +65,7 @@ Although the user is free to set whatever values for the simulation values such 
 \centering
 \includegraphics[width=350]{two_obstacles.png}
 \caption{The PF robot stuck in a local minimum point between two obstacles.}
-\end{figure}
+\end{figure}.
 
 
 
