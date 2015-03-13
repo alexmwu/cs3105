@@ -2,6 +2,8 @@ package skynet;
 
 import easyGui.EasyGui;
 
+import java.io.IOException;
+
 public class Robot {
 	private EasyGui gui;
 	
@@ -40,8 +42,14 @@ public class Robot {
 	//status label for gui
 	private int statusLabel;
 
+    //load button for file
+    private int loadButton;
+
 	//pixel height and length of gui
 	private int xPixels,yPixels;
+
+    //manager for course
+    private CourseManager cm;
 	
 	private RRT rrt;
 	private PotFields pf;
@@ -50,9 +58,12 @@ public class Robot {
 		gui=new EasyGui(x,y);
 		xPixels=x;
 		yPixels=y;
+
+        //add file loader
+        loadButton=gui.addButton(0,0,"Load Course File",this,"load");
 		
 		// Add labels above the gui text fields for robot x,y starting coords and size and step
-		startXLabel=gui.addLabel(1,0,"Starting X");
+		startXLabel=gui.addLabel(1, 0, "Starting X");
 		startYLabel=gui.addLabel(1,1,"Starting Y");
 		robotSizeLabel=gui.addLabel(1,2,"Robot Size");
 		stepSizeLabel=gui.addLabel(1,3,"Step/Sonar Size");
@@ -65,7 +76,7 @@ public class Robot {
 		startXText=gui.addTextField(2, 0, "0");
 		startYText=gui.addTextField(2, 1, "0");
 		robotSizeText=gui.addTextField(2,2,"10");
-		stepSizeText=gui.addTextField(2,3,"60");
+		stepSizeText=gui.addTextField(2,3,"100");
 		
 		//add goal fields for both rrt and pot fields
 		goalXText=gui.addTextField(4, 0, "500");
@@ -81,13 +92,7 @@ public class Robot {
 		pf=new PotFields(this);
 		rrt=new RRT(this,buffer);
 		
-		/*simType=sType;
-		if(simType==true){
-			startRRT();
-		}
-		else{
-			startPotFields();
-		}*/
+        cm=new CourseManager("courses.txt");
 		
 		//show gui
 		gui.show();
@@ -142,7 +147,7 @@ public class Robot {
         gui.setButtonEnabled(pfGoalButton,true);
 
         //set step size to robot size
-        gui.setTextFieldContent(stepSizeText,"60");
+        gui.setTextFieldContent(stepSizeText,"100");
 
         //wipe gui and update
         gui.clearGraphicsPanel();
@@ -165,6 +170,14 @@ public class Robot {
         //logic to ensure that buttons are reenabled on restarting the simulation
         pf.setStarted(false);
 	}
+
+    public void load(){
+        try {
+            cm.readCoursesFromFile();
+        } catch (IOException e) {
+            System.err.println("The file "+cm.getCourseFileName()+" is not valid.");
+        }
+    }
 
     public double diagonalDistance(){
         return Math.sqrt(Math.pow(xPixels,2)+Math.pow(yPixels,2));
@@ -388,6 +401,14 @@ public class Robot {
 
     public void setGoalBiasButton(int goalBiasButton) {
         this.goalBiasButton = goalBiasButton;
+    }
+
+    public int getLoadButton() {
+        return loadButton;
+    }
+
+    public void setLoadButton(int loadButton) {
+        this.loadButton = loadButton;
     }
 
 	// MAIN

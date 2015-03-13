@@ -280,8 +280,7 @@ public class RRT {
         int buffEdgeNX=-(rob.getxPixels()/bufferFactor);
         int buffEdgePY=rob.getyPixels()+(rob.getyPixels()/bufferFactor);
         int buffEdgeNY=-(rob.getyPixels()/bufferFactor);
-        System.out.println(buffEdgeNX+" "+buffEdgeNY+" "+buffEdgePX+" "+buffEdgePY);
-        //System.out.println(randP);
+
         if(randP.x>buffEdgePX){
             randP.x=buffEdgePX;
         }
@@ -294,7 +293,7 @@ public class RRT {
         else if(randP.y<buffEdgeNY){
             randP.y=buffEdgeNY;
         }
-        //System.out.println(randP);
+
     }
 
 }

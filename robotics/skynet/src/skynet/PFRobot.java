@@ -282,14 +282,14 @@ public class PFRobot{
 
     //get goal potential; temporary placeholder equation
     public double getGoalPotential(IntPoint goal,IntPoint sensingSample,Robot rob){
-        return -(rob.diagonalDistance())/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
+        return -Math.sqrt(rob.diagonalDistance())/dist(goal.x,goal.y,sensingSample.x,sensingSample.y);
     }
 
     //distance from nearest obstacle
     public double getNearestObstacleDist(ArrayList<Obstacle> obstacles){
         double dist=sonarRange;
         for(Obstacle o : obstacles){
-            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius()-sensingRadius;
+            double d=dist(o.getX(),o.getY(),xCenter,yCenter)-o.getRadius();//-sensingRadius;
             if(d<dist){
                 dist=d;
             }
@@ -350,13 +350,6 @@ public class PFRobot{
                 inter=getCloserIntersection(sensingSamples[i], rayEnds[i], o);
                 if(inter!=null)
                     intersections.add(inter);
-                /*else{
-                    /////////////////////needs work
-                    sensingRadius/=2;
-                    calculateSensingSamples();
-                    i--;
-                    d-=step;
-                }*/
                 i++;
             }
             i=0;
@@ -400,12 +393,13 @@ public class PFRobot{
         }
         else{
             double a=sonarRange-d;
-            return Math.exp(-1.0/a)/d;
+            //return Math.exp(-1.0/a)/d;
+            return Math.exp(-1.0/a)/Math.pow(d,2);
         }
     }
 
     public int calculateSensingRadius(){
-        return sonarRange/3;
+        return (robotSize+sonarRange)/2;
     }
 
     public void sensingRadiusCheck(){
