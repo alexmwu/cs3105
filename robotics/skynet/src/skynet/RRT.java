@@ -17,6 +17,8 @@ public class RRT {
 	
 	private Random randGen;
 	private int bufferFactor;	//bufferFactor to pick random ints in buffer around window
+
+    private boolean freeSpace;
 	
 	private ArrayList<Obstacle> obstacles;
 
@@ -46,6 +48,8 @@ public class RRT {
         goalBias=false;
 
         started=false;
+
+        freeSpace=false;
 
 		// New Random generator
 		randGen = new Random();
@@ -129,6 +133,10 @@ public class RRT {
     public void goalBias(){
         goalBias=!goalBias;
     }
+
+    public void freeSpace(){
+        freeSpace=!freeSpace;
+    }
 	
 	public void init(){
         if(!started){
@@ -148,8 +156,13 @@ public class RRT {
 			return;
 		}
 
-		// Initialize obstacles
-		obstacles = initRandObstacles(11);
+        //if not free space sim, initialize obstacles
+        if(freeSpace){
+            obstacles=new ArrayList<Obstacle>();
+        }
+        else{
+            obstacles = initRandObstacles(11);
+        }
 
         totalMoves=0;
 

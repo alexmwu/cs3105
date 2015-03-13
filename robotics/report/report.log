@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.7.2)  13 MAR 2015 17:53
+This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.7.2)  13 MAR 2015 17:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -123,18 +123,18 @@ File: lstlang1.sty 2013/08/26 1.5b listings language file
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -232,7 +232,7 @@ e
 [1
 
 {/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (7.72495pt too wide) in paragraph at lines 45--47
+Overfull \hbox (7.72495pt too wide) in paragraph at lines 49--51
  \OT1/cmr/bx/n/12 Smooth-ing \OT1/cmr/m/n/12 Smooth-ing for the RRT is rel-a-ti
 vely au-to-matic since it uses the RRTree's
  []
@@ -241,39 +241,33 @@ vely au-to-matic since it uses the RRTree's
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.83 ...ludegraphics[width=350]{two_obstacles.png}
+l.86 ...ludegraphics[width=350]{two_obstacles.png}
                                                   
-? ^^[[A
-Type <return> to proceed, S to scroll future error messages,
-R to run without stopping, Q to run quietly,
-I to insert something, E to edit your file,
-1 or ... or 9 to ignore the next 1 to 9 tokens of input,
-H for help, X to quit.
 ? 
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.83 ...ludegraphics[width=350]{two_obstacles.png}
+l.86 ...ludegraphics[width=350]{two_obstacles.png}
                                                   
 ? 
 File: two_obstacles.png Graphic file (type png)
 <use two_obstacles.png>
-Package pdftex.def Info: two_obstacles.png used on input line 83.
+Package pdftex.def Info: two_obstacles.png used on input line 86.
 (pdftex.def)             Requested size: 350.0pt x 188.12201pt.
  [3] [4 <./two_obstacles.png>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 3317 strings out of 495034
- 47843 string characters out of 6181678
- 129865 words of memory out of 5000000
- 6511 multiletter control sequences out of 15000+600000
+ 3322 strings out of 495034
+ 47891 string characters out of 6181678
+ 129945 words of memory out of 5000000
+ 6516 multiletter control sequences out of 15000+600000
  5319 words of font info for 20 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,5n,49p,840b,995s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,5n,49p,840b,998s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/f
 onts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (4 pages, 119305 bytes).
+Output written on report.pdf (4 pages, 122772 bytes).
 PDF statistics:
  30 PDF objects out of 1000 (max. 8388607)
  19 compressed objects within 1 object stream

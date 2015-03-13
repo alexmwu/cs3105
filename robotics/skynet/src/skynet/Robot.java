@@ -48,6 +48,9 @@ public class Robot {
 	//pixel height and length of gui
 	private int xPixels,yPixels;
 
+    //button to toggle free space
+    private int freeSpaceButton;
+
     //manager for course
     private CourseManager cm;
 	
@@ -60,7 +63,8 @@ public class Robot {
 		yPixels=y;
 
         //add file loader
-        loadButton=gui.addButton(0,0,"Load Course File",this,"load");
+        //loadButton=gui.addButton(0,0,"Load Course File",this,"load");
+        freeSpaceButton=gui.addButton(0,0,"Toggle Free Space",this,"toggleFreeSpace");
 		
 		// Add labels above the gui text fields for robot x,y starting coords and size and step
 		startXLabel=gui.addLabel(1, 0, "Starting X");
@@ -76,7 +80,7 @@ public class Robot {
 		startXText=gui.addTextField(2, 0, "0");
 		startYText=gui.addTextField(2, 1, "0");
 		robotSizeText=gui.addTextField(2,2,"10");
-		stepSizeText=gui.addTextField(2,3,"100");
+		stepSizeText=gui.addTextField(2,3,"60");
 		
 		//add goal fields for both rrt and pot fields
 		goalXText=gui.addTextField(4, 0, "500");
@@ -147,7 +151,7 @@ public class Robot {
         gui.setButtonEnabled(pfGoalButton,true);
 
         //set step size to robot size
-        gui.setTextFieldContent(stepSizeText,"100");
+        gui.setTextFieldContent(stepSizeText,"60");
 
         //wipe gui and update
         gui.clearGraphicsPanel();
@@ -171,13 +175,18 @@ public class Robot {
         pf.setStarted(false);
 	}
 
-    public void load(){
+    public void toggleFreeSpace(){
+        rrt.freeSpace();
+        pf.freeSpace();
+    }
+
+   /* public void load(){
         try {
             cm.readCoursesFromFile();
         } catch (IOException e) {
             System.err.println("The file "+cm.getCourseFileName()+" is not valid.");
         }
-    }
+    }*/
 
     public double diagonalDistance(){
         return Math.sqrt(Math.pow(xPixels,2)+Math.pow(yPixels,2));

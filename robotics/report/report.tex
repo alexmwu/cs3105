@@ -54,7 +54,7 @@ The PF robot exhibits superiority in free space in a number of aspects. It is ab
 
 \section{Obstacle Navigation}
 \paragraph*{Output}
-The output for the RRT and PF are the same as implemented in free space. The only difference is that the planning and execution of the paths have to avoid obstacles. For the RRT, the output only shows nodes that avoid any obstacles (also displayed on the screen). Thus, the output on the GUI shows the entire tree as well as the final path, except that this time there are obstacles which all nodes avoid, including the nonused ones. For the PF, the output shows the robot planning and executing its path around obstacles. The GUI displays the changing (shrinking and growing) of the sensor radius to help the user see where the possible moves are. Additionally, the sonar range and the rays from the sensors are shown to help visualize the robot detecting obstacles in its local area. Finally, the intersection
+The output for the RRT and PF are the same as implemented in free space. The only difference is that the planning and execution of the paths have to avoid obstacles. For the RRT, the output only shows nodes that avoid any obstacles (also displayed on the screen). Thus, the output on the GUI shows the entire tree as well as the final path, except that this time there are obstacles which all nodes avoid, including the nonused ones. For the PF, the output shows the robot planning and executing its path around obstacles. The GUI displays the changing (shrinking and growing) of the sensor radius to help the user see where the possible moves are. Additionally, the sonar range and the rays from the sensors are shown to help visualize the robot detecting obstacles in its local area. Finally, the detected obstacles are highlighted red to better show the user that the robot has sensed the obstacles. The intersection points are also displayed to better show what the robot sees from its sensors.
 
 \paragraph*{Efficiency}
 The number of moves and, again, the number of nodes of the RRT with obstacles is a much larger range and depends on the specific obstacle course. However, for the random obstacle course, it generally falls in the 300 to 600 move range.
@@ -72,12 +72,13 @@ Several enhancements were added on top of the existing programs.
 
 \section{Compiling and Running}
 \paragraph*{Compiling}
-The 
-
-\begin{lstlisting}
-make
-\end{lstlisting}
+The files are located in the src/skynet/ subdirectory. A Makefile and ToolBox.jar are also located in this directory. The files can be compiled by running make in the same directory. 
 \paragraph*{Running}
+The program is run with the following command:
+\begin{lstlisting}
+java -cp ../:ToolBox.jar skynet.Robot
+\end{lstlisting}
+\paragraph*{Running Instructions}
 Although the user is free to set whatever values for the simulation values such as robot size, sonar size, or goal coordinates, there are recommended settings in place. If the parameters are out of the recommended range, the program may exhibit unexpected and/or incorrect behavior.
 
 
