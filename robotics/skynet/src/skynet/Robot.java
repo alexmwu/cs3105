@@ -133,7 +133,7 @@ public class Robot {
         gui.setButtonEnabled(solutionButton,false);
         gui.setButtonEnabled(goalBiasButton,false);
     }
-	
+
 	public void startPotFields(){
 		stopRRT();
 

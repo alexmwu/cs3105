@@ -146,29 +146,6 @@ public class RRTRobot extends Object{
 		// Set properties and then draw
 		path.setProperties(Color.GREEN, 0.0f);
 		gui.draw(path);
-
-
-
-        //get smoothed route
-        finalRoute=smoothPath(route);
-
-        //display smoothed route. add first point of route and first point of finalRoute to finalpath
-        finalPath.addPoint(route.get(0).x,route.get(0).y);
-        finalPath.addPoint(finalRoute.get(0).x,finalRoute.get(0).y);
-        //initial path length
-        pathLength+=dist(route.get(0).x,route.get(0).y,finalRoute.get(0).x,finalRoute.get(0).y);
-        for(int i=1;i<finalRoute.size();i++){
-            pathLength+=dist(finalRoute.get(i).x,finalRoute.get(i).y,finalRoute.get(i-1).x,finalRoute.get(i-1).y);
-            finalPath.addPoint(finalRoute.get(i).x,finalRoute.get(i).y);
-        }
-        //case of final path length
-        pathLength+=dist(route.get(numNodes-1).x,route.get(numNodes-1).y,finalRoute.get(finalRoute.size()-1).x,finalRoute.get(finalRoute.size()-1).y);
-        //add final point in route to drawn line
-        finalPath.addPoint(route.get(numNodes-1).x,route.get(numNodes-1).y);
-//gui.clearGraphicsPanel();
-        //draw
-        finalPath.setProperties(Color.RED,1.0f);
-        gui.draw(finalPath);
 	}
 
    public ArrayList<IntPoint> smoothPath(ArrayList<IntPoint> route){
