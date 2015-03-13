@@ -24,7 +24,7 @@ public class RRTRobot extends Object{
     int numNodes;
     //to determine if angle changed to increment efficiency counter
     double lastAngle;
-	
+
 	//ids for the x,y coordinates at start and for the radius and step of robot
 	RRTRobot(Robot r){
 		xId=r.getStartXText();
@@ -86,7 +86,7 @@ public class RRTRobot extends Object{
 	public boolean move(EasyGui gui, ArrayList<Obstacle> obstacles, int randomX, int randomY,boolean draw){
 		// Returns the nearest node to the random point
 		RRNode nearest = tree.getNearestNeighbour(new IntPoint(randomX, randomY));
-			
+
 		// Get point to move to
 		IntPoint moveTo = step(randomX,randomY,nearest.x,nearest.y);
 		
@@ -156,6 +156,10 @@ public class RRTRobot extends Object{
 		gui.draw(path);
         return route;
 	}
+
+    /*public ArrayList<IntPoint> smoothPath(ArrayList<IntPoint>){
+        double lastA
+    }*/
 
 
     //get angle to see if angle changed
