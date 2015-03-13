@@ -30,7 +30,7 @@
             <file leaf-file-name="RRT.java" pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/src/skynet/RRT.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="3297" max-vertical-offset="4248">
+                  <state vertical-scroll-proportion="0.0" vertical-offset="3706" max-vertical-offset="4012">
                     <caret line="225" column="29" selection-start-line="225" selection-start-column="29" selection-end-line="225" selection-end-column="29" />
                     <folding />
                   </state>
@@ -40,16 +40,9 @@
             <file leaf-file-name="RRTRobot.java" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/skynet/RRTRobot.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.2807571" vertical-offset="2037" max-vertical-offset="3150">
-                    <caret line="142" column="34" selection-start-line="142" selection-start-column="34" selection-end-line="142" selection-end-column="34" />
-                    <folding>
-                      <element signature="e#4991#4992#0" expanded="true" />
-                      <element signature="e#5022#5023#0" expanded="true" />
-                      <element signature="e#5059#5060#0" expanded="true" />
-                      <element signature="e#5092#5093#0" expanded="true" />
-                      <element signature="e#5124#5125#0" expanded="true" />
-                      <element signature="e#5155#5156#0" expanded="true" />
-                    </folding>
+                  <state vertical-scroll-proportion="0.14071038" vertical-offset="2141" max-vertical-offset="2873">
+                    <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+                    <folding />
                   </state>
                 </provider>
               </entry>
@@ -68,7 +61,7 @@
       <file leaf-file-name="Robot.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/Robot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2628" max-vertical-offset="5130">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2482" max-vertical-offset="4845">
               <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
               <folding />
             </state>
@@ -78,7 +71,7 @@
       <file leaf-file-name="Obstacle.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/Obstacle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="378" max-vertical-offset="594">
+            <state vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="561">
               <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
               <folding />
             </state>
@@ -88,7 +81,7 @@
       <file leaf-file-name="Goal.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/Goal.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="504">
+            <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="476">
               <caret line="4" column="33" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
               <folding />
             </state>
@@ -98,7 +91,7 @@
       <file leaf-file-name="Object.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/Object.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="1368">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1105" max-vertical-offset="1292">
               <caret line="77" column="3" selection-start-line="77" selection-start-column="3" selection-end-line="77" selection-end-column="3" />
               <folding>
                 <element signature="e#286#287#0" expanded="true" />
@@ -114,7 +107,7 @@
       <file leaf-file-name="PotFields.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/skynet/PotFields.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38053098" vertical-offset="1405" max-vertical-offset="4212">
+            <state vertical-scroll-proportion="2.1045392" vertical-offset="0" max-vertical-offset="3978">
               <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
               <folding />
             </state>
@@ -124,12 +117,10 @@
       <file leaf-file-name="PFRobot.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/PFRobot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="5292" max-vertical-offset="8316">
+            <state vertical-scroll-proportion="0.0" vertical-offset="5015" max-vertical-offset="7871">
               <caret line="295" column="5" selection-start-line="295" selection-start-column="5" selection-end-line="295" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-                <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
               </folding>
             </state>
           </provider>
@@ -138,7 +129,7 @@
       <file leaf-file-name="CourseManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/CourseManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="756">
+            <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="714">
               <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
               <folding />
             </state>
@@ -148,7 +139,7 @@
       <file leaf-file-name="FileChooser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skynet/FileChooser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1422">
+            <state vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="1343">
               <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -179,10 +170,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="27" />
-    <option name="width" value="1922" />
-    <option name="height" value="1024" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1616" />
+    <option name="height" value="876" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -207,7 +198,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -251,6 +241,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -505,33 +496,33 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="27" width="1922" height="1024" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32884398" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3346354" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33445567" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22364217" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.223125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32884398" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33445567" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32996634" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -614,8 +605,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -680,8 +669,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -746,8 +733,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -818,8 +803,6 @@
           <caret line="132" column="6" selection-start-line="132" selection-start-column="6" selection-end-line="132" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -876,8 +859,6 @@
           <caret line="132" column="6" selection-start-line="132" selection-start-column="6" selection-end-line="132" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -934,8 +915,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -1009,8 +988,6 @@
           <caret line="295" column="5" selection-start-line="295" selection-start-column="5" selection-end-line="295" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1426247562920" expanded="false" signature="5346:5356" placeholder="&lt;~&gt;" />
-            <marker date="1426247562920" expanded="false" signature="12066:12076" placeholder="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -1025,7 +1002,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/skynet/PotFields.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38053098" vertical-offset="1405" max-vertical-offset="4212">
+        <state vertical-scroll-proportion="2.1045392" vertical-offset="0" max-vertical-offset="3978">
           <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
           <folding />
         </state>
@@ -1033,16 +1010,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/skynet/RRTRobot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2807571" vertical-offset="2037" max-vertical-offset="3150">
-          <caret line="142" column="34" selection-start-line="142" selection-start-column="34" selection-end-line="142" selection-end-column="34" />
-          <folding>
-            <element signature="e#4991#4992#0" expanded="true" />
-            <element signature="e#5022#5023#0" expanded="true" />
-            <element signature="e#5059#5060#0" expanded="true" />
-            <element signature="e#5092#5093#0" expanded="true" />
-            <element signature="e#5124#5125#0" expanded="true" />
-            <element signature="e#5155#5156#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.14071038" vertical-offset="2141" max-vertical-offset="2873">
+          <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1086,7 +1056,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.7</last-edited>
+          <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

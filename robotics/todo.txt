@@ -1,6 +1,7 @@
 to do (by order of importance)
 
 report
+goal bias
 add smoothing to rrt
 obstacle course loading
 obstacle course saving
