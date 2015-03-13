@@ -17,6 +17,13 @@ public class RRTRobot extends Object{
 	//ids for starting input
 	private int xId,yId,radiusId,stepId;
 	private RRTree tree;
+
+    //efficiency counter for turns
+    int numTurns;
+    double pathLength;
+    int numNodes;
+    //to determine if angle changed to increment efficiency counter
+    double lastAngle;
 	
 	//ids for the x,y coordinates at start and for the radius and step of robot
 	RRTRobot(Robot r){
@@ -27,6 +34,10 @@ public class RRTRobot extends Object{
 
 		// Create an RRTree to be used later.
 		tree = new RRTree(Color.BLACK);
+        numTurns=0;
+        pathLength=0;
+        numNodes=0;
+        lastAngle=0;
 	}
 	
 	private void setRenderable(){
@@ -42,6 +53,7 @@ public class RRTRobot extends Object{
 	}
 	
 	public void start(EasyGui gui,Goal goal){
+
 		gui.clearGraphicsPanel();
 		
 		//grab gui strings for the input values and parse into the object variables (i.e., into
@@ -61,6 +73,13 @@ public class RRTRobot extends Object{
 		
 		// Tell the GUI to draw this tree (start and goal)
 		gui.draw(tree);
+
+        //reinit to 0
+        numTurns=0;
+        pathLength=0;
+        numNodes=0;
+        //initial angle is b/w goal and start position
+        lastAngle=getAngle(getX(),getY(),goal.getX(),goal.getY());
 	}
 	
 	//returns next point if there is no obstacle collision; null otherwise
@@ -83,10 +102,19 @@ public class RRTRobot extends Object{
         //only if told to draw
         if(draw) gui.draw(tree);
 
+        //see if angle changed before changing current position
+        double ang=getAngle(getX(),getY(),moveTo.x,moveTo.y);
+        if(lastAngle!=ang){
+            numTurns++;
+        }
+        //set this angle for next use of move
+        lastAngle=ang;
+
 		setX(moveTo.x);
 		setY(moveTo.y);
 		rendOv.centreX=getX();
 		rendOv.centreY=getY();
+
 		return true;
 	}
 
@@ -105,21 +133,47 @@ public class RRTRobot extends Object{
 		return new IntPoint(moveX,moveY);
 	}
 	
-	//if goal is reached
-	public void end(EasyGui gui){
+	//if goal is reached, returns length of path
+	public ArrayList<IntPoint> end(EasyGui gui){
 		// Last node
 		RRNode last = tree.getNearestNeighbour(getIntPoint());
 		
 		// This prints the route we used.
 		ArrayList<IntPoint> route = tree.getPathFromRootTo(last);
 		RenderablePolyline path = new RenderablePolyline();
-		for(IntPoint p : route){
-			path.addPoint(p.x, p.y);
-		}
-		
+
+        //number of nodes in path
+        numNodes=route.size();
+
+        path.addPoint(route.get(0).x,route.get(0).y);
+        for(int i=1;i<route.size();i++){
+            pathLength+=dist(route.get(i).x,route.get(i).y,route.get(i-1).x,route.get(i-1).y);
+            path.addPoint(route.get(i).x,route.get(i).y);
+        }
+
 		// Set properties and then draw
 		path.setProperties(Color.RED, 2.5f);
 		gui.draw(path);
+        return route;
 	}
-	
+
+
+    //get angle to see if angle changed
+    public double getAngle(int x1, int y1, int x2, int y2){
+        int dX=x2-x1;
+        int dY=y2-y1;
+        return Math.atan2((double) dY , (double) dX);
+    }
+
+    public int getNumTurns() {
+        return numTurns;
+    }
+
+    public double getPathLength() {
+        return pathLength;
+    }
+
+    public int getNumNodes() {
+        return numNodes;
+    }
 }

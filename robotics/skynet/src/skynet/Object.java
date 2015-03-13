@@ -70,6 +70,10 @@ public class Object{
 		return Math.sqrt(distX*distX+distY*distY);
 	}
 
+    public double dist(int x1,int y1, int x2,int y2){
+        return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
+    }
+
     public void print(){
         System.out.println("x: "+xCenter+", y: "+yCenter+", r: "+radius);
     }

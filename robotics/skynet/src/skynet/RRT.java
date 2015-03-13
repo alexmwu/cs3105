@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+import geometry.IntPoint;
 import renderables.*;
 
 
@@ -23,6 +24,8 @@ public class RRT {
     // whether gui has initially started (produces two more buttons), whether current robot is at
 	//the goal, and whether the user wants to display the random red dots, respectively
 	private boolean started,atGoal,displayRandomDots;
+
+    private int totalMoves;
 
 	public RRT(Robot r,int buffer){
 		
@@ -44,7 +47,9 @@ public class RRT {
 
 		// New Random generator
 		randGen = new Random();
-		
+
+        //init efficiency counts
+        totalMoves=0;
 	}
 	
 	//initialize rrt gui
@@ -135,9 +140,8 @@ public class RRT {
 
 		// Initialize obstacles
 		obstacles = initRandObstacles(11);
-		
-		// User instructions
-		rob.setStatusLabelText("Pick a movement mode (Move, Animate, Solution).");
+
+        totalMoves=0;
 
         atGoal=false;
 		// Refresh the GUI
@@ -148,14 +152,13 @@ public class RRT {
 		if(atGoal) return;
 		else{
 			int randomX=0,randomY=0;
-			
+
 			// if it returns IntPoint, break out of loop; else continue (it won't return if it
 			// hits obstacles
 			
 			while(true){
 				randomX = randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
 				randomY = randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
-				//if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
 				if(explorer.move(rob.getGui(),obstacles,randomX,randomY,true)) break;
 			}
 			
@@ -166,12 +169,15 @@ public class RRT {
 				rob.getGui().draw(randPoint);
 			}
 
-			rob.getGui().draw(explorer.getRenderable());	
-			
+			rob.getGui().draw(explorer.getRenderable());
+
+            //another move - increment efficiency counters
+            totalMoves++;
+
 			if(explorer.didCollide(goal)){
 				atGoal = true;
-				rob.setStatusLabelText("You've reached the goal.");
 				end();
+                rob.setStatusLabelText("Moves: " + Integer.toString(totalMoves) + " Nodes: " + Integer.toString(explorer.getNumNodes()) + " Length: " + Double.toString(explorer.getPathLength())+" Turns: "+explorer.getNumTurns());
 			}
 			
 			// Update GUI
@@ -179,9 +185,10 @@ public class RRT {
 		}
 	}
 
+    //return number of nodes in path
 	public void end(){
 		explorer.end(rob.getGui());
-		
+
 		// Update GUI
 		rob.getGui().update();
 	}
@@ -193,23 +200,25 @@ public class RRT {
 
     public void solution(){
         while(!atGoal) {
-                int randomX = 0, randomY = 0;
+            int randomX = 0, randomY = 0;
 
-                // if it returns IntPoint, break out of loop; else continue (it won't return if it
-                // hits obstacles
+            // if it returns IntPoint, break out of loop; else continue (it won't return if it
+            // hits obstacles
 
-                while (true) {
-                    randomX = randGen.nextInt((int) rob.getxPixels() + 2 * (rob.getxPixels() / bufferFactor)) - (rob.getxPixels() / bufferFactor);
-                    randomY = randGen.nextInt((int) rob.getyPixels() + 2 * (rob.getyPixels() / bufferFactor)) - (rob.getyPixels() / bufferFactor);
-                    //if(randomX>550 || randomX<-50||randomY>550||randomY<-550)System.out.println(randomX+", "+randomY);
-                    if (explorer.move(rob.getGui(), obstacles, randomX, randomY,false)) break;
-                }
+            while(true){
+                randomX = randGen.nextInt((int)rob.getxPixels()+2*(rob.getxPixels()/bufferFactor))-(rob.getxPixels()/bufferFactor);
+                randomY = randGen.nextInt((int)rob.getyPixels()+2*(rob.getyPixels()/bufferFactor))-(rob.getyPixels()/bufferFactor);
+                if(explorer.move(rob.getGui(),obstacles,randomX,randomY,true)) break;
+            }
 
-                if (explorer.didCollide(goal)) {
-                    atGoal = true;
-                    rob.setStatusLabelText("You've reached the goal. Please wait for GUI to update.");
-                    end();
-                }
+            //another successful move
+            totalMoves++;
+
+			if(explorer.didCollide(goal)){
+				atGoal = true;
+				end();
+                rob.setStatusLabelText("Moves: " + Integer.toString(totalMoves) + " Nodes: " + Integer.toString(explorer.getNumNodes()) + " Length: " + Double.toString(explorer.getPathLength())+" Turns: "+Integer.toString(explorer.getNumTurns()));
+			}
         }
 
 
@@ -228,5 +237,9 @@ public class RRT {
 
     public void setStarted(boolean started) {
         this.started = started;
+    }
+
+    public double dist(int x1,int y1, int x2,int y2){
+        return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
     }
 }

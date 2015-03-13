@@ -99,7 +99,10 @@ public class Robot {
 		gui.setButtonEnabled(rrtGoalButton, true);
 		gui.setButtonEnabled(toggleDotsButton, true);
         gui.setButtonEnabled(solutionButton,true);
-		
+
+        //set step size to robot size
+        gui.setTextFieldContent(stepSizeText,gui.getTextFieldContent(robotSizeText));
+
 		//set status label text
 		gui.setLabelText(statusLabel, "Enter in coordinates and click start to begin RRT simulation.");
 
@@ -133,6 +136,9 @@ public class Robot {
         //enable pot fields move and goal buttons
         gui.setButtonEnabled(pfMoveButton,true);
         gui.setButtonEnabled(pfGoalButton,true);
+
+        //set step size to robot size
+        gui.setTextFieldContent(stepSizeText,"60");
 
         //wipe gui and update
         gui.clearGraphicsPanel();
