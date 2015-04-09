@@ -10,6 +10,7 @@ import org.encog.ml.data.versatile.sources.CSVDataSource;
 import org.encog.ml.data.versatile.sources.VersatileDataSource;
 import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.model.EncogModel;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.csv.ReadCSV;
 import org.encog.util.simple.EncogUtility;
@@ -23,36 +24,54 @@ import java.util.Arrays;
 public class NetworkTrainer {
     private String filePath;
     private File testingFile;
+    VersatileMLDataSet data;
+    BasicNetwork network;
 
     NetworkTrainer(String filePath){
         testingFile=new File(filePath);
+        CSVSetup();
     }
 
-    public void train(){
-        try{
-            //Define the data file format
-            //false means no headers
-            VersatileDataSource src=new CSVDataSource(testingFile,false, CSVFormat.DECIMAL_POINT);
-            VersatileMLDataSet data=new VersatileMLDataSet(src);
+    public void CSVSetup(){
+         try {
+             //Define the data file format
+             //false means no headers
+             VersatileDataSource src = new CSVDataSource(testingFile, false, CSVFormat.DECIMAL_POINT);
+             VersatileMLDataSet data = new VersatileMLDataSet(src);
 
-            //not sure if continuous
-            data.defineSourceColumn("isOrganic",0, ColumnType.nominal);
-            data.defineSourceColumn("isUsed",1,ColumnType.nominal);
-            data.defineSourceColumn("isElectronic",2,ColumnType.nominal);
-            data.defineSourceColumn("isAPlace",3,ColumnType.nominal);
-            data.defineSourceColumn("isOnEarth",4,ColumnType.nominal);
-            data.defineSourceColumn("isMammal",5,ColumnType.nominal);
-            data.defineSourceColumn("canFly",6,ColumnType.nominal);
-            data.defineSourceColumn("walksOnTwoLegs",7,ColumnType.nominal);
+             //not sure if continuous
+             data.defineSourceColumn("isOrganic", 0, ColumnType.nominal);
+             data.defineSourceColumn("isUsed", 1, ColumnType.nominal);
+             data.defineSourceColumn("isElectronic", 2, ColumnType.nominal);
+             data.defineSourceColumn("isAPlace", 3, ColumnType.nominal);
+             data.defineSourceColumn("isOnEarth", 4, ColumnType.nominal);
+             data.defineSourceColumn("isMammal", 5, ColumnType.nominal);
+             data.defineSourceColumn("canFly", 6, ColumnType.nominal);
+             data.defineSourceColumn("walksOnTwoLegs", 7, ColumnType.nominal);
 
-            //define column trying to predict
-            ColumnDefinition outputCol=data.defineSourceColumn("concept",8,ColumnType.nominal);
+             //define column trying to predict
+             ColumnDefinition outputCol=data.defineSourceColumn("concept",8,ColumnType.nominal);
 
-            //analyze data
-            data.analyze();
+             //analyze data
+             data.analyze();
 
-            //map prediction column to output of model and all other columns to the input
-            data.defineSingleOutputOthersInput(outputCol);
+             //map prediction column to output of model and all other columns to the input
+             data.defineSingleOutputOthersInput(outputCol);
+
+         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+  /*  public void backPropagationTrain{
+        BasicNetwork network=new BasicNetwork();
+        network.addLayer();
+    }*/
+
+    public void crossValidateTrain(){
 
             //create feedforward neural network as model type.
             EncogModel model=new EncogModel(data);
@@ -89,10 +108,7 @@ public class NetworkTrainer {
 
             //shut down
             Encog.getInstance().shutdown();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+   }
 
     public void verify(NormalizationHelper helper, MLRegression bestMethod){
         // Loop over the entire, original, dataset and feed it through the model.
@@ -136,7 +152,6 @@ public class NetworkTrainer {
             System.exit(0);
         }
         NetworkTrainer q20 = new NetworkTrainer(args[0]);
-        q20.train();
     }
 
 }
