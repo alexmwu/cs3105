@@ -132,7 +132,11 @@ public class FileTrainer {
         // train the neural network
         Backpropagation train = new Backpropagation(network, trainingSet, .5, .3);
 
-        int epoch = 1;
+        EncogUtility.trainToError(network,trainingSet,0.01);
+
+        EncogUtility.evaluate(method,trainingSet);
+
+        /*int epoch = 1;
 
         do {
             train.iteration();
@@ -147,7 +151,8 @@ public class FileTrainer {
             final MLData output = network.compute(pair.getInput());
             System.out.println(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
                     + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
-        }
+        }*/
+
         Encog.getInstance().shutdown();
     }
 
