@@ -25,7 +25,6 @@ import org.encog.util.simple.EncogUtility;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.DoubleSummaryStatistics;
 
 /**
  * Created by aw246 on 01/04/15.
@@ -35,18 +34,19 @@ public class NetworkTrainer {
     private File testingFile;
     VersatileMLDataSet data;
     BasicNetwork network;
+    ArrayList<String> concepts;
 
     NetworkTrainer(String filePath){
         testingFile=new File(filePath);
-        EncogCSVSetup();
+        concepts=new ArrayList<String>();
+        CSVSetup();
     }
 
     public void CSVSetup(){
         BufferedReader br=null;
         String line;
         String csvSplit=",";
-        ArrayList<ArrayList<Double>> input;
-        double output;
+        ArrayList<ArrayList<Double>> input=new ArrayList<ArrayList<Double>>();
 
         try {
             br = new BufferedReader(new FileReader(testingFile));
@@ -55,11 +55,18 @@ public class NetworkTrainer {
                 // use comma as separator
                 String[] testingData= line.split(csvSplit);
 
-
-                //do data work here
+                ArrayList<Double> tmp=new ArrayList<Double>();
+                for(int i=0;i<testingData.length;i++){
+                    if(i==testingData.length-1){
+                        concepts.add(testingData[i]);
+                    }
+                    else {
+                        tmp.add(Double.parseDouble(testingData[i]));
+                    }
+                }
+                input.add(tmp);
 
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -180,7 +187,7 @@ public class NetworkTrainer {
             // Display the final model.
             System.out.println("Final model: " + bestMethod);
 
-            crossValidateVerify(helper,bestMethod);
+            crossValidateVerify(helper, bestMethod);
 
             //shut down
             Encog.getInstance().shutdown();
