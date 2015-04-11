@@ -1,0 +1,18 @@
+Is it organic?
+Do you use it?
+Is it electronic?
+Is it a place?
+Is it on earth?
+Is it a mammal?
+Can it fly?
+Does it walk on two legs?
+
+1,0,0,0,1,0,0,0,0
+1,1,1,0,1,0,0,0,1
+0,0,0,0,1,0,0,0,2
+0,0,0,1,1,0,0,0,3
+1,0,0,0,1,0,0,0,4
+1,0,0,0,1,0,1,1,5
+1,0,0,0,1,1,0,1,6
+0,0,0,1,0,0,0,0,7
+1,0,0,0,1,1,0,0,8
