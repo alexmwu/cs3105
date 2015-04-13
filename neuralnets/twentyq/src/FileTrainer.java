@@ -7,6 +7,7 @@ import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.util.simple.EncogUtility;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -132,11 +133,12 @@ public class FileTrainer {
         // train the neural network
         Backpropagation train = new Backpropagation(network, trainingSet, .5, .3);
 
-        EncogUtility.trainToError(network,trainingSet,0.01);
+        /*
+        EncogUtility.trainToError(network, trainingSet, 0.01);
 
         EncogUtility.evaluate(method,trainingSet);
-
-        /*int epoch = 1;
+*/
+        int epoch = 1;
 
         do {
             train.iteration();
@@ -151,7 +153,7 @@ public class FileTrainer {
             final MLData output = network.compute(pair.getInput());
             System.out.println(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
                     + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
-        }*/
+        }
 
         Encog.getInstance().shutdown();
     }
