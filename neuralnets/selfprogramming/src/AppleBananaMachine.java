@@ -15,13 +15,12 @@ import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.pattern.ElmanPattern;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Created by aw246 on 4/14/15.
  */
-public class LearningMachine {
+public class AppleBananaMachine {
     BasicNetwork network;
 
     public static BasicNetwork createElmanNetwork(int in,int layers,int out){
@@ -42,7 +41,7 @@ public class LearningMachine {
         final MLTrain trainAlt = new NeuralSimulatedAnnealing(
                 network, score, 10, 2, 100);
 
-        final MLTrain trainMain = new Backpropagation(network, trainingSet,0.000001, 0.0);
+        final MLTrain trainMain = new Backpropagation(network, trainingSet,.5, 0.05);
 
         final StopTrainingStrategy stop = new StopTrainingStrategy();
 
@@ -63,8 +62,8 @@ public class LearningMachine {
         return trainMain.getError();
     }
 
-    public static String TOURINPUT="00101100111000010001100100110101000110010111";
-    public static String TOUROUTPUT="0000000000000001000101000000001000100010010100010010011100010011001100110110000100111000";
+    public static String TOURINPUT="001011001110000100011001001101010001100101111011";
+    public static String TOUROUTPUT="000000000000000100010100000000100010001001010001001001110001001100110011011000010011100011001100";
 
     public double[][] parseString(String in, int power){
         double out[][]=new double[(int)(in.length()/power)][power];
@@ -111,13 +110,13 @@ public class LearningMachine {
     }
 
     public static void main(final String args[]) {
-        LearningMachine lm=new LearningMachine();
+        AppleMachine lm=new AppleMachine();
         System.out.println(lm.parseStringAL(TOURINPUT, 2));
         MLDataSet trainingSet = new BasicMLDataSet(lm.parseString(TOURINPUT,2),lm.parseString(TOUROUTPUT,4));
 
-        BasicNetwork elmanNetwork = LearningMachine.createElmanNetwork(2,7,4);
+        BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 8, 4);
 
-        double elmanError = HelloRecurrent.trainNetwork(elmanNetwork, trainingSet);
+        double elmanError = AppleMachine.trainNetwork(elmanNetwork, trainingSet);
 
         for(MLDataPair pair: trainingSet ) {
             final MLData output = elmanNetwork.compute(pair.getInput());
