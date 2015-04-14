@@ -15,24 +15,22 @@ import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.pattern.ElmanPattern;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
- * Created by aw246 on 11/04/15.
+ * Created by aw246 on 4/14/15.
  */
 public class LearningMachine {
     BasicNetwork network;
 
-    LearningMachine(){
-
-    }
-
-
-    public static BasicNetwork createElmanNetwork(){
+    public static BasicNetwork createElmanNetwork(int in,int layers,int out){
         // construct an Elman type network
         ElmanPattern pattern = new ElmanPattern();
         pattern.setActivationFunction(new ActivationSigmoid());
-        pattern.setInputNeurons(2);
-        pattern.addHiddenLayer(2);
-        pattern.setOutputNeurons(1);
+        pattern.setInputNeurons(in);
+        pattern.addHiddenLayer(layers);
+        pattern.setOutputNeurons(out);
         return (BasicNetwork)pattern.generate();
     }
 
@@ -65,20 +63,100 @@ public class LearningMachine {
         return trainMain.getError();
     }
 
-    public static double INPUT[][]={{0.0,1.0},{0.0,1.0},{0.0,1.0},{0.0,1.0},{0.0,1.0},{0.0,1.0},{0.0,1.0},{0.0,1.0}};
-    public static double IDEAL[][]={{0.0},{1.0},{0.0},{1.0},{0.0},{1.0},{0.0},{1.0}};
+    public static String TOURINPUT="00101100111000010001100100110101000110010111";
+    public static String TOUROUTPUT="0000000000000001000101000000001000100010010100010010011100010011001100110110000100111000";
+
+    public double[][] parseString(String in, int power){
+        double out[][]=new double[(int)(in.length()/power)][power];
+
+        for(int i=0;i<(int)(in.length()/power);i++){
+            int index=i*power;
+            for(int j=0;j<power;j++){
+                System.out.println(in.substring(index + j, index + j + 1));
+                out[i][j]=Double.parseDouble(in.substring(index+j,index+j+1));
+            }
+        }
+
+        return out;
+    }
+
+    public ArrayList<ArrayList<Double>> parseStringAL(String in, int power){
+        ArrayList<ArrayList<Double>> out=new ArrayList<ArrayList<Double>>();
+        ArrayList<Double> tmp=new ArrayList<Double>();
+
+        for(int i=0;i<(int)(in.length()/power);i++){
+            int index=i*power;
+
+            tmp=new ArrayList<Double>();
+            for(int j=0;j<power;j++){
+                tmp.add(Double.parseDouble(in.substring(index+j,index+j+1)));
+            }
+            out.add(tmp);
+        }
+
+        return out;
+    }
+
+    public String toString(double[][] out){
+        String outString=new String();
+        System.out.println(out.length);
+        for(int i=0;i<out.length;i++){
+            System.out.println(out[i].length);
+            for(int j=0;i<out[i].length;i++){
+                System.out.println(out[i][j]);
+                outString+=out[i][j]+", ";
+            }
+        }
+        return outString;
+    }
 
     public static void main(final String args[]) {
+        LearningMachine lm=new LearningMachine();
+        System.out.println(lm.parseStringAL(TOURINPUT, 2));
+        MLDataSet trainingSet = new BasicMLDataSet(lm.parseString(TOURINPUT,2),lm.parseString(TOUROUTPUT,4));
 
-        MLDataSet trainingSet = new BasicMLDataSet(INPUT,IDEAL);
+        BasicNetwork elmanNetwork = LearningMachine.createElmanNetwork(2,7,4);
 
-        BasicNetwork elmanNetwork = LearningMachine.createElmanNetwork();
-
-        double elmanError = LearningMachine.trainNetwork(elmanNetwork, trainingSet);
+        double elmanError = HelloRecurrent.trainNetwork(elmanNetwork, trainingSet);
 
         for(MLDataPair pair: trainingSet ) {
             final MLData output = elmanNetwork.compute(pair.getInput());
-            System.out.println(pair.getInput().getData(0)  + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
+            System.out.print("input= ");
+            for(int i=0;i<pair.getInput().size();i++){
+                System.out.print(pair.getInput().getData(i));
+                if(i==pair.getInput().size()-1){
+                    System.out.print("; ");
+                }
+                else{
+                    System.out.print(", ");
+                }
+            }
+            System.out.print("actual= ");
+            for(int i=0;i<output.size();i++){
+//                System.out.print(output.getData(i));
+                if(output.getData(i)>=0.5){
+                    System.out.print(1);
+                }
+                else{
+                    System.out.print(0);
+                }
+                if(i==output.size()-1){
+                    System.out.print("; ");
+                }
+                else{
+                    System.out.print(", ");
+                }
+            }
+            System.out.print("ideal= ");
+            for(int i=0;i<pair.getIdeal().size();i++){
+                System.out.print(pair.getIdeal().getData(i));
+                if(i==pair.getIdeal().size()-1){
+                    System.out.println();
+                }
+                else{
+                    System.out.print(", ");
+                }
+            }
         }
 
         System.out.println("Best error rate with Elman Network: " + elmanError);

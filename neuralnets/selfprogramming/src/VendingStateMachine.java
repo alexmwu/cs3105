@@ -1,6 +1,4 @@
-import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -13,7 +11,7 @@ public class VendingStateMachine {
 
     public static enum states{EMPTY,TEN,TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY}
 
-    public static void generateTour(){
+    public static void getDFSTour(){
         Stack<Path> tour=new Stack<Path>();
 
         //add all starting paths
@@ -34,6 +32,10 @@ public class VendingStateMachine {
                 tour.push(p.copy(p.currentState,i));
             }
         }
+
+    }
+
+    public static void getEulerCycle(){
 
     }
 
@@ -298,6 +300,6 @@ public class VendingStateMachine {
 
 
     public static void main(String[] args){
-        VendingStateMachine.generateTour();
+        VendingStateMachine.getDFSTour();
     }
 }
