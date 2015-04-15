@@ -244,7 +244,7 @@ public class AppleMachine {
         System.out.println(lm.parseStringAL(TOURINPUT, 2));
         MLDataSet trainingSet = new BasicMLDataSet(lm.parseString(TOURINPUT,2),lm.parseString(TOUROUTPUT,3));
 
-        BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 4, 3);
+        BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 5, 3);
 
         double elmanError = AppleMachine.trainNetwork(elmanNetwork, trainingSet);
 

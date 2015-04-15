@@ -112,7 +112,7 @@ public class FileTrainer {
     public void setupNetwork(){
         network=new BasicNetwork();
         network.addLayer(new BasicLayer(null,true,questions.size()));
-        network.addLayer(new BasicLayer(new ActivationSigmoid(),true,3));
+        network.addLayer(new BasicLayer(new ActivationSigmoid(),true,5));
         network.addLayer(new BasicLayer(new ActivationSigmoid(),false,concepts.get(0).size()));
         network.getStructure().finalizeStructure();
         network.reset();
@@ -158,6 +158,49 @@ public class FileTrainer {
         return arr;
     }
 
+    public void verify(BasicNetwork netw, MLDataSet trainingSet){
+        for(MLDataPair pair: trainingSet ) {
+            final MLData output = netw.compute(pair.getInput());
+            System.out.print("input= ");
+            for(int i=0;i<pair.getInput().size();i++){
+                System.out.print(pair.getInput().getData(i));
+                if(i==pair.getInput().size()-1){
+                    System.out.print("; ");
+                }
+                else{
+                    System.out.print(", ");
+                }
+            }
+            System.out.print("actual= ");
+            for(int i=0;i<output.size();i++){
+//                System.out.print(output.getData(i));
+                if(output.getData(i)>=0.5){
+                    System.out.print(1);
+                }
+                else{
+                    System.out.print(0);
+                }
+                if(i==output.size()-1){
+                    System.out.print("; ");
+                }
+                else{
+                    System.out.print(", ");
+                }
+            }
+            System.out.print("ideal= ");
+            for(int i=0;i<pair.getIdeal().size();i++){
+                System.out.print(pair.getIdeal().getData(i));
+                if(i==pair.getIdeal().size()-1){
+                    System.out.println();
+                }
+                else{
+                    System.out.print(", ");
+                }
+            }
+        }
+
+    }
+
     //print questions and concepts
     public void printQC(){
         System.out.println("Questions: "+questions+"\n");
@@ -185,16 +228,18 @@ public class FileTrainer {
             train.iteration();
             System.out.println("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
-        } while (train.getError() > .05);
+        } while (train.getError() > .001);
         train.finishTraining();
 
         //test the neural network
         System.out.println("Neural Network Results:");
-        for(MLDataPair pair: trainingSet ) {
+       /* for(MLDataPair pair: trainingSet ) {
             final MLData output = network.compute(pair.getInput());
             System.out.println(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
                     + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
-        }
+        }*/
+
+        verify(network,trainingSet);
 
         Encog.getInstance().shutdown();
     }
