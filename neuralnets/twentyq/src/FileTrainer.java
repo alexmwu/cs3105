@@ -33,7 +33,7 @@ public class FileTrainer {
     }
 
     public void conceptSetup(){
-
+        BufferedReader br=null;
     }
 
     public void qaSetup(){
@@ -88,6 +88,8 @@ public class FileTrainer {
                 }
                 input.add(tmp);
            }
+            //after all input is read, convert integer concept mapping to binary
+            toBinaryArray();
        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -118,12 +120,30 @@ public class FileTrainer {
 
     //converts the arraylist of integers to arraylist of arraylist of doubles (binary 1.0 or 0.0)
     public void toBinaryArray(){
+        concepts=new ArrayList<ArrayList<Double>>();
+//        System.out.println("length: "+conceptInts.size()+"; "+conceptInts);
         int power=(int)(Math.log(conceptInts.size())/Math.log(2))+1;    //add one to account for potential new concepts
         for(int i=0;i<conceptInts.size();i++){
-            String bitStr=Integer.toString(conceptInts.get(i),power);
-            for(int j=bitStr.length()-1;j>=0;j++){
-
+            String bitStr=Integer.toString(conceptInts.get(i),2);
+            ArrayList<Double> tmp=new ArrayList<Double>();
+            for(int j=0;j<power-bitStr.length()-1;j++){
+      //          System.out.print("0");
+                tmp.add(0.0);
             }
+
+            for(int j=0;j<bitStr.length();j++){
+       //         System.out.print(bitStr.charAt(j));
+                if(bitStr.substring(j,j+1).equals("0")){
+                    tmp.add(0.0);
+                }
+                else if(bitStr.substring(j,j+1).equals("1")){
+                    tmp.add(1.0);
+                }
+                else{
+                    System.err.println("Bad call to Integer.toString");
+                }
+            }
+            concepts.add(tmp);
         }
     }
 
@@ -140,9 +160,9 @@ public class FileTrainer {
 
     //print questions and concepts
     public void printQC(){
-        System.out.println(questions+"\n");
-        System.out.println(input+"\n");
-        System.out.println(concepts+"\n");
+        System.out.println("Questions: "+questions+"\n");
+        System.out.println("Inputs (question answer mapping indexed by concept): "+input+"\n");
+        System.out.println("Concept mapping to binary: "+concepts+"\n");
     }
 
     public void train() {

@@ -165,7 +165,7 @@ public class AppleMachine {
         String readIn;
         double input[]=new double[2];
         while(true){
-            System.out.println("Please enter an input: 10P, 20P, or Apple");
+            System.out.println("Please enter an input: 10P, 20P, Apple, or Quit.");
             readIn=br.readLine();
             if(readIn.toLowerCase().equals("apple")){
                 input[0]=1;
@@ -178,6 +178,9 @@ public class AppleMachine {
             else if(readIn.toLowerCase().equals("20p")){
                 input[0]=0;
                 input[1]=1;
+            }
+            else if(readIn.toLowerCase().equals("quit")){
+                break;
             }
             else{
                 System.out.println("Bad input.");
