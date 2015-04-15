@@ -113,7 +113,7 @@ public class FileTrainer {
         network=new BasicNetwork();
         network.addLayer(new BasicLayer(null,true,questions.size()));
         network.addLayer(new BasicLayer(new ActivationSigmoid(),true,3));
-        network.addLayer(new BasicLayer(new ActivationSigmoid(),false,concepts.size()));
+        network.addLayer(new BasicLayer(new ActivationSigmoid(),false,concepts.get(0).size()));
         network.getStructure().finalizeStructure();
         network.reset();
     }
@@ -172,7 +172,7 @@ public class FileTrainer {
         MLDataSet trainingSet = new BasicMLDataSet(in, out);
 
         // train the neural network
-        Backpropagation train = new Backpropagation(network, trainingSet, .5, .3);
+        Backpropagation train = new Backpropagation(network, trainingSet, .06, .1);
 
         /*
         EncogUtility.trainToError(network, trainingSet, 0.01);
@@ -185,7 +185,7 @@ public class FileTrainer {
             train.iteration();
             System.out.println("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
-        } while (train.getError() > .01);
+        } while (train.getError() > .05);
         train.finishTraining();
 
         //test the neural network
