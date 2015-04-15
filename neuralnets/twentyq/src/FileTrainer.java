@@ -120,7 +120,10 @@ public class FileTrainer {
     public void toBinaryArray(){
         int power=(int)(Math.log(conceptInts.size())/Math.log(2))+1;    //add one to account for potential new concepts
         for(int i=0;i<conceptInts.size();i++){
+            String bitStr=Integer.toString(conceptInts.get(i),power);
+            for(int j=bitStr.length()-1;j>=0;j++){
 
+            }
         }
     }
 
