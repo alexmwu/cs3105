@@ -106,8 +106,7 @@ public class AppleMachine {
         for(int i=0;i<(int)(in.length()/power);i++){
             int index=i*power;
             for(int j=0;j<power;j++){
-                System.out.println(in.substring(index + j, index + j + 1));
-                out[i][j]=Double.parseDouble(in.substring(index+j,index+j+1));
+                 out[i][j]=Double.parseDouble(in.substring(index+j,index+j+1));
             }
         }
 
@@ -272,11 +271,11 @@ public class AppleMachine {
 
 //        MLDataSet trainingSet = new BasicMLDataSet(AppleMachine.parseString(LOOPLESSINPUT,2),AppleMachine.parseString(LOOPLESSOUTPUT,3));
 
-       MLDataSet trainingSet = new BasicMLDataSet(AppleMachine.parseString(LOOPINPUT,2),AppleMachine.parseString(LOOPOUTPUT,3));
+       MLDataSet trainingSet = new BasicMLDataSet(AppleMachine.parseString(LOOPLESSINPUT,2),AppleMachine.parseString(LOOPLESSOUTPUT,3));
 
-       BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 5, 3);
+       BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 4, 3);
 
- /*       double elmanError = AppleMachine.trainNetworkStrategies(elmanNetwork, trainingSet);
+        double elmanError = AppleMachine.trainNetworkStrategies(elmanNetwork, trainingSet);
 
         AppleMachine.verify(elmanNetwork, trainingSet);
         AppleMachine.verify(elmanNetwork, trainingSet);
@@ -284,8 +283,8 @@ public class AppleMachine {
 
         System.out.println("Best error rate with Elman Network: " + elmanError);
         AppleMachine.vend(elmanNetwork);
-       */
-
+       
+/*
         BasicNetwork jordanNetwork=AppleMachine.createJordanNetwork(2,5,3);
 
         double jordanError=AppleMachine.trainNetworkStrategies(jordanNetwork,trainingSet);
@@ -293,7 +292,7 @@ public class AppleMachine {
         System.out.println("Best error rate with Jordan Network: "+jordanError);
         AppleMachine.verify(jordanNetwork, trainingSet);
         AppleMachine.vend(jordanNetwork);
-
+*/
         Encog.getInstance().shutdown();
     }
 }

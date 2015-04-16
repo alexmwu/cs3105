@@ -178,9 +178,9 @@ public class Player {
 
             do {
                 train.iteration();
-                System.out.println("Epoch #" + epoch + " Error:" + train.getError());
+                //System.out.println("Epoch #" + epoch + " Error:" + train.getError());
                 epoch++;
-           } while (train.getError() > .001 && epoch<500000);
+           } while (train.getError() > .001 && epoch<200000);
 
             if(!hasClassificationError(network,trainingSet)){
                 break;

@@ -287,11 +287,6 @@ public class FileTrainer {
         // train the neural network
         Backpropagation train = new Backpropagation(network, trainingSet, .06, .1);
 
-        /*
-        EncogUtility.trainToError(network, trainingSet, 0.01);
-
-        EncogUtility.evaluate(method,trainingSet);
-*/
         int epoch = 1;
 
         do {
@@ -301,15 +296,8 @@ public class FileTrainer {
         } while (train.getError() > .001);
         train.finishTraining();
 
-        //test the neural network
-        System.out.println("Neural Network Results:");
-       /* for(MLDataPair pair: trainingSet ) {
-            final MLData output = network.compute(pair.getInput());
-            System.out.println(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
-                    + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
-        }*/
-
-        verify(network, trainingSet);
+        //test the neural network accuracy
+        //verify(network, trainingSet);
 
         Encog.getInstance().shutdown();
     }

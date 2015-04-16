@@ -41,7 +41,7 @@ public class AppleBananaMachine {
         final MLTrain trainAlt = new NeuralSimulatedAnnealing(
                 network, score, 10, 2, 100);
 
-        final MLTrain trainMain = new Backpropagation(network, trainingSet,.5, 0.05);
+        final MLTrain trainMain = new Backpropagation(network, trainingSet,.0006, 0.1);
 
         final StopTrainingStrategy stop = new StopTrainingStrategy();
 
