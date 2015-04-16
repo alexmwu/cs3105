@@ -114,9 +114,9 @@ public class AppleBananaMachine {
         System.out.println(lm.parseStringAL(TOURINPUT, 2));
         MLDataSet trainingSet = new BasicMLDataSet(lm.parseString(TOURINPUT,2),lm.parseString(TOUROUTPUT,4));
 
-        BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 8, 4);
+        BasicNetwork elmanNetwork = AppleBananaMachine.createElmanNetwork(2, 8, 4);
 
-        double elmanError = AppleMachine.trainNetwork(elmanNetwork, trainingSet);
+        double elmanError = AppleBananaMachine.trainNetwork(elmanNetwork, trainingSet);
 
         for(MLDataPair pair: trainingSet ) {
             final MLData output = elmanNetwork.compute(pair.getInput());

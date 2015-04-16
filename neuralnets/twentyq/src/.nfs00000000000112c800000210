@@ -252,7 +252,6 @@ public class FileTrainer {
         FileTrainer q20 = new FileTrainer(args[0],args[1]);
         q20.printQC();
         q20.train();
-
     }
 
 }
