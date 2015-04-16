@@ -28,21 +28,25 @@ CS3105\\
 Practical 2, Neural Nets
 \end{flushright}
 
-This practical tests the uses of a neural net for learning a classification problem as well as training
+This practical tests the uses of a neural net for learning a classification problem as well as training a neural net to be a finite state machine.
 
 \section{20 Questions}
 \paragraph*{Pre-Processing and Input}
-The system reads in input from two files: a concept to output pairing file
+The system reads in input from two files: a concept to output pairing file and a concept to question-answer sequence file. This allows a concept to map to its question answers as well as the concept's binary output to map to its name (string).
 
 \paragraph*{Hidden Layering}
+The fixed system starts off with 4 hidden units, as it allows the system to separate from the 16 beginning concepts. This is the threshold that allows for the separation of the starting concepts; 3 or lower hidden units will keep training and not reach the deired LMS error rate. For the learning system, hidden units are added when the number of epochs reaches 500,000. This is because, given my learning rate and momentum, the epochs will occasionally reach into the 100000-plus range while also eventually reaching the desired error level. However, when the epoch number reaches the 200 or 300,000 range, it begins to plateau and will not train to the desired level. The program then breaks out of training to add a hidden unit and begins retraining.
 
 \paragraph*{Output and Post-Processing}
 
 \paragraph*{Training}
+Training is done in both systems using backpropagation. Training for the fixed system has been tweaked for the best training time and correct results. The 
 
 \paragraph*{Choosing a Question}
+Choosing a question has not been implemented due to time constraints. A good way of choosing the best question would be to keep track of concepts that have not been ruled out (at the beginning, all of them are in contention, which is why the first question should be one that best evenly divides the concepts). Given the list of concepts that have not been ruled out, one should then pick the next question that evenly divides the concepts. Since the system doesn't know the answer to the question beforehand, it can be wasteful to find the question that rules out the most concepts as the opposite answer would only rule out one. 
 
 \paragraph*{When to Guess}
+When to guess has not been implemented due to time constraints. The system could use the 
 
 \paragraph*{Answers to Question}
 %What are the similarities and differences betweeen the way your system generalizes and standard neural generalization
@@ -51,8 +55,10 @@ The system reads in input from two files: a concept to output pairing file
 
 \paragraph*{Extension}
 %Evaluate how well your system keeps the number of hidden units under control. Improve your system to keep the number of hidden units under better control.
+Because my system takes a conservative approach to adding hidden units (forcing the system to train for a full 500000 epoch cycle before it adds a hidden unit), it is already quite efficient. This method makes sure that the system needs to add hidden units, rather than because the learning rate and momentum were poorly chosen. Originally, the error weight was set a bit higher and the epoch time out lower. This didn't allow the program to train until it needed a new unit. This is because it stopped too quickly and just added another hidden unit to deal with a classification error.In addition to this, I also adjusted the hidden units of the fixed system to the lowest possible value with the system still performing correctly.
 
 \paragraph*{Documentation}
+The 20Q program is located in the twentyq directory.
 
 
 
