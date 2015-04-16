@@ -11,18 +11,54 @@ import org.encog.util.simple.EncogUtility;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.function.BinaryOperator;
 
 /**
  * Created by aw246 on 01/04/15.
  */
 public class FileTrainer {
+    public File getQaMapping() {
+        return qaMapping;
+    }
+
     private File qaMapping;
+
+    public File getConceptMapping() {
+        return conceptMapping;
+    }
+
     private File conceptMapping;
     BasicNetwork network;
+
+    public ArrayList<ArrayList<Double>> getInput() {
+        return input;
+    }
+
     ArrayList<ArrayList<Double>> input;
+
+    public ArrayList<ArrayList<Double>> getConcepts() {
+        return concepts;
+    }
+
     ArrayList<ArrayList<Double>> concepts;
+
+    public ArrayList<Integer> getConceptInts() {
+        return conceptInts;
+    }
+
     ArrayList<Integer> conceptInts; //integer input of concepts
+
+    public ArrayList<String> getQuestions() {
+        return questions;
+    }
+
     ArrayList<String> questions;
+
+    public ArrayList<String> getConceptStrings() {
+        return conceptStrings;
+    }
+
+    ArrayList<String> conceptStrings;
 
     FileTrainer(String qaMappingPath,String conceptMappingPath){
         qaMapping=new File(qaMappingPath);
@@ -34,6 +70,28 @@ public class FileTrainer {
 
     public void conceptSetup(){
         BufferedReader br=null;
+        String line;
+        String csvSplit=",";
+        conceptStrings=new ArrayList<String>();
+        try{
+            br=new BufferedReader(new FileReader(conceptMapping));
+            while((line=br.readLine())!=null){
+                String[] conceptMap=line.split(csvSplit);
+                conceptStrings.add(conceptMap[1]);
+            }
+        } catch (FileNotFoundException e) {
+        e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void qaSetup(){
@@ -122,15 +180,14 @@ public class FileTrainer {
     public void toBinaryArray(){
         concepts=new ArrayList<ArrayList<Double>>();
 //        System.out.println("length: "+conceptInts.size()+"; "+conceptInts);
-        int power=(int)(Math.log(conceptInts.size())/Math.log(2))+1;    //add one to account for potential new concepts
+        int power=(int)(Math.log(conceptInts.size())/Math.log(2))+1;    //add one to account for potential new concept
         for(int i=0;i<conceptInts.size();i++){
             String bitStr=Integer.toString(conceptInts.get(i),2);
             ArrayList<Double> tmp=new ArrayList<Double>();
-            for(int j=0;j<power-bitStr.length()-1;j++){
+            for(int j=0;j<power-bitStr.length();j++){
       //          System.out.print("0");
                 tmp.add(0.0);
             }
-
             for(int j=0;j<bitStr.length();j++){
        //         System.out.print(bitStr.charAt(j));
                 if(bitStr.substring(j,j+1).equals("0")){
@@ -172,13 +229,16 @@ public class FileTrainer {
                 }
             }
             System.out.print("actual= ");
+            ArrayList<Integer> binaryOutput=new ArrayList<Integer>();
             for(int i=0;i<output.size();i++){
 //                System.out.print(output.getData(i));
                 if(output.getData(i)>=0.5){
                     System.out.print(1);
+                    binaryOutput.add(1);
                 }
                 else{
                     System.out.print(0);
+                    binaryOutput.add(0);
                 }
                 if(i==output.size()-1){
                     System.out.print("; ");
@@ -187,6 +247,8 @@ public class FileTrainer {
                     System.out.print(", ");
                 }
             }
+            int out=getBinaryOutput(binaryOutput);
+            System.out.print(" actual to decimal: "+out+"; ");
             System.out.print("ideal= ");
             for(int i=0;i<pair.getIdeal().size();i++){
                 System.out.print(pair.getIdeal().getData(i));
@@ -199,6 +261,14 @@ public class FileTrainer {
             }
         }
 
+    }
+
+    public int getBinaryOutput(ArrayList<Integer> binaryIn){
+        double decimal=0;
+        for(int i=0;i<binaryIn.size();i++){
+            decimal+=binaryIn.get(i)*Math.pow(2.0,binaryIn.size()-1-i);
+        }
+        return (int) decimal;
     }
 
     //print questions and concepts
@@ -239,12 +309,12 @@ public class FileTrainer {
                     + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
         }*/
 
-        verify(network,trainingSet);
+        verify(network, trainingSet);
 
         Encog.getInstance().shutdown();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         if(args.length!=2){
             System.out.println("Usage: NetworkTrainer QAMappingFilePath ConceptMappingFilePath");
             System.exit(0);
@@ -253,6 +323,8 @@ public class FileTrainer {
         q20.printQC();
         q20.train();
 
+        Player pl=new Player(q20.getNetwork(),q20.getInput(),q20.getConcepts(),q20.getQuestions(),q20.getConceptStrings(),q20.getQaMapping(),q20.getConceptMapping());
+        pl.play();
     }
 
 }
