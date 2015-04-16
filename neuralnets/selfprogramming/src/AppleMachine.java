@@ -17,6 +17,7 @@ import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.pattern.ElmanPattern;
+import org.encog.neural.pattern.JordanPattern;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,8 +40,41 @@ public class AppleMachine {
         return (BasicNetwork)pattern.generate();
     }
 
-    //found in Encog github examples
-    public static double trainNetwork(BasicNetwork network,MLDataSet trainingSet){
+    public static BasicNetwork createJordanNetwork(int in,int layers, int out){
+        JordanPattern pattern=new JordanPattern();
+        pattern.setActivationFunction(new ActivationSigmoid());
+        pattern.setInputNeurons(in);
+        pattern.addHiddenLayer(layers);
+        pattern.setOutputNeurons(out);
+        return (BasicNetwork)pattern.generate();
+    }
+
+    //train network given certain strategies
+    public static double trainNetworkStrategies(BasicNetwork network,MLDataSet trainingSet){
+            // train the neural network
+            CalculateScore score = new TrainingSetScore(trainingSet);
+            final MLTrain trainAlt = new NeuralSimulatedAnnealing(
+                    network, score, 10, 2, 100);
+
+            final MLTrain trainMain = new Backpropagation(network, trainingSet,0.0000001, 0.0);
+
+            final StopTrainingStrategy stop = new StopTrainingStrategy();
+            trainMain.addStrategy(new Greedy());
+            trainMain.addStrategy(new HybridStrategy(trainAlt));
+            trainMain.addStrategy(stop);
+
+            int epoch = 0;
+            while (!stop.shouldStop()) {
+                trainMain.iteration();
+                System.out.println("Epoch #" + epoch
+                        + " Error:" + trainMain.getError());
+                epoch++;
+            }
+            return trainMain.getError();
+    }
+
+    //train network until it meets error thresholds
+    public static double trainNetworkThreshold(BasicNetwork network,MLDataSet trainingSet){
         // train the neural network
         CalculateScore score = new TrainingSetScore(trainingSet);
 
@@ -48,15 +82,6 @@ public class AppleMachine {
                 network, score, 10, 2, 100);
 
         final MLTrain trainMain = new Backpropagation(network, trainingSet,0.006, .1);
-
-        final StopTrainingStrategy stop = new StopTrainingStrategy();
-
-        //add a greedy strategy (if no improvement in iteration, discard)
-//        trainMain.addStrategy(new Greedy());
-        //secondary algorithm in case greedy isn't working
- //       trainMain.addStrategy(new HybridStrategy(trainAlt));
-        //or stop
-//        trainMain.addStrategy(stop);
 
         int epoch = 0;
         do{
@@ -68,25 +93,27 @@ public class AppleMachine {
         return trainMain.getError();
     }
 
-//    public static String TOURINPUT="1000100000011000010001100110";
- //   public static String TOUROUTPUT="000001001010010010100001011011011101010100";
-    public static String TOURINPUT="0000100001100110";
-    public static String TOUROUTPUT="000001011000010100001011";
-    public double[][] parseString(String in, int power){
+    //hard coded state machine with loops
+    public static String LOOPINPUT="1000100000011000010001100110";
+    public static String LOOPOUTPUT="000001001010010010100001011011011101010100";
+    //hard coded state machine without loops
+    public static String LOOPLESSINPUT="0000100001100110";
+    public static String LOOPLESSOUTPUT="000001011000010100001011";
+
+    public static double[][] parseString(String in, int power){
         double out[][]=new double[(int)(in.length()/power)][power];
 
         for(int i=0;i<(int)(in.length()/power);i++){
             int index=i*power;
             for(int j=0;j<power;j++){
-                System.out.println(in.substring(index + j, index + j + 1));
-                out[i][j]=Double.parseDouble(in.substring(index+j,index+j+1));
+                 out[i][j]=Double.parseDouble(in.substring(index+j,index+j+1));
             }
         }
 
         return out;
     }
 
-    public ArrayList<ArrayList<Double>> parseStringAL(String in, int power){
+    public static ArrayList<ArrayList<Double>> parseStringAL(String in, int power){
         ArrayList<ArrayList<Double>> out=new ArrayList<ArrayList<Double>>();
         ArrayList<Double> tmp=new ArrayList<Double>();
 
@@ -116,7 +143,7 @@ public class AppleMachine {
         return outString;
     }
 
-    public void verify(BasicNetwork elmanNetwork, MLDataSet trainingSet){
+    public static void verify(BasicNetwork elmanNetwork, MLDataSet trainingSet){
          for(MLDataPair pair: trainingSet ) {
             final MLData output = elmanNetwork.compute(pair.getInput());
             System.out.print("input= ");
@@ -160,7 +187,7 @@ public class AppleMachine {
     }
 
     //accept user input after vending
-    public void vend(BasicNetwork elm) throws IOException {
+    public static void vend(BasicNetwork elm) throws IOException {
         BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         String readIn;
         double input[]=new double[2];
@@ -193,7 +220,7 @@ public class AppleMachine {
         }
     }
 
-    public String outputToString(MLData output){
+    public static String outputToString(MLData output){
         int out=output.getData()[0]>.5?1:0;
         if(out==0){
             out=output.getData()[1]>.5?1:0;
@@ -239,22 +266,33 @@ public class AppleMachine {
         }
     }
 
+
     public static void main(final String args[]) throws IOException {
-        AppleMachine lm=new AppleMachine();
-        System.out.println(lm.parseStringAL(TOURINPUT, 2));
-        MLDataSet trainingSet = new BasicMLDataSet(lm.parseString(TOURINPUT,2),lm.parseString(TOUROUTPUT,3));
 
-        BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 4, 3);
+//        MLDataSet trainingSet = new BasicMLDataSet(AppleMachine.parseString(LOOPLESSINPUT,2),AppleMachine.parseString(LOOPLESSOUTPUT,3));
 
-        double elmanError = AppleMachine.trainNetwork(elmanNetwork, trainingSet);
+       MLDataSet trainingSet = new BasicMLDataSet(AppleMachine.parseString(LOOPLESSINPUT,2),AppleMachine.parseString(LOOPLESSOUTPUT,3));
 
-        lm.verify(elmanNetwork, trainingSet);
-        lm.verify(elmanNetwork,trainingSet);
-        lm.verify(elmanNetwork,trainingSet);
+       BasicNetwork elmanNetwork = AppleMachine.createElmanNetwork(2, 4, 3);
+
+        double elmanError = AppleMachine.trainNetworkStrategies(elmanNetwork, trainingSet);
+
+        AppleMachine.verify(elmanNetwork, trainingSet);
+        AppleMachine.verify(elmanNetwork, trainingSet);
+        AppleMachine.verify(elmanNetwork, trainingSet);
 
         System.out.println("Best error rate with Elman Network: " + elmanError);
-        lm.vend(elmanNetwork);
+        AppleMachine.vend(elmanNetwork);
+       
+/*
+        BasicNetwork jordanNetwork=AppleMachine.createJordanNetwork(2,5,3);
 
+        double jordanError=AppleMachine.trainNetworkStrategies(jordanNetwork,trainingSet);
+
+        System.out.println("Best error rate with Jordan Network: "+jordanError);
+        AppleMachine.verify(jordanNetwork, trainingSet);
+        AppleMachine.vend(jordanNetwork);
+*/
         Encog.getInstance().shutdown();
     }
 }
